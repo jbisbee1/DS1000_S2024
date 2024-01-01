@@ -161,7 +161,7 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 
 ## Syllabus
 
-| Date | Title | Learning Goal | Slides | Homework | Pset 
+| Date | Topic | Learning Goal | Slides | HW | Pset 
 | ---: | :--- | :--- | --- | --- | --- 
 01/09 | Intro to Data Science | Scientific method, camps of analysis | [Lecture 1](//www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_1.html#1) | [HW 1](//www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_1.Rmd) | [Pset 0](//www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_0.Rmd)
 01/11 | BREAK |  |  |  | 
