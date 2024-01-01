@@ -96,12 +96,3 @@ and save it as `[Your Last Name]_ps0.pdf`.
 
 
 Finally, upload the PDF to Brightspace under the Problem Set 0 assignment!
-
-```{r,message=F,echo=F,warning=F,results='hide',error=T}
-dir <- getwd()
-type <- 'pdf'
-format <- 'portrait'
-f <- 'ds1000_problem_set_0'
-
-system(paste('Rscript ../../../NFGH/chromeprint.R',dir,type,format,f),wait = F)
-```

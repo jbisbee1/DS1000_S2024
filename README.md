@@ -48,7 +48,7 @@ Here is the list of channels you should see upon joining the Campuswire workspac
 ### GitHub
 I have created a [`GitHub`](https://github.com/jbisbee1/DS1000-S2024) repository to prepare and share all course-related content. This very syllabus is available as the repository's README and all links below are connected to the appropriate folders, sub-folders, and files in this repository. 
 
-You are encouraged to adopt the following workflow for this class:
+You are expected to adopt the following workflow for this class:
 
 1. Prior to each lecture, download the appropriate `.Rmd` file, open it in `RStudio`, and read through it. **This is your primary homework assignment!** As you work through it, try to tweak some of the code and answer the toy examples where provided. Each time you make a change, click the `knit` button in `RStudio` to see if everything still loads.
 	
@@ -66,11 +66,11 @@ There are also two exams. The first is a mid-term exam that is scheduled for Oct
 
 The final grade is calculated as a weighted average of these components with the following weights:
 
-- **Problem sets:** 9 in total, each worth 5% of your final grade. You can drop the lowest-scoring problem set, resulting in a total value of 40% of your final grade.
+- **Problem sets:** 11 in total, only 8 of which are worth 5% of your final grade. I will automatically drop the three lowest-scoring problem sets from your final grade. 
 - **Exams:** Midterm and final, both of which are in-class. These are each worth 20% of your final grade, comprising 40% of your final grade. 
 - **Quizzes:** There are 20 quizzes over the course of the semester which can only be taken if you attend class. Each consist of five questions plus an honor statement. 50% of the quiz grade comes from accurately answering all five questions, and 50% comes from signing the honor statement. Each quiz is worth 1% of your final grade, and combined comprise the final 20%.
 	
-Both problem sets and exams will have opportunities to earn extra credit, theoretically meaning you could score above 100%. All grades are curved without taking the extra credit results into consideration. We follow the standard Vanderbilt grading system, reproduced below:
+Letter grades are determined as per the standard Vanderbilt grading system, reproduced below:
 
 - A: 94+
 - A-: 90-93
@@ -91,7 +91,7 @@ Both problem sets and exams will have opportunities to earn extra credit, theore
 
 ### Late Assignments
 
-Every problem set is assigned on a Monday, and due on Brightspace by **11:59PM Nashville time on the following Friday**. Problem sets should be submitted via Brightspace. The problem sets are designed to require no more than two hours in total to complete. Late submissions will be **penalized 1 point off for each day late**. After three days, problem sets will no longer be accepted and will be scored 0. (But also remember that your lowest scoring problem set will not be counted toward your final grade, effectively giving you one "freebie".) Answer keys for the preceding week's problem set are posted on Wednesdays after lecture.
+Every problem set is assigned on a Monday, and due on Brightspace by **11:59PM Nashville time on the following Friday**. Problem sets should be submitted via Brightspace. The problem sets are designed to require no more than two hours in total to complete. Late submissions will be **penalized 1 point off for each day late**. After three days, problem sets will no longer be accepted and will be scored 0. (But also remember that your three lowest scoring problem sets will not be counted toward your final grade, effectively giving you three "freebies".) Answer keys for the preceding week's problem set are posted on Thursdays after lecture.
 
 ### Cell Phones, Laptops, Tablets, etc.
 
@@ -121,7 +121,7 @@ As per Vanderbilt's [F22 Covid Plan](https://news.vanderbilt.edu/2022/08/11/ever
 * Asymptomatic testing has been suspended.
 * Isolation guidelines only apply to those who have tested positive for COVID-19.
 
-As such, DS1000 will be meeting in-person every Monday and Wednesday from 1:15PM - 2:30PM. Lectures will not be hybrid or remote. For students affected by COVID-19, this means that you are responsible for obtaining any course material you missed. As you'll see below, I make all materials available on the course GitHub repository. In addition, I will be recording all lectures and posting these the evening following the lecture. **NB: this does not mean that students are permitted to skip the lectures.**
+As such, DS1000 will be meeting in-person. Lectures will not be hybrid or remote. For students affected by COVID-19, this means that you are responsible for obtaining any course material you missed. As you'll see below, I make all materials available on the course GitHub repository. In addition, I will be recording all lectures and posting these the evening following the lecture. **NB: this does not mean that students are permitted to skip the lectures.**
 
 I will be holding my office hours in-person in The Commons Center Room #353. The TAs are free to determine how best to hold their office hours, and their choices will be communicated to the students as soon as they are decided.
 
@@ -145,15 +145,15 @@ The observance of religious holidays (activities observed by a religious group o
 *[Back to ToC](#table-of-contents)*
 
 ## Office Hours (OH) / Labs
-* Prof. Bisbee: OH M & W at 3PM in Commons #353
-* TA Brych: OH T from 1PM to 3PM on Zoom (see Campuswire for link)
-* TA Fang: OH TH from 3PM to 5PM in FGH 201
-* TA Gupta: OH W from 11AM to 1PM on Zoom (see Campuswire for link)
-* TA Manda Li: Lab TH from 2PM to 3PM in Stevenson 2212
-* TA Qifan Lin: OH W from 5PM to 7PM in DSI Building Suite 208
-* TA Negi: OH T from 4PM to 6PM on Zoom (see Campuswire for link)
-* TA Quagliata: OH TH from 8:30AM to 9:30AM, and 5:15PM to 6:15PM in Sarratt Student Center Lounge
-* TA Zha: OH T & TH from 12PM to 1PM on Zoom (see Campuswire for link)
+* Prof. Bisbee: OH T & Th at 3PM in Commons #353
+* TA Brych: TBD
+* TA Fang: TBD
+* TA Gupta: TBD
+* TA Manda Li: TBD
+* TA Qifan Lin: TBD
+* TA Negi: TBD
+* TA Quagliata: TBD
+* TA Zha: TBD
 
 All these can also be found on the [Campuswire calendar](https://campuswire.com/c/G0D071C4A/calendar), along with the Zoom links for those hosting their office hours remotely.
 
@@ -161,40 +161,40 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 
 ## Syllabus
 
-| Date | Lecture | Learning Goal | Psets<br />(due Friday) | HW<br />(due next class) | Quiz<br />(in class) |
-| ----: | :----- | ------------ | :-------: | :-------: | :------: |
-| 1/9 | [Intro 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/1_Intro_Data_Science/code/Intro_Data_Science_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2953333/View) | Scientific method, analytic camps | [Pset 0](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/1_Intro_Data_Science/code/ds1000_problem_set_0.pdf) | | |
-| 1/11 | [Intro 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/1_Intro_Data_Science/code/ChatGPT_and_Data_Science_slides.html#1)<br />[- Recording 1](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2967884/View), [2](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2967883/View) | ChatGPT and Data Science | | [HW #1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/ds1000_homework_1.Rmd) | Quiz 1 |
-| 1/16 | BREAK |  | | | |
-| 1/18 | [Intro to `R` 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/2_Intro_to_R/code/Intro_to_R_Part1_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2978281/View) | Objects, functions, `%>%`, and `<-` | | [HW #2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/2_Intro_to_R/code/Intro_to_R_Part1_hw.Rmd) | Quiz 2 | 
-| 1/23 | [Intro to `R` 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/2_Intro_to_R/code/Intro_to_R_Part2_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2981061/View) | Visualization in `R` | | [HW #3](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/2_Intro_to_R/code/Intro_to_R_Part2_hw.Rmd) | Quiz 3 | 
-| 1/25 | [Intro to `R` 3](https://www.jamesbisbee.com/DS1000_S2024/Lectures/2_Intro_to_R/code/Intro_to_R_Part3_slides.html#1)<br />[Recording 1](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2985573/View), [2](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2985575/View), [3](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2985577/View) | More visualization | [Pset 1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/2_Intro_to_R/code/Problem_Set_1.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/2_Intro_to_R/code/Problem_Set_1_AK.pdf) | [HW #4](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/2_Intro_to_R/code/Intro_to_R_Part3_hw.Rmd) | Quiz 4 | 
-| 1/30 | Review Session<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2987937/View) | | | | | 
-| 2/1 | [Data Wrangling](https://www.jamesbisbee.com/DS1000_S2024/Lectures/3_Data_Wrangling/code/Data_Wrangling_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2992452/View) | Replicability and `R` | [Pset 2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/3_Data_Wrangling/code/3_Data_Wrangling_PS2.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/3_Data_Wrangling/code/Problem_Set_2_AK.Rmd) | [HW #5](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/3_Data_Wrangling/code/Data_Wrangling_hw.Rmd) | Quiz 5 | 
-| 2/6 | [Univariate](https://www.jamesbisbee.com/DS1000_S2024/Lectures/4_Uni_Multivariate/code/Univariate_Analysis_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/2995159/View) | Summaries of one variable | | [HW #6](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/Univariate_Analysis_hw.Rmd) | Quiz 6 | 
-| 2/8 | [Multivariate 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/2_Intro_to_R/code/Intro_to_R_Part1_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3000257/View) | Summaries of multiple variables | [Pset 3](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/4_Uni_Multivariate_PS3.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/4_Uni_Multivariate_PS3_AK.Rmd) | [HW #7](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part1_hw.Rmd) | Quiz 7 | 
-| 2/13 | [Multivariate 2.a](https://www.jamesbisbee.com/DS1000_S2024/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part2_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3003097/View) | Visualizations of multiple variables | | [HW #8](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part2_hw.Rmd) | | 
-| 2/15 | [Multivariate 2.b](https://www.jamesbisbee.com/DS1000_S2024/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part2_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3007190/View) | Visualizations of multiple variables | [Pset 4](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/4_Uni_Multivariate_PS4.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/4_Uni_Multivariate_PS4_AK.Rmd) | [HW #9](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part2_hw.Rmd) | Quiz 8 | 
-| 2/20 | [Multivariate 3](https://www.jamesbisbee.com/DS1000_S2024/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part3_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3009891/View) | Uncertainty and bootstrapping | | [HW #10](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/4_Uni_Multivariate/code/Multivariate_Analysis_part3_hw.Rmd) | Quiz 9 | 
-| 2/22 | Review Session<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3013712/View) | | | | | 
-| 2/27 | [Regression 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/5_Regression/code/Regression_part1_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3017063/View) | Linear regression | | [HW #11](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/5_Regression/code/Regression_part1_hw.Rmd) | Quiz 10 | 
-| 2/29 | [Regression 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/5_Regression/code/Regression_part2_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3020360/View) | Interpretation and evaluation | [Pset 5](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/5_Regression/code/5_Regression_PS5.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/5_Regression/code/5_Regression_PS5_AK.Rmd) | [HW #12](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/5_Regression/code/Regression_part2_hw.Rmd) | Quiz 11 | 
-| 3/5 | [Regression 3](https://www.jamesbisbee.com/DS1000_S2024/Lectures/5_Regression/code/Regression_part3_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3022651/View) | Multiple regression, categorical $X$ | | [Practice](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/6_Midterm/DS1000_practice_midterm.Rmd) | Quiz 12 | 
-| 3/7 | [Review Session](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/6_Midterm/DS1000_practice_midterm_review_session.Rmd)<br />[-Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3026338/View) | | | | | 
-| 3/12 | [**Midterm Exam**](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/6_Midterm/DS1000_midterm.Rmd) | | [AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/6_Midterm/DS1000_midterm_AK.Rmd) | | | 
-| 3/14 | [Classification 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/7_Classification/code/Classification_part1_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3035783/View) | Logistic Regression | [Pset 6](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/7_Classification/code/Classification_PS6.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/7_Classification/code/Classification_PS6_AK.Rmd) | [HW #13](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/7_Classification/code/Classification_parts_1_and_2_hw.Rmd) | | 
-| 3/19 | [Classification 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/7_Classification/code/Classification_part2_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3039479/View) | Interpretation and evaluation | | [HW #14](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/7_Classification/code/Classification_part3_hw.Rmd) | Quiz 14 | 
-| 3/21 | [Classification 3](https://www.jamesbisbee.com/DS1000_S2024/Lectures/7_Classification/code/Classification_part3_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3042961/View) | Prediction | [Pset 7](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/7_Classification/code/Classification_PS7.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/7_Classification/code/Classification_PS7_AK.Rmd) | [HW #15](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/Clustering_part1_hw.Rmd) | Quiz 15 | 
-| 3/26 | Review Session<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3046369/View) | | | | | 
-| 3/28 | [Clustering](https://www.jamesbisbee.com/DS1000_S2024/Lectures/8_Clustering_NLP/code/Clustering_part1_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3051241/View) | $k$-means clustering | [Pset 8](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/Clustering_PS8.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/Clustering_PS8_AK.Rmd) | [HW #16](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/Clustering_part1_hw.Rmd) | Quiz 16 | 
-| 4/2 | [NLP 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/8_Clustering_NLP/code/Clustering_part2_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3053454/View) | Topic models | | [HW #17](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/Clustering_part2_hw.Rmd) | Quiz 17 | 
-| 4/4 | BREAK | | | | | 
-| 4/9 | BREAK | | | | | 
-| 4/11 | [NLP 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/8_Clustering_NLP/code/Clustering_part3_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3059924/View) | Sentiment analysis | [Pset 9](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/NLP_PS9.Rmd)<br />[AK](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/NLP_PS9_AK.Rmd) | [HW #18](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/8_Clustering_NLP/code/Clustering_part3_hw.Rmd) | Quiz 18 | 
-| 4/16 | Review Session<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3063969/View) | | | | | 
-| 4/18 | [Ethics](https://www.jamesbisbee.com/DS1000_S2024/Lectures/9_Advanced_Topics/code/Ethics_slides.html#1)<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3070547/View) | Ethical data science | | | **Final Assigned** | 
-| 4/23 | Review Session<br />[- Recording](https://brightspace.vanderbilt.edu/d2l/le/content/442169/viewContent/3070558/View) | | | |  | 
-| 4/25 | **Final Exam Due** | | | | | 
+| Date | DOW | Title | Learning Goal | Slides | Homework | Pset 
+| ---: | --- | :--- | :--- | --- | --- | --- 
+01/09 | Tue | Intro to Data Science Part 1 | Scientific method, camps of analysis | [Lecture 1](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_1.html#1) | [HW 1](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_1.Rmd) | [Pset 0](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_0.Rmd)
+01/11 | Thu | BREAK |  |  |  | 
+01/16 | Tue | Intro to R Part 1 | Objects, functions, %>%, and <- | [Lecture 2](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_2.html#1) | [HW 2](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_2.Rmd) | [Pset 1](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_1.Rmd)
+01/18 | Thu | Intro to R Part 2 | Visualization in R | [Lecture 3](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_3.html#1) | [HW 3](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_3.Rmd) | 
+01/23 | Tue | Intro to R Part 3 | More visualization | [Lecture 4](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_4.html#1) | [HW 4](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_4.Rmd) | [Pset 2](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_2.Rmd)
+01/25 | Thu | Review of R |  |  |  | 
+01/30 | Tue | Data Wrangling | Replicability, R, and tabular data | [Lecture 5](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_5.html#1) | [HW 5](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_5.Rmd) | [Pset 3](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_3.Rmd)
+02/01 | Thu | Univariate Analysis | Summaries of a single variable | [Lecture 6](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_6.html#1) | [HW 6](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_6.Rmd) | 
+02/06 | Tue | Multivariate Analysis Part 1 | Summaries of multiple variables | [Lecture 7](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_7.html#1) | [HW 7](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_7.Rmd) | [Pset 4](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_4.Rmd)
+02/08 | Thu | Multivariate Analysis Part 2.a | Visualizations of multiple variables | [Lecture 8](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_8.html#1) | [HW 8](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_8.Rmd) | 
+02/13 | Tue | Multivariate Analysis Part 2.b | Visualizations of multiple variables | [Lecture 9](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_9.html#1) | [HW 9](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_9.Rmd) | [Pset 5](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_5.Rmd)
+02/15 | Thu | Multivariate Analysis Part 3 | Uncertainty and bootstrapping | [Lecture 10](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_10.html#1) | [HW 10](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_10.Rmd) | 
+02/20 | Tue | Multivariate Review |  |  |  | [Pset 6](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_6.Rmd)
+02/22 | Thu | Regression Part 1 | The concept of a linear regression | [Lecture 11](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_11.html#1) | [HW 11](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_11.Rmd) | 
+02/27 | Tue | Regression Part 2 | Interpreting output and evaluating model | [Lecture 12](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_12.html#1) | [HW 12](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_12.Rmd) | [Pset 7](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_7.Rmd)
+02/29 | Thu | Regression Part 3 | Multiple regression and categorical predictors | [Lecture 13](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13.html#1) | [HW 13](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_13.Rmd) | 
+03/05 | Tue | Midterm Review |  |  |  | 
+03/07 | Thu | Midterm Exam |  |  |  | 
+03/12 | Tue | BREAK |  |  |  | 
+03/14 | Thu | BREAK |  |  |  | 
+03/19 | Tue | Classification Part 1 | The concept of a logistic regression | [Lecture 14](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_14.html#1) | [HW 14](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_14.Rmd) | [Pset 8](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_8.Rmd)
+03/21 | Thu | Classification Part 2 | Interpreting output and evaluating model | [Lecture 15](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_15.html#1) | [HW 15](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_15.Rmd) | 
+03/26 | Tue | Classification Part 3 | Using models for prediction | [Lecture 16](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_16.html#1) | [HW 16](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_16.Rmd) | [Pset 9](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_9.Rmd)
+03/28 | Thu | Classification Review |  |  |  | 
+04/02 | Tue | Clustering & NLP Part 1 | k-means clustering | [Lecture 17](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_17.html#1) | [HW 17](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_17.Rmd) | [Pset 10](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_10.Rmd)
+04/04 | Thu | Clustering & NLP Part 2 | k-means clustering on text | [Lecture 18](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_18.html#1) | [HW 18](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_18.Rmd) | 
+04/09 | Tue | Clustering & NLP Part 3 | Sentiment analysis | [Lecture 19](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19.html#1) | [HW 19](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_19.Rmd) | [Pset 11](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_11.Rmd)
+04/11 | Thu | Clustering & NLP Review |  |  |  | 
+04/16 | Tue | Ethics | The risks of rapid technological change | [Lecture 20](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20.html#1) | [HW 20](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_20.Rmd) | 
+04/18 | Thu | Final Review |  |  |  | 
+04/23 | Tue | Final Exam |  |  |  | 
+04/25 | Thu | Final Exam |  |  |  | 
 
 ## Helpful Resources
 
