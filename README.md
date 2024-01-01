@@ -178,7 +178,7 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 02/20 | Review Session |  |  |  | [Pset 6](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_6.Rmd)
 02/22 | Regression 1 | The concept of a linear regression | [Lecture 11](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_11.html#1) | [HW 11](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_11.Rmd) | 
 02/27 | Regression 2 | Interpreting output and evaluating model | [Lecture 12](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_12.html#1) | [HW 12](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_12.Rmd) | [Pset 7](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_7.Rmd)
-02/29 | Regression 3 | Multiple regression and categorical predictors | [Lecture 13](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13.html#1) | [HW 13](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_13.Rmd) | 
+02/29 | Regression 3 | Multiple regression, categorical Xs | [Lecture 13](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13.html#1) | [HW 13](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_13.Rmd) | 
 03/05 | Review Session |  |  |  | 
 03/07 | Midterm Exam |  |  |  | 
 03/12 | BREAK |  |  |  | 
@@ -191,7 +191,7 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 04/04 | NLP 1 | k-means clustering on text | [Lecture 18](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_18.html#1) | [HW 18](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_18.Rmd) | 
 04/09 | NLP 2 | Sentiment analysis | [Lecture 19](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19.html#1) | [HW 19](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_19.Rmd) | [Pset 11](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_11.Rmd)
 04/11 | Review Session |  |  |  | 
-04/16 | Ethics | The risks of rapid technological change | [Lecture 20](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20.html#1) | [HW 20](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_20.Rmd) | 
+04/16 | Ethics | The risks of rapid technological change | [Lecture 20](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20.html#1) |  | 
 04/18 | Review Session |  |  |  | 
 04/23 | Final Exam |  |  |  | 
 04/25 | Final Exam |  |  |  | 
