@@ -161,40 +161,40 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 
 ## Syllabus
 
-| Date | DOW | Title | Learning Goal | Slides | Homework | Pset 
-| ---: | --- | :--- | :--- | --- | --- | --- 
-01/09 | Tue | Intro to Data Science Part 1 | Scientific method, camps of analysis | [Lecture 1](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_1.html#1) | [HW 1](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_1.Rmd) | [Pset 0](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_0.Rmd)
-01/11 | Thu | BREAK |  |  |  | 
-01/16 | Tue | Intro to R Part 1 | Objects, functions, %>%, and <- | [Lecture 2](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_2.html#1) | [HW 2](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_2.Rmd) | [Pset 1](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_1.Rmd)
-01/18 | Thu | Intro to R Part 2 | Visualization in R | [Lecture 3](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_3.html#1) | [HW 3](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_3.Rmd) | 
-01/23 | Tue | Intro to R Part 3 | More visualization | [Lecture 4](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_4.html#1) | [HW 4](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_4.Rmd) | [Pset 2](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_2.Rmd)
-01/25 | Thu | Review of R |  |  |  | 
-01/30 | Tue | Data Wrangling | Replicability, R, and tabular data | [Lecture 5](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_5.html#1) | [HW 5](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_5.Rmd) | [Pset 3](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_3.Rmd)
-02/01 | Thu | Univariate Analysis | Summaries of a single variable | [Lecture 6](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_6.html#1) | [HW 6](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_6.Rmd) | 
-02/06 | Tue | Multivariate Analysis Part 1 | Summaries of multiple variables | [Lecture 7](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_7.html#1) | [HW 7](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_7.Rmd) | [Pset 4](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_4.Rmd)
-02/08 | Thu | Multivariate Analysis Part 2.a | Visualizations of multiple variables | [Lecture 8](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_8.html#1) | [HW 8](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_8.Rmd) | 
-02/13 | Tue | Multivariate Analysis Part 2.b | Visualizations of multiple variables | [Lecture 9](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_9.html#1) | [HW 9](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_9.Rmd) | [Pset 5](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_5.Rmd)
-02/15 | Thu | Multivariate Analysis Part 3 | Uncertainty and bootstrapping | [Lecture 10](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_10.html#1) | [HW 10](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_10.Rmd) | 
-02/20 | Tue | Multivariate Review |  |  |  | [Pset 6](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_6.Rmd)
-02/22 | Thu | Regression Part 1 | The concept of a linear regression | [Lecture 11](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_11.html#1) | [HW 11](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_11.Rmd) | 
-02/27 | Tue | Regression Part 2 | Interpreting output and evaluating model | [Lecture 12](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_12.html#1) | [HW 12](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_12.Rmd) | [Pset 7](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_7.Rmd)
-02/29 | Thu | Regression Part 3 | Multiple regression and categorical predictors | [Lecture 13](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13.html#1) | [HW 13](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_13.Rmd) | 
-03/05 | Tue | Midterm Review |  |  |  | 
-03/07 | Thu | Midterm Exam |  |  |  | 
-03/12 | Tue | BREAK |  |  |  | 
-03/14 | Thu | BREAK |  |  |  | 
-03/19 | Tue | Classification Part 1 | The concept of a logistic regression | [Lecture 14](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_14.html#1) | [HW 14](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_14.Rmd) | [Pset 8](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_8.Rmd)
-03/21 | Thu | Classification Part 2 | Interpreting output and evaluating model | [Lecture 15](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_15.html#1) | [HW 15](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_15.Rmd) | 
-03/26 | Tue | Classification Part 3 | Using models for prediction | [Lecture 16](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_16.html#1) | [HW 16](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_16.Rmd) | [Pset 9](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_9.Rmd)
-03/28 | Thu | Classification Review |  |  |  | 
-04/02 | Tue | Clustering & NLP Part 1 | k-means clustering | [Lecture 17](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_17.html#1) | [HW 17](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_17.Rmd) | [Pset 10](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_10.Rmd)
-04/04 | Thu | Clustering & NLP Part 2 | k-means clustering on text | [Lecture 18](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_18.html#1) | [HW 18](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_18.Rmd) | 
-04/09 | Tue | Clustering & NLP Part 3 | Sentiment analysis | [Lecture 19](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19.html#1) | [HW 19](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_19.Rmd) | [Pset 11](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_11.Rmd)
-04/11 | Thu | Clustering & NLP Review |  |  |  | 
-04/16 | Tue | Ethics | The risks of rapid technological change | [Lecture 20](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20.html#1) | [HW 20](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_20.Rmd) | 
-04/18 | Thu | Final Review |  |  |  | 
-04/23 | Tue | Final Exam |  |  |  | 
-04/25 | Thu | Final Exam |  |  |  | 
+| Date | Title | Learning Goal | Slides | Homework | Pset 
+| ---: | :--- | :--- | --- | --- | --- 
+01/09 | Intro to Data Science | Scientific method, camps of analysis | [Lecture 1](//www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_1.html#1) | [HW 1](//www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_1.Rmd) | [Pset 0](//www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_0.Rmd)
+01/11 | BREAK |  |  |  | 
+01/16 | Intro to R Part 1 | Objects, functions, and code | [Lecture 2](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_2.html#1) | [HW 2](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_2.Rmd) | [Pset 1](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_1.Rmd)
+01/18 | Intro to R Part 2 | Visualization in R | [Lecture 3](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_3.html#1) | [HW 3](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_3.Rmd) | 
+01/23 | Intro to R Part 3 | More visualization | [Lecture 4](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_4.html#1) | [HW 4](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_4.Rmd) | [Pset 2](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_2.Rmd)
+01/25 | Review of R |  |  |  | 
+01/30 | Data Wrangling | Replicability and tabular data | [Lecture 5](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_5.html#1) | [HW 5](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_5.Rmd) | [Pset 3](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_3.Rmd)
+02/01 | Univariate Analysis | Summaries of a single variable | [Lecture 6](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_6.html#1) | [HW 6](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_6.Rmd) | 
+02/06 | Multivariate Part 1 | Summaries of multiple variables | [Lecture 7](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_7.html#1) | [HW 7](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_7.Rmd) | [Pset 4](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_4.Rmd)
+02/08 | Multivariate Part 2.a | Visualizations of multiple variables | [Lecture 8](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_8.html#1) | [HW 8](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_8.Rmd) | 
+02/13 | Multivariate Part 2.b | Visualizations of multiple variables | [Lecture 9](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_9.html#1) | [HW 9](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_9.Rmd) | [Pset 5](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_5.Rmd)
+02/15 | Multivariate Part 3 | Uncertainty and bootstrapping | [Lecture 10](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_10.html#1) | [HW 10](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_10.Rmd) | 
+02/20 | Multivariate Review |  |  |  | [Pset 6](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_6.Rmd)
+02/22 | Regression Part 1 | The concept of a linear regression | [Lecture 11](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_11.html#1) | [HW 11](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_11.Rmd) | 
+02/27 | Regression Part 2 | Interpreting output and evaluating model | [Lecture 12](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_12.html#1) | [HW 12](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_12.Rmd) | [Pset 7](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_7.Rmd)
+02/29 | Regression Part 3 | Multiple regression and categorical predictors | [Lecture 13](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13.html#1) | [HW 13](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_13.Rmd) | 
+03/05 | Midterm Review |  |  |  | 
+03/07 | Midterm Exam |  |  |  | 
+03/12 | BREAK |  |  |  | 
+03/14 | BREAK |  |  |  | 
+03/19 | Classification Part 1 | The concept of a logistic regression | [Lecture 14](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_14.html#1) | [HW 14](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_14.Rmd) | [Pset 8](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_8.Rmd)
+03/21 | Classification Part 2 | Interpreting output and evaluating model | [Lecture 15](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_15.html#1) | [HW 15](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_15.Rmd) | 
+03/26 | Classification Part 3 | Using models for prediction | [Lecture 16](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_16.html#1) | [HW 16](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_16.Rmd) | [Pset 9](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_9.Rmd)
+03/28 | Classification Review |  |  |  | 
+04/02 | Clustering | k-means clustering | [Lecture 17](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_17.html#1) | [HW 17](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_17.Rmd) | [Pset 10](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_10.Rmd)
+04/04 | NLP Part 1 | k-means clustering on text | [Lecture 18](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_18.html#1) | [HW 18](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_18.Rmd) | 
+04/09 | NLP Part 2 | Sentiment analysis | [Lecture 19](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19.html#1) | [HW 19](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_19.Rmd) | [Pset 11](www.jamesbisbee.com/DS1000_S2024/Psets/ds1000_pset_11.Rmd)
+04/11 | Clustering & NLP Review |  |  |  | 
+04/16 | Ethics | The risks of rapid technological change | [Lecture 20](www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20.html#1) | [HW 20](www.jamesbisbee.com/DS1000_S2024/Homeworks/ds1000_hw_20.Rmd) | 
+04/18 | Final Review |  |  |  | 
+04/23 | Final Exam |  |  |  | 
+04/25 | Final Exam |  |  |  | 
 
 ## Helpful Resources
 
