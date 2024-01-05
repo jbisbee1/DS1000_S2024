@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Multivariate Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Prof. Bisbee" />
+    <script src="libs/header-attrs-2.18/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Multivariate Analysis
+]
+.subtitle[
+## Part 2: Visualizations
+]
+.author[
+### Prof. Bisbee
+]
+.institute[
+### Vanderbilt University
+]
+.date[
+### Slides Updated: 2024-01-04
+]
+
+---
+
+
+
+
+# Agenda
+
+1. Why did the polls underestimate Trump support?
+
+2. Rules of visualization
+
+
+---
+
+# 2020 polling
+
+--
+
+- Let's introduce a different dataset!
+
+--
+
+  - Download and open [`Pres2020_PV.Rds`](https://github.com/jbisbee1/DS1000_F2024/blob/main/data/Pres2020_PV.Rds)
+  - Wrangle to get the popular vote margin, expressed in decimals
+  
+--
+
+
+```r
+require(tidyverse)
+poll &lt;- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Pres2020_PV.Rds')
+
+poll &lt;- poll %&gt;%
+  mutate(Trump = Trump/100,
+         Biden = Biden/100,
+         margin = Biden - Trump)
+```
+
+---
+
+# The Research Question
+
+
+```r
+pRQ &lt;- poll %&gt;%
+  ggplot() + 
+  geom_bar(aes(x = Biden*100),fill = 'blue',alpha = .5) + 
+  geom_bar(aes(x = Trump*100),fill = 'red',alpha = .5) + 
+  geom_vline(xintercept = 47,linetype = 'dashed',color= 'red') + 
+  geom_vline(xintercept = 51,linetype = 'dashed',color= 'blue')+ 
+  annotate(geom = 'text',x = c(47),y = Inf,angle = 90,hjust = 1,vjust = 0,label = c("Trump's Actual Support"),color = 'darkred') + 
+  annotate(geom = 'text',x = c(51),y = Inf,angle = 90,hjust = 1,vjust = 1,label = c("Biden's Actual Support"),color = 'darkblue') + 
+  labs(title = 'Poll Bias in the 2020 U.S. Presidential Election',
+       subtitle = 'Predicted vs Actual Support for Trump (red) and Biden (blue)',
+       x = 'Popular Vote Share (%)',
+       y = 'Number of Polls') + 
+  scale_x_continuous(breaks = seq(30,60,by = 5),labels = function(x) paste0(x,'%'))
+```
+
+---
+
+# The Research Question
+
+
+```r
+pRQ 
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# The Research Question
+
+
+```r
+poll %&gt;% # Proportion that under-predict
+  summarise(propBidenUP = mean(Biden &lt; .51),
+            propTrumpUP = mean(Trump &lt; .47))
+```
+
+```
+## # A tibble: 1 × 2
+##   propBidenUP propTrumpUP
+##         &lt;dbl&gt;       &lt;dbl&gt;
+## 1       0.612       0.983
+```
+--
+
+
+```r
+poll %&gt;% # Average under-prediction
+  summarise(avgBidenErr = mean(.51 - Biden),
+            avgTrumpErr = mean(.47 - Trump))
+```
+
+```
+## # A tibble: 1 × 2
+##   avgBidenErr avgTrumpErr
+##         &lt;dbl&gt;       &lt;dbl&gt;
+## 1      0.0175      0.0577
+```
+
+
+---
+
+# .blue[Theorizing]
+
+--
+
+- .blue[Research Question]: Why do polls under-predict Trump more than Biden?
+
+--
+
+  1. Unrepresentative samples (how were respondents contacted?)
+  
+  2. Small samples (how many respondents?)
+  
+  3. Shy Trump Voters / trolls (lying respondents)
+  
+  4. Timing (closer to the election &amp;rarr; less biased)
+
+---
+
+# .blue[Theorizing]
+
+- A fifth explanation?
+
+--
+
+- Anti-Trump media!
+
+&lt;center&gt;&lt;img src="https://www.open.ac.uk/blogs/religious-studies/wp-content/uploads/2017/07/trump-2.jpg"&gt;&lt;/center&gt;
+
+
+---
+
+# .blue[Theorizing]
+
+- However...
+
+&lt;center&gt;&lt;iframe width="560" height="315" src="https://www.youtube.com/embed/Cq6A9uytB7U?start=22&amp;end=31" title="Trump Admits He's Lying ALL The Time" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;&lt;/center&gt;
+
+
+
+---
+
+# .blue[Theorizing]
+
+--
+
+- Theory #1: Does the "mode" of the survey matter?
+
+--
+
+  - I.e., if you only call people on landlines, who do you reach?
+  
+--
+
+  - And how might they differ from the general population?
+  
+--
+
+- .blue[Assumption 1]: Younger people do not use landlines, meaning that surveys which rely on **r**andom **d**igit **d**ialing (RDD) will get disproportionately older respondents.
+
+--
+
+- .blue[Assumption 2]: Younger voters are more progressive, making them less likely to support Trump.
+
+--
+
+- .blue[Theory]: Surveys that use RDD will find more support for Trump than Biden.
+
+---
+
+# .red[Analyzing]
+
+--
+
+- Plot the Biden-Trump vote margin by mode type
+
+
+```r
+poll %&gt;%
+  count(Mode)
+```
+
+```
+## # A tibble: 9 × 2
+##   Mode                 n
+##   &lt;chr&gt;            &lt;int&gt;
+## 1 IVR                  1
+## 2 IVR/Online          47
+## 3 Live phone - RBS    13
+## 4 Live phone - RDD    51
+## 5 Online             366
+## 6 Online/Text          1
+## 7 Phone - unknown      1
+## 8 Phone/Online        19
+## 9 &lt;NA&gt;                29
+```
+
+--
+
+- So many modes of interviewing people!
+
+---
+
+# (Soft) Rules of Visualization
+
+- Variable `type` informs visualization
+
+--
+
+1. Univariate
+
+  - Categorical data: `geom_bar()`
+  
+  - Continuous data: `geom_histogram()` or `geom_density()`
+  
+--
+
+2. Bivariate
+
+  - Categorical X Categorical: `geom_bar()`
+  
+  - Binary X Continuous: `geom_histogram()` or `geom_density()`
+  
+  - Categorical X Continuous: `geom_boxplot()` or `geom_violin()`
+  
+  - Continuous X Continuous: `geom_point()`
+  
+---
+
+# Beyond Bivariate
+
+2. Trivariate
+
+  - Categorical X Categorical X Continuous: `geom_tile()`
+  
+  - Continuous X Continuous X Categorical: `geom_point()` + `color`
+  
+  - Continuous X Continuous X Continuous: `geom_point()` + `color`/`size`
+  
+  - Latitude X Longitude X Categorical / Continuous: Maps!
+  
+  - Var X Var X Time: Animated!
+  
+  - (Beyond the scope of this course, but get creative!)
+
+---
+
+# .red[Analyzing]
+
+- For now, just focus on `IRV/Online` versus `Live phone - RDD`
+
+--
+
+- Since `margin` is a continuous variable, use `geom_histogram`
+
+
+```r
+pMode &lt;- poll %&gt;% 
+  filter(Mode == "IVR/Online" | Mode == "Live phone - RDD") %&gt;%
+    ggplot(aes(x= margin, fill = Mode)) +     
+  labs(y = "Number of Polls",
+         x = "Biden- Trump Margin",
+         title = "Biden-Trump Margin for Two Types of Polls",
+        fill = "Mode of Interview") +
+*   geom_histogram(bins=10, color="black", position="dodge") +
+    scale_x_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# Mode Matters!
+
+
+```r
+pMode
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- But results are **inconsistent** with our .blue[theory]!
+
+---
+
+# Visualization
+
+--
+
+- How can we improve this? Perhaps `geom_density()` and `geom_vline()`?
+
+
+```r
+toplot &lt;- poll %&gt;% 
+  filter(Mode == "IVR/Online" | Mode == "Live phone - RDD")
+
+pModeDens &lt;- toplot %&gt;%
+  ggplot(aes(x= margin, color = Mode)) +     
+  labs(y = "Number of Polls",
+       x = "Biden- Trump Margin",
+       title = "Biden-Trump Margin for Two Types of Polls",
+       color = "Mode of Interview") +
+* geom_density(lwd = 1.2) +
+  scale_x_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1)) + 
+  geom_vline(data = toplot %&gt;%
+               group_by(Mode) %&gt;%
+               summarise(margin = mean(margin)),aes(xintercept = margin,color = Mode),linetype = 'dashed')
+```
+
+---
+
+# Visualization
+
+- How can we improve this? Perhaps `geom_density()` and `geom_vline()`?
+
+
+```r
+pModeDens
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# More Modes
+
+--
+
+- `geom_histogram()` and `geom_density()` less useful for more comparisons
+
+--
+
+- First, let's drop modes that were hardly used
+
+
+```r
+(toKeep &lt;- poll %&gt;%
+  count(Mode) %&gt;%
+* filter(n &gt; 5,
+         !is.na(Mode)))
+```
+
+```
+## # A tibble: 5 × 2
+##   Mode                 n
+##   &lt;chr&gt;            &lt;int&gt;
+## 1 IVR/Online          47
+## 2 Live phone - RBS    13
+## 3 Live phone - RDD    51
+## 4 Online             366
+## 5 Phone/Online        19
+```
+
+```r
+toplot &lt;- poll %&gt;% filter(Mode %in% toKeep$Mode)
+```
+
+---
+
+# More Modes
+
+- How hard is `geom_histogram()` with more categories?
+
+
+```r
+pModeHist &lt;- toplot %&gt;%
+  ggplot(aes(x= margin, fill = Mode)) +     
+  labs(y = "Number of Polls",
+       x = "Biden- Trump Margin",
+       title = "Biden-Trump Margin for Two Types of Polls",
+       fill = "Mode of Interview") +
+* geom_histogram(color = 'black',position = 'dodge',bins = 10) +
+  scale_x_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# More Modes
+
+- How hard is `geom_histogram()` with more categories?
+
+
+```r
+pModeHist
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+# More Modes
+
+- How hard is `geom_density()` with more categories?
+
+
+```r
+pModeDens &lt;- toplot %&gt;%
+  ggplot(aes(x= margin, color = Mode)) +     
+  labs(y = "Number of Polls",
+       x = "Biden- Trump Margin",
+       title = "Biden-Trump Margin for Two Types of Polls",
+       color = "Mode of Interview") +
+* geom_density(lwd = 1.2) +
+  scale_x_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1)) + 
+  geom_vline(data = toplot %&gt;%
+               group_by(Mode) %&gt;%
+               summarise(margin = mean(margin)),aes(xintercept = margin,color = Mode),linetype = 'dashed')
+```
+
+---
+
+# More Modes
+
+- How hard is `geom_density()` with more categories?
+
+
+```r
+pModeDens
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# `geom_boxplot()`
+
+--
+
+- More categories requires more compact ways of visualizing distributions
+
+--
+
+
+```r
+pModeBox &lt;- toplot %&gt;% 
+  ggplot(aes(x = Mode, y = margin)) + 
+    labs(x = "Mode of Survey Interview",
+         y = "Biden- Trump Margin",
+         title = "2020 Popular Vote Margin by Type of Poll") +
+*   geom_boxplot(fill = "slateblue") +
+    scale_y_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# `geom_boxplot()`
+
+- More categories requires more compact ways of visualizing distributions
+
+
+```r
+pModeBox
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Ordering Unordered Categories
+
+--
+
+- We can use `reorder()` to arrange categories by the data
+
+
+```r
+pModeBox &lt;- toplot %&gt;% 
+* ggplot(aes(x = reorder(Mode,margin), y = margin)) +
+    labs(x = "Mode of Survey Interview",
+         y = "Biden- Trump Margin",
+         title = "2020 Popular Vote Margin by Type of Poll") +
+    geom_boxplot(fill = "slateblue") + 
+    scale_y_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# Ordering Unordered Categories
+
+- We can use `reorder()` to arrange categories by the data
+
+
+```r
+pModeBox + coord_flip()
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# `geom_violin()`
+
+--
+
+- Boxplots are cleaner than densities and histograms for multiple categories
+
+--
+
+- But we lose ability to see distributions within the 80% box
+
+
+```r
+pModeViol &lt;- toplot %&gt;% 
+  ggplot(aes(x = reorder(Mode,margin), y = margin)) + 
+    labs(x = "Mode of Survey Interview",
+         y = "Biden- Trump Margin",
+         title = "2020 Popular Vote Margin by Type of Poll") +
+*   geom_violin(fill = "slateblue",alpha = .5) +
+    scale_y_continuous(breaks=seq(-.1,.2,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+
+---
+
+# `geom_violin()`
+
+
+```r
+pModeViol + geom_hline(yintercept = 0,linetype = 'dashed')
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Continuous by Continuous
+
+--
+
+- For .blue[conditional relationships] between two .red[continuous variables], use `geom_point()`
+
+--
+
+- .blue[Theory]: Are polls politically biased?
+
+--
+
+  - I.e., a Biden-friendly poll might **under**predict Trump support and **over**predict Biden support
+  
+--
+
+- .red[Data]: Trump support conditional on Biden support
+
+
+
+---
+
+# .red[Analysis]
+
+- Plot Trump support versus Biden support
+
+
+```r
+pSupp &lt;- poll %&gt;%
+  ggplot(aes(x = Biden, y = Trump)) + 
+  labs(title="Biden and Trump Support in 2020 National Popular Vote",
+       y = "Trump Support",
+       x = "Biden Support") + 
+  geom_point(color="purple") + 
+    scale_y_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# `geom_scatter()`
+
+
+```r
+pSupp
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- How many observations are at each point?
+
+---
+
+# Tweaking `alpha`
+
+--
+
+- We can set the transparency of each point such that multiple points will show up darker
+
+--
+
+  - I.e., `alpha=.3` means that a single point will be 70% transparent, but 3 points on top of each other will be 10% transparent
+
+
+```r
+pSupp &lt;- poll %&gt;%
+  ggplot(aes(x = Biden, y = Trump)) + 
+  labs(title="Biden and Trump Support in 2020 National Popular Vote",
+       y = "Trump Support",
+       x = "Biden Support") + 
+* geom_point(color="purple",alpha = .3,size = 3) +
+    scale_y_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# Tweaking `alpha`
+
+
+```r
+pSupp
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# `geom_jitter()`
+
+--
+
+- Instead, we could "jitter" the points
+
+--
+
+  - This adds some random noise to each point to shake them off each other
+  
+
+```r
+pSupp &lt;- poll %&gt;%
+  ggplot(aes(x = Biden, y = Trump)) + 
+  labs(title="Biden and Trump Support in 2020 National Popular Vote",
+       y = "Trump Support",
+       x = "Biden Support") + 
+* geom_jitter(color="purple") +
+    scale_y_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+---
+
+# `geom_jitter()`
+
+
+```r
+pSupp
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# `size`
+
+--
+
+- Finally, we could simply count the number of polls at each x,y coordinate
+
+--
+
+  - Then size the points by the number of polls
+  
+
+```r
+pSupp &lt;- poll %&gt;%
+  group_by(Biden,Trump) %&gt;%
+* summarise(nPolls = n()) %&gt;%
+* ggplot(aes(x = Biden, y = Trump,size = nPolls)) +
+  labs(title="Biden and Trump Support in 2020 National Popular Vote",
+       y = "Trump Support",
+       x = "Biden Support") + 
+  geom_point(color="purple",alpha = .5) +  
+    scale_y_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks=seq(0,1,by=.05),
+                     labels= scales::percent_format(accuracy = 1))
+```
+
+```
+## `summarise()` has grouped output by 'Biden'. You can
+## override using the `.groups` argument.
+```
+
+---
+
+# `size`
+
+
+```r
+pSupp
+```
+
+&lt;img src="ds1000_lecture_8_slides_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# .blue[Theory]
+
+--
+
+- These results indicate that polls which predict greater support for Biden **also** predict greater support for Trump
+
+--
+
+  - Is this consistent with the theory?
+  
+--
+
+  - Recall that **Biden-biased** polls should underpredict Trump support and overpredict Biden support
+  
+--
+
+  - In the .red[data], this would suggest a **negative** relationship
+  
+--
+
+  - But we find a **positive** relationship
+  
+--
+
+- **Inconsistent** with the theory, but raises another puzzle
+
+--
+
+- Why do polls that underpredict support for Biden also underpredict support for Trump?
+
+--
+
+  - .blue[Third party bias?] Polls bias against 3rd party candidates
+  
+--
+
+  - .blue[Timing of poll?] Fewer uncertain responses closer to election
+  
+  - More next time!
+
+
+---
+
+# Quiz &amp; Homework
+
+- Go to Brightspace and take the **7th** quiz
+
+--
+
+  - The password to take the quiz is #### &lt;!-- 1828 --&gt;
+  
+--
+
+- **Homework:**
+
+--
+  
+  1. Work through ds1000_hw_8.Rmd
+  
+  2. Problem Set 4 (Brightspace)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
