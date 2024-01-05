@@ -66,9 +66,9 @@ There are also two exams. The first is a mid-term exam that is scheduled for Oct
 
 The final grade is calculated as a weighted average of these components with the following weights:
 
-- **Problem sets:** 11 in total, only 8 of which are worth 5% of your final grade. I will automatically drop the three lowest-scoring problem sets from your final grade. 
-- **Exams:** Midterm and final, both of which are in-class. These are each worth 20% of your final grade, comprising 40% of your final grade. 
-- **Quizzes:** There are 20 quizzes over the course of the semester which can only be taken if you attend class. Each consist of five questions plus an honor statement. 50% of the quiz grade comes from accurately answering all five questions, and 50% comes from signing the honor statement. Each quiz is worth 1% of your final grade, and combined comprise the final 20%.
+- **Problem sets:** 11 in total, only 10 of which are worth 4% of your final grade. I will automatically drop the lowest-scoring problem sets from your final grade. 
+- **Exams:** Midterm and final, both of which are in-class. The midterm is worth 20%, and the final worth 25% of your final grade.
+- **Quizzes:** There are 19 quizzes over the course of the semester which can only be taken if you attend class. Each consist of several questions plus an attendance statement. 50% of the quiz grade comes from accurately answering all five questions, and 50% comes from signing the attendance statement. Each quiz is worth 1% of your final grade, and combined comprise the final 15%, meaning that 4 are not counted.
 	
 Letter grades are determined as per the standard Vanderbilt grading system, reproduced below:
 
