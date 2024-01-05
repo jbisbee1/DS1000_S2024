@@ -149,7 +149,7 @@ The observance of religious holidays (activities observed by a religious group o
 *[Back to ToC](#table-of-contents)*
 
 ## Office Hours (OH) / Labs
-* Prof. Bisbee: OH T & Th at 3PM in Commons #353
+* Prof. Bisbee: OH T & Th from 3PM-4PM in Commons #353
 * TA Brych: TBD
 * TA Fang: TBD
 * TA Gupta: TBD
