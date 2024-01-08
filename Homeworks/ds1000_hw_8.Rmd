@@ -18,6 +18,7 @@ Recall that we have tested Trump's theory that the MSM was biased against him. W
 
 ```{r}
 require(tidyverse)
+require(scales)
 Pres2020.PV <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Pres2020_PV.Rds")
 Pres2020.PV <- Pres2020.PV %>%
                 mutate(Trump = Trump/100,
