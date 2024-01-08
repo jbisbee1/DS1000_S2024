@@ -1,6 +1,6 @@
 ---
 title: "Problem Set 4"
-subtitle: "Intro to `R`"
+subtitle: "Univariate Analysis"
 author: "[YOUR NAME]"
 institute: "Vanderbilt University"
 date: "Due Date: 2024-02-09"
@@ -35,12 +35,9 @@ You are free to rely on whatever resources you need to complete this problem set
 *Copy the link to ChatGPT you used here: _______________________.
 
 ## Question 0
-Require `tidyverse` and `haven`, and then load the [`nba_players_2018.Rds`](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/nba_players_2018.Rds?raw=true') data to an object called `nba`.
+Require `tidyverse` and an additional package called `haven` (remember to `install.packages("haven")` if you don't have it yet), and then load the [`nba_players_2018.Rds`](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/nba_players_2018.Rds?raw=true') data to an object called `nba`.
 ```{r}
-require(tidyverse)
-require(haven)
-nba <- read_rds('https://github.com/jbisbee1/DS1000_S2024/blob/main/data/nba_players_2018.Rds?raw=true')
-#https://github.com/jbisbee1/DS1000_S2023/blob/main/Lectures/4_Uni_Multivariate/data/nba_players_2018.Rds?raw=true')
+# INSERT CODE HERE
 ```
 
 

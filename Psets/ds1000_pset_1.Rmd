@@ -30,15 +30,15 @@ You are free to rely on whatever resources you need to complete this problem set
 
 **Good luck!**
 
-*Copy the link to ChatGPT you used here: https://chat.openai.com/share/76ceff30-77db-42ed-a151-01d5ce76488e.
+*Copy the link to ChatGPT you used here: _________________
 
 
 
 ## Question 0 [0 points]
 *Require `tidyverse` and load the `sc_debt.Rds` data by assigning it to an object named `df`.*
 ```{r}
-require(tidyverse) # Load tidyverse
-df <- read_rds("https://github.com/jbisbee1/DS1000_F2023/blob/main/data/sc_debt.Rds") # Load the dataset
+require() # Load tidyverse
+df <- read_rds() # Load the dataset directly from github
 ```
 
 
@@ -50,7 +50,7 @@ df %>%
   select() # Select the school name, the admission rate, and the state
 ```
 
-> - There are two schools with the lowest admissions rate: St. Elizabeth College of Nursing and Yeshivat Hechal Shemuel. They are both in New York, and have an admissions rate of 0%. EC: Assuming that this is an error in the data (since how can a school not admit any students?), the lowest non-zero admissions is for Hampshire College in Massachusetts.
+> Write answer here
 
 ## Question 2 [2 points]
 *Which are the top 10 schools by average SAT score (`sat_avg`)?*
@@ -61,7 +61,7 @@ df %>%
   print() # Print the first 12 rows (hint: there is a tie)
 ```
 
-> - The top 10 schools by average SAT score are CIT, MIT, U Chicago, Harvey Mudd, Duke, Franklin Olin, WUSTL, Rice, Yale, Harvard. EC: There is a three-way tie for the school with the 10th highest average SAT score: Princeton, Harvard, and Yale all have an average score of 1517.
+> Write answer here
 
 ## Question 3 [2 points]
 *Create a new variable called `adm_rate_pct` which is the admissions rate multiplied by 100 to convert from a 0-to-1 decminal to a 0-to-100 percentage point.*
@@ -87,5 +87,4 @@ df %>%
 # INSERT CODE HERE
 ```
 
-> - I observe a positive relationship between SAT scores and earnings. I theorize that this relationship reflects the fact that SAT scores capture student abilities that are rewarded on the labor market. EC: However, SAT scores are also correlated with many other socio-economic factors which might also improve one's earnings (i.e. social network) which are unrelated to student ability.
-
+> Write answer here

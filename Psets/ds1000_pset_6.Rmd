@@ -33,10 +33,9 @@ You are free to rely on whatever resources you need to complete this problem set
 *Copy the link to ChatGPT you used here: _____________________
 
 ## Question 0
-Require `tidyverse` and load the [`game_summary.rds`](https://github.com/jbisbee1/DS1000_S2023/blob/main/Lectures/4_Uni_Multivariate/data/game_summary.Rds?raw=true') data to an object called `games`.
+Require `tidyverse` and load the [`game_summary.rds`](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/game_summary.Rds?raw=true') data to an object called `games`.
 ```{r}
-require(tidyverse)
-games <- read_rds('https://github.com/jbisbee1/DS1000_S2024/blob/main/data/game_summary.Rds?raw=true')
+# INSERT CODE HERE
 ```
 
 

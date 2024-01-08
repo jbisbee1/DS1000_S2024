@@ -1,5 +1,5 @@
 ---
-title: "Problem Set 2"
+title: "Problem Set 3"
 subtitle: "Data Wrangling"
 author: "[YOUR NAME]"
 institute: "Vanderbilt University"
@@ -30,10 +30,10 @@ You are free to rely on whatever resources you need to complete this problem set
 
 **Good luck!**
 
-*Copy the link to ChatGPT you used here: https://chat.openai.com/share/76ceff30-77db-42ed-a151-01d5ce76488e.
+*Copy the link to ChatGPT you used here: _________________
 
 ## Question 0
-Require `tidyverse` and load the `MI2020_ExitPoll.Rds` data to an object called `MI_raw`. (Tip: use the `read_rds()` function with the link to the raw data.)
+Require `tidyverse` and an additional package called `labelled` (remember to `install.packages("labelled")` if you don't have it yet) and load the `MI2020_ExitPoll.Rds` data to an object called `MI_raw`. (Tip: use the `read_rds()` function with the link to the raw data.)
 
 ```{r}
 # INSERT CODE HERE
@@ -42,17 +42,19 @@ Require `tidyverse` and load the `MI2020_ExitPoll.Rds` data to an object called 
 
 ## Question 1 [2 points]
 Create a new object called `MI_clean` that contains only the following variables:
-  - AGE10
-  - SEX
-  - PARTYID
-  - EDUC18
-  - PRMSI20
-  - QLT20
-  - LGBT
-  - BRNAGAIN
-  - LATINOS
-  - QRACEAI
-  - WEIGHT
+
+* AGE10
+* SEX
+* PARTYID
+* EDUC18
+* PRMSI20
+* QLT20
+* LGBT
+* BRNAGAIN
+* LATINOS
+* QRACEAI
+* WEIGHT
+
 and then list which of these variables contain missing data recorded as `NA`. How many respondents were not asked certain questions?
 ```{r}
 MI_clean <- MI_raw %>% 
@@ -92,10 +94,10 @@ MI_clean <- MI_clean %>%
          Lgbt_clean = ) # Create new variable with text
 
 MI_clean <- MI_clean %>%
-  mutate(Qlty = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",Qlty),NA,Qlty),
-         Lgbt_clean = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",Lgbt_clean),NA,Lgbt_clean),
-         Age = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",Age),NA,Age),
-         preschoice = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",preschoice),NA,preschoice))
+  mutate(Qlty = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",Qlty),NA,Qlty), # Replace unit non-response with NA
+         Lgbt_clean = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",Lgbt_clean),NA,Lgbt_clean), # Replace unit non-response with NA
+         Age = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",Age),NA,Age), # Replace unit non-response with NA
+         preschoice = ifelse(grepl("SUBSTRING FOR UNIT NON-RESPONSE",preschoice),NA,preschoice)) # Replace unit non-response with NA
 ```
 
 ## Question 5 [1 point]

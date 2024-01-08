@@ -1,6 +1,6 @@
 ---
 title: "Problem Set 2"
-subtitle: "Intro to `R`"
+subtitle: "Visualization in `R`"
 author: "[YOUR NAME]"
 institute: "Vanderbilt University"
 date: "Due Date: 2024-01-26"
@@ -30,7 +30,7 @@ You are free to rely on whatever resources you need to complete this problem set
 
 **Good luck!**
 
-*Copy the link to ChatGPT you used here: https://chat.openai.com/share/76ceff30-77db-42ed-a151-01d5ce76488e.
+*Copy the link to ChatGPT you used here: _________________
 
 
 
@@ -45,7 +45,7 @@ df <- read_rds("") # Load the dataset
 ## Question 1 [2 points]
 *Research Question: Do students who graduate from smaller schools (i.e., schools with smaller student bodies) make more money in their future careers? Before looking at the data, write out what you think the answer is, and explain why you think so.*
 
->- Write a few sentences here.
+> Write a few sentences here.
 
 ## Question 2 [2 points]
 *Based on this research question, what is the outcome / dependent / $Y$ variable and what is the explanatory / independent / $X$ variable? Create the scatterplot of the data based on this answer, along with a line of best fit. Is your answer to the research question supported?*
@@ -60,7 +60,7 @@ df %>%
        y = '')
 ```
 
-> - Write a few sentences here.
+> Write a few sentences here.
 
 ## Question 3 [2 points]
 *Does this relationship change by whether the school is a research university? Using the filter() function, create two versions of the plot, one for research universities and the other for non-research universities.*
@@ -111,5 +111,5 @@ df %>%
 ## Extra Credit [2 points]
 *Write a short paragraph discussing your findings. What do you think is going on in these data?*
 
-> - Write a few sentences here
+> Write a few sentences here
 
