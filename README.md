@@ -165,37 +165,35 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 
 ## Syllabus
 
-| Date | Topic | Learning Goal | Slides | HW | Pset 
-| ---: | :--- | :--- | --- | --- | --- 
 01/09 | Introduction | Scientific method, camps of analysis | [Lecture 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_1_slides.html#1) | [HW 1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_1.Rmd) | [Pset 0](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_0.Rmd)
 01/11 | BREAK |  |  |  | 
-01/16 | Intro to R 1 | R as data science | [Lecture 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_2_slides.html#1) | [HW 2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_2.Rmd) | [Pset 1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_1.Rmd)
-01/18 | Intro to R 2 | Objects, functions, and code | [Lecture 3](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_3_slides.html#1) | [HW 3](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_3.Rmd) | 
-01/23 | Intro to R 3 | Visualization in R | [Lecture 4](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_4_slides.html#1) | [HW 4](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_4.Rmd) | [Pset 2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_2.Rmd)
+01/16 | Intro to R 1 | Objects, functions, and code | [Lecture 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_2_slides.html#1) | [HW 2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_2.Rmd) | [Pset 1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_1.Rmd)
+01/18 | Intro to R 2 | Visualization in R | [Lecture 3](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_3_slides.html#1) | [HW 3](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_3.Rmd) | 
+01/23 | Intro to R 3 | More visualization | [Lecture 4](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_4_slides.html#1) | [HW 4](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_4.Rmd) | [Pset 2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_2.Rmd)
 01/25 | Review Session |  |  |  | 
 01/30 | Data Wrangling | Replicability and tabular data | [Lecture 5](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_5_slides.html#1) | [HW 5](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_5.Rmd) | [Pset 3](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_3.Rmd)
 02/01 | Univariate Analysis | Summaries of a single variable | [Lecture 6](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_6_slides.html#1) | [HW 6](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_6.Rmd) | 
 02/06 | Multivariate 1 | Summaries of multiple variables | [Lecture 7](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_7_slides.html#1) | [HW 7](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_7.Rmd) | [Pset 4](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_4.Rmd)
 02/08 | Multivariate 2.a | Visualizations of multiple variables | [Lecture 8](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_8_slides.html#1) | [HW 8](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_8.Rmd) | 
 02/13 | Multivariate 2.b | Visualizations of multiple variables | [Lecture 9](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_9_slides.html#1) | [HW 9](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_9.Rmd) | [Pset 5](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_5.Rmd)
-02/15 | Multivariate 3 | Uncertainty and bootstrapping | [Lecture 10](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_10_slides.html#1) | [HW 10](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_10.Rmd) | 
-02/20 | Review Session |  |  |  | [Pset 6](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_6.Rmd)
-02/22 | Regression 1 | The concept of a linear regression | [Lecture 11](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_11_slides.html#1) | [HW 11](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_11.Rmd) | 
-02/27 | Regression 2 | Interpreting output and evaluating model | [Lecture 12](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_12_slides.html#1) | [HW 12](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_12.Rmd) | [Pset 7](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_7.Rmd)
-02/29 | Regression 3 | Multiple regression, categorical Xs | [Lecture 13](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13_slides.html#1) | [HW 13](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_13.Rmd) | 
-03/05 | Review Session |  |  |  | 
+02/15 | Review Session |  |  |  | 
+02/20 | Uncertainty 1 | Uncertainty and bootstrapping | [Lecture 10](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_10_slides.html#1) | [HW 10](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_10.Rmd) | [Pset 6](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_6.Rmd)
+02/22 | Uncertainty 2 | Confidence statements | [Lecture 11](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_11_slides.html#1) | [HW 11](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_11.Rmd) | 
+02/27 | Regression 1 | The concept of a linear regression | [Lecture 12](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_12_slides.html#1) | [HW 12](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_12.Rmd) | [Pset 7](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_7.Rmd)
+02/29 | Regression 2 | Interpreting output and evaluating model | [Lecture 13](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_13_slides.html#1) | [HW 13](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_13.Rmd) | 
+03/05 | Regression 3 | Multiple regression, categorical Xs | [Lecture 14](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_14_slides.html#1) | [HW 14](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_14.Rmd) | 
 03/07 | Midterm Exam |  |  |  | 
 03/12 | BREAK |  |  |  | 
 03/14 | BREAK |  |  |  | 
-03/19 | Classification 1 | The concept of a logistic regression | [Lecture 14](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_14_slides.html#1) | [HW 14](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_14.Rmd) | [Pset 8](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_8.Rmd)
-03/21 | Classification 2 | Interpreting output and evaluating model | [Lecture 15](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_15_slides.html#1) | [HW 15](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_15.Rmd) | 
-03/26 | Classification 3 | Using models for prediction | [Lecture 16](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_16_slides.html#1) | [HW 16](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_16.Rmd) | [Pset 9](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_9.Rmd)
+03/19 | Classification 1 | The concept of a logistic regression | [Lecture 15](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_15_slides.html#1) | [HW 15](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_15.Rmd) | [Pset 8](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_8.Rmd)
+03/21 | Classification 2 | Interpreting output and evaluating model | [Lecture 16](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_16_slides.html#1) | [HW 16](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_16.Rmd) | 
+03/26 | Classification 3 | Using models for prediction | [Lecture 17](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_17_slides.html#1) | [HW 17](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_17.Rmd) | [Pset 9](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_9.Rmd)
 03/28 | Review Session |  |  |  | 
-04/02 | Clustering | k-means clustering | [Lecture 17](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_17_slides.html#1) | [HW 17](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_17.Rmd) | [Pset 10](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_10.Rmd)
-04/04 | NLP 1 | k-means clustering on text | [Lecture 18](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_18_slides.html#1) | [HW 18](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_18.Rmd) | 
-04/09 | NLP 2 | Sentiment analysis | [Lecture 19](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19_slides.html#1) | [HW 19](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_19.Rmd) | [Pset 11](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_11.Rmd)
+04/02 | Clustering | k-means clustering | [Lecture 18](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_18_slides.html#1) | [HW 18](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_18.Rmd) | [Pset 10](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_10.Rmd)
+04/04 | NLP 1 | k-means clustering on text | [Lecture 19](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19_slides.html#1) | [HW 19](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_19.Rmd) | 
+04/09 | NLP 2 | Sentiment analysis | [Lecture 20](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20_slides.html#1) |  | [Pset 11](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_11.Rmd)
 04/11 | Review Session |  |  |  | 
-04/16 | Ethics | The risks of rapid technological change | [Lecture 20](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20_slides.html#1) |  | 
+04/16 | Ethics | The risks of rapid technological change | [Lecture 21](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_21_slides.html#1) |  | 
 04/18 | Review Session |  |  |  | 
 04/23 | Final Exam |  |  |  | 
 04/25 | Final Exam |  |  |  | 
