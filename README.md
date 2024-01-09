@@ -150,14 +150,14 @@ The observance of religious holidays (activities observed by a religious group o
 
 ## Office Hours
 * Prof. Bisbee: T & Th from 3PM-4PM in Commons #353
-* TA Brych: Tues from 10AM-12PM on [Zoom](https://vanderbilt.zoom.us/j/96141105504?pwd=eVFOdTBNelZFSHdVZEZ1VXcrNjBOZz09)
+* TA Brych: Tues from 10AM-12PM on Zoom
 * TA Fang: TBD
-* TA Gupta: Mon from 4PM-6PM on [Zoom](https://vanderbilt.zoom.us/j/95319136653)
-* TA Manda Li: Wed from 3PM-5PM on [Zoom](https://us04web.zoom.us/j/3018196722?pwd=Ynh6M0xDTlNaQS9xSDQvYUtYc2ljZz09)
+* TA Gupta: Mon from 4PM-6PM on Zoom
+* TA Manda Li: Wed from 3PM-5PM on Zoom
 * TA Qifan Lin: TBD
-* TA Quagliata: Mon from 1PM-3PM on [Zoom](https://vanderbilt.zoom.us/j/5805405406)
-* TA Sivakumar: Mon from 10AM-12PM on [Zoom](https://vanderbilt.zoom.us/j/3608157838)
-* TA Zha: Tues from 4PM-6PM on [Zoom](https://vanderbilt.zoom.us/j/3484914485)
+* TA Quagliata: Mon from 1PM-3PM on Zoom
+* TA Sivakumar: Mon from 10AM-12PM on Zoom
+* TA Zha: Tues from 4PM-6PM on Zoom
 
 All these can also be found on the [Campuswire calendar](https://campuswire.com/c/G07163719/feed), along with the Zoom links for those hosting their office hours remotely.
 
