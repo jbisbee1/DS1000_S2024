@@ -165,6 +165,8 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 
 ## Syllabus
 
+| Date | Topic | Learning Goal | Slides | HW | Pset 
+| ---: | :--- | :--- | --- | --- | --- 
 01/09 | Introduction | Scientific method, camps of analysis | [Lecture 1](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_1_slides.html#1) | [HW 1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_1.Rmd) | [Pset 0](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_0.Rmd)
 01/11 | BREAK |  |  |  | 
 01/16 | Intro to R 1 | Objects, functions, and code | [Lecture 2](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_2_slides.html#1) | [HW 2](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_2.Rmd) | [Pset 1](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_1.Rmd)
