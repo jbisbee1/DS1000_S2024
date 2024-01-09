@@ -19,6 +19,7 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      slideNumberFormat: "%current%"
       #ratio: "16:9"
 
 ---
@@ -728,7 +729,7 @@ p +
 
 # Quiz & Homework
 
-- Go to Brightspace and take the quiz
+- Go to Brightspace and take the **3rd** quiz
 
 --
 
@@ -740,7 +741,7 @@ p +
 
 --
   
-  1. Work through ds1000_hw_3.Rmd
+  1. Work through ds1000_hw_4.Rmd
   
   2. Complete Problem Set 2 by Friday
 

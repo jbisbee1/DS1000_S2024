@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Uncertainty Part 2</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Prof. Bisbee" />
+    <script src="libs/header-attrs-2.18/header-attrs.js"></script>
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/lexis.css" type="text/css" />
+    <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Uncertainty Part 2
+]
+.subtitle[
+## Sports Analytic Mania
+]
+.author[
+### Prof. Bisbee
+]
+.institute[
+### Vanderbilt University
+]
+.date[
+### Slides Updated: 2024-01-09
+]
+
+---
+
+
+&lt;style type="text/css"&gt;
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+&lt;/style&gt;
+
+
+
+# Agenda
+
+1. Uncertainty
+
+2. More NBA data
+
+3. Bootstrap Sampling
+
+---
+
+# Sports Analytics
+
+- Previously, we looked at players
+
+--
+
+  - Specifically, `isRookie` and `pts`
+  
+  - But could try **many** other ideas
+  
+--
+
+- Useful if we want a job scouting talent
+
+- But what if we want to advise actual games?
+
+--
+
+  - **Game Data**!
+
+---
+
+# Other NBA Data
+
+--
+
+- Load the [`game_summary.Rds`](https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_summary.Rds) data
+
+
+```r
+require(tidyverse)
+gms &lt;- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_summary.Rds')
+gms
+```
+
+```
+## # A tibble: 7,380 × 16
+##    idGame yearSeason dateGame   idTeam nameTeam locationGame
+##     &lt;dbl&gt;      &lt;int&gt; &lt;date&gt;      &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;       
+##  1 2.16e7       2017 2016-10-25 1.61e9 Clevela… H           
+##  2 2.16e7       2017 2016-10-25 1.61e9 New Yor… A           
+##  3 2.16e7       2017 2016-10-25 1.61e9 Portlan… H           
+##  4 2.16e7       2017 2016-10-25 1.61e9 Utah Ja… A           
+##  5 2.16e7       2017 2016-10-25 1.61e9 Golden … H           
+##  6 2.16e7       2017 2016-10-25 1.61e9 San Ant… A           
+##  7 2.16e7       2017 2016-10-26 1.61e9 Miami H… A           
+##  8 2.16e7       2017 2016-10-26 1.61e9 Orlando… H           
+##  9 2.16e7       2017 2016-10-26 1.61e9 Dallas … A           
+## 10 2.16e7       2017 2016-10-26 1.61e9 Indiana… H           
+## # ℹ 7,370 more rows
+## # ℹ 10 more variables: tov &lt;dbl&gt;, pts &lt;dbl&gt;, treb &lt;dbl&gt;,
+## #   oreb &lt;dbl&gt;, pctFG &lt;dbl&gt;, pctFT &lt;dbl&gt;, teamrest &lt;dbl&gt;,
+## #   second_game &lt;lgl&gt;, isWin &lt;lgl&gt;, ft_80 &lt;dbl&gt;
+```
+
+---
+
+# Other NBA Data
+
+- Contains data on every game played between 2016 and 2019
+
+--
+
+
+```r
+gms %&gt;%
+  ggplot(aes(x = dateGame)) +
+  geom_bar(stat = 'count')
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Other NBA Data
+
+
+```r
+glimpse(gms)
+```
+
+```
+## Rows: 7,380
+## Columns: 16
+## $ idGame       &lt;dbl&gt; 21600001, 21600001, 21600002, 2160000…
+## $ yearSeason   &lt;int&gt; 2017, 2017, 2017, 2017, 2017, 2017, 2…
+## $ dateGame     &lt;date&gt; 2016-10-25, 2016-10-25, 2016-10-25, …
+## $ idTeam       &lt;dbl&gt; 1610612739, 1610612752, 1610612757, 1…
+## $ nameTeam     &lt;chr&gt; "Cleveland Cavaliers", "New York Knic…
+## $ locationGame &lt;chr&gt; "H", "A", "H", "A", "H", "A", "A", "H…
+## $ tov          &lt;dbl&gt; 14, 18, 12, 11, 16, 13, 10, 11, 15, 1…
+## $ pts          &lt;dbl&gt; 117, 88, 113, 104, 100, 129, 108, 96,…
+## $ treb         &lt;dbl&gt; 51, 42, 34, 31, 35, 55, 52, 45, 49, 5…
+## $ oreb         &lt;dbl&gt; 11, 13, 5, 6, 8, 21, 16, 15, 10, 8, 1…
+## $ pctFG        &lt;dbl&gt; 0.4833077, 0.3220769, 0.4310000, 0.51…
+## $ pctFT        &lt;dbl&gt; 0.7500000, 0.8055000, 1.0000000, 1.00…
+## $ teamrest     &lt;dbl&gt; 120, 120, 120, 120, 120, 120, 120, 12…
+## $ second_game  &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FA…
+## $ isWin        &lt;lgl&gt; TRUE, FALSE, TRUE, FALSE, FALSE, TRUE…
+## $ ft_80        &lt;dbl&gt; 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+```
+
+---
+
+# Codebook
+
+| Name         |                                          Description |
+|--------------|-----------------------------------------------------:|
+| idGame       |                                       Unique game id |
+| yearSeason   | Which season? NBA uses ending year so 2016-17 = 2017 |
+| dateGame     |                                     Date of the game |
+| idTeam       |                                       Unique team id |
+| nameTeam     |                                            Team Name |
+| locationGame |                        Game location, H=Home, A=Away |
+| tov          |                                      Total turnovers |
+| pts          |                                         Total points |
+| treb         |                                       Total rebounds |
+| pctFG        |                                Field Goal Percentage |
+| teamrest     |               How many days since last game for team |
+| pctFT        |                                Free throw percentage |
+| isWin        |                                   Won? TRUE or FALSE |
+| ft_80        |      Team scored more than 80 percent of free throws |
+
+---
+
+# Codebook
+
+--
+
+- Which of these are categorical? Which are continuous?
+
+--
+
+  - Remember the **process**!
+  
+--
+
+- `isWin` as an ordered binary
+
+
+```r
+gms %&gt;%
+  count(isWin)
+```
+
+```
+## # A tibble: 2 × 2
+##   isWin     n
+##   &lt;lgl&gt; &lt;int&gt;
+## 1 FALSE  3690
+## 2 TRUE   3690
+```
+
+---
+
+# Codebook
+
+- The same number for wins and losses?
+  
+
+```r
+gms %&gt;%
+  select(idGame,nameTeam,dateGame,locationGame,isWin) %&gt;% head()
+```
+
+```
+## # A tibble: 6 × 5
+##     idGame nameTeam            dateGame   locationGame isWin
+##      &lt;dbl&gt; &lt;chr&gt;               &lt;date&gt;     &lt;chr&gt;        &lt;lgl&gt;
+## 1 21600001 Cleveland Cavaliers 2016-10-25 H            TRUE 
+## 2 21600001 New York Knicks     2016-10-25 A            FALSE
+## 3 21600002 Portland Trail Bla… 2016-10-25 H            TRUE 
+## 4 21600002 Utah Jazz           2016-10-25 A            FALSE
+## 5 21600003 Golden State Warri… 2016-10-25 H            FALSE
+## 6 21600003 San Antonio Spurs   2016-10-25 A            TRUE
+```
+
+--
+
+- Each row is a **team-game** pair
+
+--
+
+  - I.e., the Cavs hosted the Knicks on October 25, 2016 and won!
+  
+---
+
+# The Knicks
+
+&lt;center&gt;&lt;img src="https://miro.medium.com/max/1215/1*SeZTaMMhZbrG6zV5wTzLqg.gif" width = 100%&gt;&lt;/center&gt;
+
+---
+
+# .blue[Science]
+
+--
+
+- What predicts winning?
+
+--
+
+  - Points? (more is better)
+  - Turnovers? (less is better)
+  - Rebounds? (more is better)
+  
+--
+
+- How confident are we?
+
+
+```r
+gms %&gt;%
+  group_by(isWin) %&gt;%
+  summarise(avgTO = mean(tov))
+```
+
+```
+## # A tibble: 2 × 2
+##   isWin avgTO
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE  13.9
+## 2 TRUE   13.1
+```
+
+---
+
+# Turnovers and Winning
+
+--
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+--
+
+- FSNoR: is this *always* the case?
+
+
+```r
+gms %&gt;%
+  filter(yearSeason == 2017) %&gt;%
+  group_by(isWin) %&gt;%
+  summarise(avgTO = mean(tov))
+```
+
+```
+## # A tibble: 2 × 2
+##   isWin avgTO
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE  13.8
+## 2 TRUE   12.9
+```
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+
+```r
+gms %&gt;%
+  filter(yearSeason == 2018) %&gt;%
+  group_by(isWin) %&gt;%
+  summarise(avgTO = mean(tov))
+```
+
+```
+## # A tibble: 2 × 2
+##   isWin avgTO
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE  14.1
+## 2 TRUE   13.3
+```
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+
+```r
+gms %&gt;%
+  group_by(isWin,yearSeason) %&gt;%
+  summarise(avgTO = mean(tov)) %&gt;%
+  spread(isWin,avgTO,sep = '_')
+```
+
+```
+## `summarise()` has grouped output by 'isWin'. You can
+## override using the `.groups` argument.
+```
+
+```
+## # A tibble: 3 × 3
+##   yearSeason isWin_FALSE isWin_TRUE
+##        &lt;int&gt;       &lt;dbl&gt;      &lt;dbl&gt;
+## 1       2017        13.8       12.9
+## 2       2018        14.1       13.3
+## 3       2019        13.9       13.1
+```
+
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+--
+
+  - Not literally (numbers change)
+
+--
+
+  - But practically?
+  
+- How **confident** are we in making this claim?
+
+--
+
+  - In each season, the average turnovers of winning teams are roughly 1 lower than the average turnovers of losing teams
+  
+--
+
+  - Use **bootstrap sampling** to express this more concretely!
+  
+
+---
+
+# Looping
+
+
+```r
+set.seed(123)
+bs_tov &lt;- NULL
+for(i in 1:1000) {
+  bs_tov &lt;- gms %&gt;%
+    sample_n(size = 100,replace = T) %&gt;%
+    group_by(isWin) %&gt;%
+    summarise(avgTO = mean(tov)) %&gt;%
+    bind_rows(bs_tov)
+}
+bs_tov %&gt;% head()
+```
+
+```
+## # A tibble: 6 × 2
+##   isWin avgTO
+##   &lt;lgl&gt; &lt;dbl&gt;
+## 1 FALSE  13.6
+## 2 TRUE   13.3
+## 3 FALSE  13.9
+## 4 TRUE   13.0
+## 5 FALSE  14.1
+## 6 TRUE   13.0
+```
+
+---
+
+# Bootstrapped Estimates vs Data
+
+
+```r
+bs_tov %&gt;%
+  group_by(isWin) %&gt;%
+  summarise(bs_est = mean(avgTO))
+```
+
+```
+## # A tibble: 2 × 2
+##   isWin bs_est
+##   &lt;lgl&gt;  &lt;dbl&gt;
+## 1 FALSE   13.9
+## 2 TRUE    13.1
+```
+
+```r
+gms %&gt;%
+  group_by(isWin) %&gt;%
+  summarise(data_est = mean(tov))
+```
+
+```
+## # A tibble: 2 × 2
+##   isWin data_est
+##   &lt;lgl&gt;    &lt;dbl&gt;
+## 1 FALSE     13.9
+## 2 TRUE      13.1
+```
+
+---
+
+# Bootstrapped Estimates vs Data
+
+--
+
+- They're identical!
+
+--
+
+  - In .blue[theory], bootstrapped samples converge on true values
+  
+--
+
+  - ...where "true" is the full data
+  
+--
+
+- So then why bother with bootstrapping?
+
+--
+
+- **Uncertainty!**
+
+---
+
+# Plot Distributions of Bootstraps
+
+
+```r
+bs_tov %&gt;%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3)
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Generalizability
+
+--
+
+- What if we only used one season?
+
+--
+
+  - Do we think our conclusions would "generalize" (i.e., apply to) other seasons?
+
+--
+
+  - For example, is the turnover-win relationship the same in the 2017 season as the 2018 season?
+  
+--
+
+  - What about the 2019 season?
+  
+--
+
+  - Why or why not?
+  
+--
+
+- Demonstrate using the 2017 data
+
+---
+
+# Generalizability
+
+- Bootstrap + `group_by`
+
+
+```r
+bsRes &lt;- NULL
+
+for(i in 1:500) {  # Only 500 simulations this time
+  bsRes &lt;- gms %&gt;%
+    group_by(yearSeason) %&gt;% #&lt;&lt; Group by the season
+    sample_n(size = 100,replace = T) %&gt;% #&lt;&lt; Get 100 observations per season
+    group_by(yearSeason,isWin) %&gt;% #&lt;&lt; Then calculate mean tov by season AND win
+    summarise(avgTO = mean(tov,na.rm=T),.groups = 'drop') %&gt;%
+    ungroup() %&gt;%
+    mutate(bsInd = i) %&gt;%
+    bind_rows(bsRes)
+  
+}
+```
+
+---
+
+# Plotting the results
+
+
+```r
+bsRes %&gt;%
+  ggplot(aes(x = avgTO)) + 
+  geom_density(alpha = .3)
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Is this answering our .blue[question]?
+
+---
+
+# Plotting the results
+
+
+```r
+bsRes %&gt;%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3)
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+- Is this answering our .blue[question]?
+
+---
+
+# Plotting the results
+
+
+```r
+bsRes %&gt;%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3) + 
+  facet_grid(yearSeason~.)
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Plotting the results
+
+
+```r
+p  &lt;- bsRes %&gt;%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3) + 
+  geom_vline(data = bsRes %&gt;%
+               group_by(yearSeason,isWin) %&gt;%
+               summarise(avgTO = mean(avgTO,na.rm=T)),
+             aes(xintercept = avgTO,color = isWin),linetype = 'dashed') + 
+  geom_text(data = bsRes %&gt;%
+               group_by(yearSeason,isWin) %&gt;%
+               summarise(avgTO = mean(avgTO,na.rm=T)),
+             aes(x = avgTO,y = Inf,label = round(avgTO,1)),hjust = 1.1,vjust = 1.1,size = 3,angle = 90) + 
+  facet_grid(yearSeason~.)
+```
+
+```
+## `summarise()` has grouped output by 'yearSeason'. You can
+## override using the `.groups` argument.
+## `summarise()` has grouped output by 'yearSeason'. You can
+## override using the `.groups` argument.
+```
+
+---
+
+# Plotting the results
+
+
+```r
+p
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Summarizing further
+
+--
+
+- We are *actually* interested in whether winning teams turnover the ball less
+
+--
+
+  - .blue[Science]: never forget your theory / hypothesis!
+  
+--
+
+- So let's actually calculate this!
+
+--
+
+- The `spread` command to create two columns
+
+
+```r
+bsRes %&gt;%
+  spread(isWin,avgTO,sep = '_') %&gt;%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE)
+```
+
+```
+## # A tibble: 1,500 × 5
+##    yearSeason bsInd isWin_FALSE isWin_TRUE TO_diff
+##         &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;      &lt;dbl&gt;   &lt;dbl&gt;
+##  1       2017     1        14.3       13.1  1.16  
+##  2       2017     2        14.1       12.5  1.60  
+##  3       2017     3        13.6       13.9 -0.285 
+##  4       2017     4        13.6       12.3  1.34  
+##  5       2017     5        14.1       13.4  0.739 
+##  6       2017     6        14.3       12.9  1.47  
+##  7       2017     7        13.4       13.4 -0.0161
+##  8       2017     8        13.7       13    0.696 
+##  9       2017     9        13.9       12.5  1.41  
+## 10       2017    10        14.2       13.1  1.12  
+## # ℹ 1,490 more rows
+```
+
+---
+
+# Generalizability
+
+
+```r
+bsRes %&gt;%
+  spread(isWin,avgTO,sep = '_') %&gt;%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE) %&gt;%
+  ggplot(aes(x = TO_diff,fill = factor(yearSeason))) + 
+  geom_density(alpha = .3)
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Comparing across seasons
+
+
+```r
+p &lt;- bsRes %&gt;%
+  spread(isWin,avgTO,sep = '_') %&gt;%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE) %&gt;%
+  ggplot(aes(x = TO_diff,group = yearSeason)) + 
+  geom_density(alpha = .3) + 
+  geom_vline(xintercept = 0) + 
+  geom_text(data = bsRes %&gt;%
+             spread(isWin,avgTO,sep = '_') %&gt;%
+             mutate(TO_diff = isWin_FALSE - isWin_TRUE) %&gt;%
+             group_by(yearSeason) %&gt;%
+             summarise(conf = mean(TO_diff &gt; 0),
+                       TO_diff = mean(TO_diff),
+                       y = .25),
+            aes(x = TO_diff,y = y,label = paste0(round(conf*100,1),'%'))) + 
+  facet_grid(yearSeason ~.)
+```
+
+---
+
+# Comparing across seasons
+
+
+```r
+p
+```
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Visualization is **DEEP**
+
+
+```r
+toplot &lt;- bsRes %&gt;%
+  spread(isWin,avgTO,sep = '_') %&gt;%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE)
+
+tmp &lt;- density(toplot$TO_diff)
+p &lt;- data.frame(x = tmp$x,y = tmp$y,
+           area = tmp$x &gt;= 0) %&gt;%
+  ggplot(aes(x = x,ymin = 0,ymax = y,fill = area)) + 
+  geom_ribbon(alpha = .6) + 
+  geom_vline(xintercept = 0,linetype = 'dashed',size = 1.1) + 
+  annotate(geom = 'text',x = mean(toplot$TO_diff),y = .25,
+           label = paste0("Losing team had\nmore turnovers in\n",round(mean(toplot$TO_diff &gt; 0),3)*100,"% of\nBootstraps"),
+           hjust = .5) + 
+  labs(title = 'Difference in Turnovers by Game Outcome',
+       subtitle = '1,000 Bootstrapped Estimates from 2016-2019 Seasons',
+       x = 'Losing Team Turnovers minus Winning Team Turnovers',
+       y = 'Density of Simulated Games') + 
+  scale_fill_manual(name = 'Who Had More Turnovers',
+                    values = c('grey60','gold'),labels = c('Winning Team','Losing Team')) + 
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom')
+```
+
+```
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2
+## 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where
+## this warning was generated.
+```
+
+
+---
+
+# Visualization is **DEEP**
+
+&lt;img src="ds1000_lecture_11_slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+# Conclusion
+
+--
+
+- Anyone can spit stats
+
+&lt;center&gt;&lt;img src="https://imgs.xkcd.com/comics/sports.png" width=30%&gt;&lt;/center&gt;
+
+--
+
+- Data scientists are comfortable with **.blue[uncertainty]**
+
+
+---
+
+# Quiz &amp; Homework
+
+- Go to Brightspace and take the **10th** quiz
+
+--
+
+  - The password to take the quiz is #### &lt;!-- 6781 --&gt;
+  
+--
+
+- **Homework:**
+
+--
+  
+  1. Work through ds1000_hw_11.Rmd (regression!)
+  
+  2. Finish Problem Set 6 (on Brightspace)
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

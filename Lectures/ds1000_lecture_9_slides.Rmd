@@ -18,6 +18,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      slideNumberFormat: "%current%"
       #ratio: "16:9"
 
 ---
@@ -904,4 +905,4 @@ statePoll %>%
   
   1. Work through ds1000_hw_9.Rmd
   
-  2. Problem Set 4 (Brightspace)
+  2. Problem Set 5 (Brightspace)

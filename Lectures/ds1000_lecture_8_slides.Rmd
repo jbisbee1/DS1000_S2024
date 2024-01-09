@@ -18,6 +18,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      slideNumberFormat: "%current%"
       #ratio: "16:9"
 
 ---

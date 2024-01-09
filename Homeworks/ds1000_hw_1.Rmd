@@ -3,7 +3,7 @@ title: "Intro to Data Science"
 subtitle: "What R we doing?"
 author: "Prof. Bisbee"
 institute: "Vanderbilt University"
-date: "Due Date: 2023-09-04"
+date: "Due Date: 2024-01-16"
 output: html_document
 ---
 

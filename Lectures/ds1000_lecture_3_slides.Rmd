@@ -19,6 +19,7 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      slideNumberFormat: "%current%"
       #ratio: "16:9"
 
 ---
@@ -81,7 +82,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 - Load the `tidyverse` package
 
-```{r,message=F}
+```{r,message=F,warning=F}
 require(tidyverse)
 ```
 
@@ -996,4 +997,4 @@ name: end
   
   1. Work through ds1000_hw_3.Rmd
 
-  2. Make sure to submit Pset 2 to Brightspace by Friday at midnight!
+  2. Make sure to submit Pset 1 to Brightspace by Friday at midnight!

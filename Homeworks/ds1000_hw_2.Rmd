@@ -1,5 +1,5 @@
 ---
-title: "Intro to `R` Part 1"
+title: "Manipulating data in `R`"
 subtitle: "Homework"
 author: "Prof. Bisbee"
 institute: "Vanderbilt University"

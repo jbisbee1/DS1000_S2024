@@ -18,6 +18,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      slideNumberFormat: "%current%"
       #ratio: "16:9"
 
 ---
@@ -1142,7 +1143,7 @@ load('../data/MI_prepped.RData')
 
 # Quiz & Homework
 
-- Go to Brightspace and take the **5th** quiz
+- Go to Brightspace and take the **4th** quiz
 
 --
 
@@ -1156,4 +1157,4 @@ load('../data/MI_prepped.RData')
   
   1. Work through ds1000_hw_5.Rmd
   
-  2. Problem Set 3 (on Brightspace)
+  2. Problem Set 3 due Friday by midnight

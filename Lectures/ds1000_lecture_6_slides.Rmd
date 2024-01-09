@@ -18,6 +18,7 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      slideNumberFormat: "%current%"
       ratio: "16:9"
 
 ---
@@ -877,7 +878,7 @@ nba %>%
 
 # Quiz & Homework
 
-- Go to Brightspace and take the **7th** quiz
+- Go to Brightspace and take the **5th** quiz
 
 --
 
@@ -891,4 +892,4 @@ nba %>%
   
   1. Work through ds1000_hw_6.Rmd
 
-  2. Finish Problem set 3
+  2. Finish Problem set 3 by Friday at midnight

@@ -4,7 +4,7 @@
     <title>Univariate Analysis</title>
     <meta charset="utf-8" />
     <meta name="author" content="Prof. Bisbee" />
-    <script src="libs/header-attrs-2.16/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.18/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/lexis.css" type="text/css" />
     <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Vanderbilt University
 ]
 .date[
-### Slides Updated: 2024-01-03
+### Slides Updated: 2024-01-08
 ]
 
 ---
@@ -136,6 +136,42 @@ class: center, middle, inverse, title-slide
 
 ```r
 require(tidyverse)
+```
+
+```
+## Warning: package 'tidyverse' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'tibble' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'tidyr' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'readr' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'purrr' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'dplyr' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'forcats' was built under R version 4.2.3
+```
+
+```
+## Warning: package 'lubridate' was built under R version 4.2.3
 ```
 
 - Load data from [github](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/nba_players_2018.Rds)
@@ -707,7 +743,7 @@ nba %&gt;%
 ##  8 LaMarcus Aldridge     SAS        684
 ##  9 Damian Lillard        POR        681
 ## 10 Karl-Anthony Towns    MIN        681
-## # … with 520 more rows
+## # ℹ 520 more rows
 ```
 
 ---
@@ -823,7 +859,7 @@ nba %&gt;%
 ##  8 Tony Parker           37
 ##  9 Dwyane Wade           37
 ## 10 Channing Frye         36
-## # … with 520 more rows
+## # ℹ 520 more rows
 ```
 
 ---
@@ -918,7 +954,7 @@ nba %&gt;%
 ##  8 Texas                     10
 ##  9 North Carolina             9
 ## 10 Michigan                   8
-## # … with 58 more rows
+## # ℹ 58 more rows
 ```
 
 ---
@@ -954,7 +990,7 @@ nba %&gt;%
 ##  8 Michigan                   8
 ##  9 Villanova                  7
 ## 10 Indiana                    6
-## # … with 56 more rows
+## # ℹ 56 more rows
 ```
 
 ---
@@ -1045,7 +1081,7 @@ nba %&gt;%
 ##  8 Cincinnati                 531
 ##  9 Colorado                  2367
 ## 10 Connecticut               3634
-## # … with 56 more rows
+## # ℹ 56 more rows
 ```
 
 ---
@@ -1088,7 +1124,7 @@ nba %&gt;%
 ##  8 Colorado                  2367
 ##  9 Connecticut               3634
 ## 10 Creighton                 1230
-## # … with 47 more rows
+## # ℹ 47 more rows
 ```
 
 ---
@@ -1114,7 +1150,7 @@ nba %&gt;%
 
 # Quiz &amp; Homework
 
-- Go to Brightspace and take the **7th** quiz
+- Go to Brightspace and take the **5th** quiz
 
 --
 
@@ -1128,7 +1164,7 @@ nba %&gt;%
   
   1. Work through ds1000_hw_6.Rmd
 
-  2. Finish Problem set 3
+  2. Finish Problem set 3 by Friday at midnight
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -1136,6 +1172,7 @@ nba %&gt;%
 "highlightStyle": "github",
 "highlightLines": true,
 "countIncrementalSlides": false,
+"slideNumberFormat": "%current%",
 "ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {

@@ -1,9 +1,9 @@
 ---
-title: "Intro to `R` Part 2"
+title: "Visualization in `R`"
 subtitle: "Homework"
 author: "Prof. Bisbee"
 institute: "Vanderbilt University"
-date: "Due Date: 2023-01-23"
+date: "Due Date: 2024-01-23"
 output: html_document
 ---
 

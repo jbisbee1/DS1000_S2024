@@ -1,0 +1,603 @@
+---
+title: "Uncertainty Part 2"
+subtitle: "Sports Analytic Mania"
+author: "Prof. Bisbee"
+institute: "Vanderbilt University"
+date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+      #ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+set.seed(123)
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Uncertainty
+
+2. More NBA data
+
+3. Bootstrap Sampling
+
+---
+
+# Sports Analytics
+
+- Previously, we looked at players
+
+--
+
+  - Specifically, `isRookie` and `pts`
+  
+  - But could try **many** other ideas
+  
+--
+
+- Useful if we want a job scouting talent
+
+- But what if we want to advise actual games?
+
+--
+
+  - **Game Data**!
+
+---
+
+# Other NBA Data
+
+--
+
+- Load the [`game_summary.Rds`](https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_summary.Rds) data
+
+```{r,message=F,warning=F}
+require(tidyverse)
+gms <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_summary.Rds')
+gms
+```
+
+---
+
+# Other NBA Data
+
+- Contains data on every game played between 2016 and 2019
+
+--
+
+```{r,fig.width=9,fig.height=5}
+gms %>%
+  ggplot(aes(x = dateGame)) +
+  geom_bar(stat = 'count')
+```
+
+
+---
+
+# Other NBA Data
+
+```{r}
+glimpse(gms)
+```
+
+---
+
+# Codebook
+
+| Name         |                                          Description |
+|--------------|-----------------------------------------------------:|
+| idGame       |                                       Unique game id |
+| yearSeason   | Which season? NBA uses ending year so 2016-17 = 2017 |
+| dateGame     |                                     Date of the game |
+| idTeam       |                                       Unique team id |
+| nameTeam     |                                            Team Name |
+| locationGame |                        Game location, H=Home, A=Away |
+| tov          |                                      Total turnovers |
+| pts          |                                         Total points |
+| treb         |                                       Total rebounds |
+| pctFG        |                                Field Goal Percentage |
+| teamrest     |               How many days since last game for team |
+| pctFT        |                                Free throw percentage |
+| isWin        |                                   Won? TRUE or FALSE |
+| ft_80        |      Team scored more than 80 percent of free throws |
+
+---
+
+# Codebook
+
+--
+
+- Which of these are categorical? Which are continuous?
+
+--
+
+  - Remember the **process**!
+  
+--
+
+- `isWin` as an ordered binary
+
+```{r}
+gms %>%
+  count(isWin)
+```
+
+---
+
+# Codebook
+
+- The same number for wins and losses?
+  
+```{r}
+gms %>%
+  select(idGame,nameTeam,dateGame,locationGame,isWin) %>% head()
+```
+
+--
+
+- Each row is a **team-game** pair
+
+--
+
+  - I.e., the Cavs hosted the Knicks on October 25, 2016 and won!
+  
+---
+
+# The Knicks
+
+<center><img src="https://miro.medium.com/max/1215/1*SeZTaMMhZbrG6zV5wTzLqg.gif" width = 100%></center>
+
+---
+
+# .blue[Science]
+
+--
+
+- What predicts winning?
+
+--
+
+  - Points? (more is better)
+  - Turnovers? (less is better)
+  - Rebounds? (more is better)
+  
+--
+
+- How confident are we?
+
+```{r}
+gms %>%
+  group_by(isWin) %>%
+  summarise(avgTO = mean(tov))
+```
+
+---
+
+# Turnovers and Winning
+
+--
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+--
+
+- FSNoR: is this *always* the case?
+
+```{r}
+gms %>%
+  filter(yearSeason == 2017) %>%
+  group_by(isWin) %>%
+  summarise(avgTO = mean(tov))
+```
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+```{r}
+gms %>%
+  filter(yearSeason == 2018) %>%
+  group_by(isWin) %>%
+  summarise(avgTO = mean(tov))
+```
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+```{r}
+gms %>%
+  group_by(isWin,yearSeason) %>%
+  summarise(avgTO = mean(tov)) %>%
+  spread(isWin,avgTO,sep = '_')
+```
+
+
+---
+
+# Turnovers and Winning
+
+- On average, winning teams have ~1 fewer turnover than losing teams
+
+- FSNoR: is this *always* the case?
+
+--
+
+  - Not literally (numbers change)
+
+--
+
+  - But practically?
+  
+- How **confident** are we in making this claim?
+
+--
+
+  - In each season, the average turnovers of winning teams are roughly 1 lower than the average turnovers of losing teams
+  
+--
+
+  - Use **bootstrap sampling** to express this more concretely!
+  
+
+---
+
+# Looping
+
+```{r}
+set.seed(123)
+bs_tov <- NULL
+for(i in 1:1000) {
+  bs_tov <- gms %>%
+    sample_n(size = 100,replace = T) %>%
+    group_by(isWin) %>%
+    summarise(avgTO = mean(tov)) %>%
+    bind_rows(bs_tov)
+}
+bs_tov %>% head()
+```
+
+---
+
+# Bootstrapped Estimates vs Data
+
+```{r}
+bs_tov %>%
+  group_by(isWin) %>%
+  summarise(bs_est = mean(avgTO))
+
+gms %>%
+  group_by(isWin) %>%
+  summarise(data_est = mean(tov))
+```
+
+---
+
+# Bootstrapped Estimates vs Data
+
+--
+
+- They're identical!
+
+--
+
+  - In .blue[theory], bootstrapped samples converge on true values
+  
+--
+
+  - ...where "true" is the full data
+  
+--
+
+- So then why bother with bootstrapping?
+
+--
+
+- **Uncertainty!**
+
+---
+
+# Plot Distributions of Bootstraps
+
+```{r,fig.width=9,fig.height=5}
+bs_tov %>%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3)
+```
+
+---
+
+# Generalizability
+
+--
+
+- What if we only used one season?
+
+--
+
+  - Do we think our conclusions would "generalize" (i.e., apply to) other seasons?
+
+--
+
+  - For example, is the turnover-win relationship the same in the 2017 season as the 2018 season?
+  
+--
+
+  - What about the 2019 season?
+  
+--
+
+  - Why or why not?
+  
+--
+
+- Demonstrate using the 2017 data
+
+---
+
+# Generalizability
+
+- Bootstrap + `group_by`
+
+```{r}
+bsRes <- NULL
+
+for(i in 1:500) {  # Only 500 simulations this time
+  bsRes <- gms %>%
+    group_by(yearSeason) %>% #<< Group by the season
+    sample_n(size = 100,replace = T) %>% #<< Get 100 observations per season
+    group_by(yearSeason,isWin) %>% #<< Then calculate mean tov by season AND win
+    summarise(avgTO = mean(tov,na.rm=T),.groups = 'drop') %>%
+    ungroup() %>%
+    mutate(bsInd = i) %>%
+    bind_rows(bsRes)
+  
+}
+
+```
+
+---
+
+# Plotting the results
+
+```{r}
+bsRes %>%
+  ggplot(aes(x = avgTO)) + 
+  geom_density(alpha = .3)
+```
+
+--
+
+- Is this answering our .blue[question]?
+
+---
+
+# Plotting the results
+
+```{r}
+bsRes %>%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3)
+```
+
+- Is this answering our .blue[question]?
+
+---
+
+# Plotting the results
+
+```{r}
+bsRes %>%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3) + 
+  facet_grid(yearSeason~.)
+```
+
+
+---
+
+# Plotting the results
+
+```{r}
+p  <- bsRes %>%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3) + 
+  geom_vline(data = bsRes %>%
+               group_by(yearSeason,isWin) %>%
+               summarise(avgTO = mean(avgTO,na.rm=T)),
+             aes(xintercept = avgTO,color = isWin),linetype = 'dashed') + 
+  geom_text(data = bsRes %>%
+               group_by(yearSeason,isWin) %>%
+               summarise(avgTO = mean(avgTO,na.rm=T)),
+             aes(x = avgTO,y = Inf,label = round(avgTO,1)),hjust = 1.1,vjust = 1.1,size = 3,angle = 90) + 
+  facet_grid(yearSeason~.)
+```
+
+---
+
+# Plotting the results
+
+```{r}
+p
+```
+
+---
+
+# Summarizing further
+
+--
+
+- We are *actually* interested in whether winning teams turnover the ball less
+
+--
+
+  - .blue[Science]: never forget your theory / hypothesis!
+  
+--
+
+- So let's actually calculate this!
+
+--
+
+- The `spread` command to create two columns
+
+```{r}
+bsRes %>%
+  spread(isWin,avgTO,sep = '_') %>%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE)
+```
+
+---
+
+# Generalizability
+
+```{r}
+bsRes %>%
+  spread(isWin,avgTO,sep = '_') %>%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE) %>%
+  ggplot(aes(x = TO_diff,fill = factor(yearSeason))) + 
+  geom_density(alpha = .3)
+```
+
+---
+
+# Comparing across seasons
+
+```{r}
+p <- bsRes %>%
+  spread(isWin,avgTO,sep = '_') %>%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE) %>%
+  ggplot(aes(x = TO_diff,group = yearSeason)) + 
+  geom_density(alpha = .3) + 
+  geom_vline(xintercept = 0) + 
+  geom_text(data = bsRes %>%
+             spread(isWin,avgTO,sep = '_') %>%
+             mutate(TO_diff = isWin_FALSE - isWin_TRUE) %>%
+             group_by(yearSeason) %>%
+             summarise(conf = mean(TO_diff > 0),
+                       TO_diff = mean(TO_diff),
+                       y = .25),
+            aes(x = TO_diff,y = y,label = paste0(round(conf*100,1),'%'))) + 
+  facet_grid(yearSeason ~.)
+```
+
+---
+
+# Comparing across seasons
+
+```{r}
+p
+```
+
+
+---
+
+# Visualization is **DEEP**
+
+```{r}
+toplot <- bsRes %>%
+  spread(isWin,avgTO,sep = '_') %>%
+  mutate(TO_diff = isWin_FALSE - isWin_TRUE)
+
+tmp <- density(toplot$TO_diff)
+p <- data.frame(x = tmp$x,y = tmp$y,
+           area = tmp$x >= 0) %>%
+  ggplot(aes(x = x,ymin = 0,ymax = y,fill = area)) + 
+  geom_ribbon(alpha = .6) + 
+  geom_vline(xintercept = 0,linetype = 'dashed',size = 1.1) + 
+  annotate(geom = 'text',x = mean(toplot$TO_diff),y = .25,
+           label = paste0("Losing team had\nmore turnovers in\n",round(mean(toplot$TO_diff > 0),3)*100,"% of\nBootstraps"),
+           hjust = .5) + 
+  labs(title = 'Difference in Turnovers by Game Outcome',
+       subtitle = '1,000 Bootstrapped Estimates from 2016-2019 Seasons',
+       x = 'Losing Team Turnovers minus Winning Team Turnovers',
+       y = 'Density of Simulated Games') + 
+  scale_fill_manual(name = 'Who Had More Turnovers',
+                    values = c('grey60','gold'),labels = c('Winning Team','Losing Team')) + 
+  theme(panel.background = element_blank(),
+        legend.position = 'bottom')
+```
+
+
+---
+
+# Visualization is **DEEP**
+
+```{r,echo=F,fig.width=9,fig.height=6}
+p
+```
+
+
+---
+
+# Conclusion
+
+--
+
+- Anyone can spit stats
+
+<center><img src="https://imgs.xkcd.com/comics/sports.png" width=30%></center>
+
+--
+
+- Data scientists are comfortable with **.blue[uncertainty]**
+
+
+---
+
+# Quiz & Homework
+
+- Go to Brightspace and take the **10th** quiz
+
+--
+
+  - The password to take the quiz is #### <!-- `r paste(sample(1:9,size = 4,replace = T),collapse = '')` -->
+  
+--
+
+- **Homework:**
+
+--
+  
+  1. Work through ds1000_hw_11.Rmd (regression!)
+  
+  2. Finish Problem Set 6 (on Brightspace)
+

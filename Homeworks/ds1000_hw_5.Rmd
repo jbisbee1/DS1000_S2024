@@ -23,7 +23,7 @@ Here's the data:
 
 ```{r}
 require(tidyverse)
-nba<-read_rds("../data/nba_players_2018.Rds")
+nba<-read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/nba_players_2018.Rds")
 ```
 
 This data contains the following variables:
