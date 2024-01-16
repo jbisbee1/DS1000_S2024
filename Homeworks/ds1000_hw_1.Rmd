@@ -67,7 +67,7 @@ Finally, replace the default code in your R Markdown file with the copied code f
 
 If viewing this as an html file, you can view this gif for more help!
 
-<center><img src="../Lectures/rmarkdown_example.gif" width = 70%></center>
+<center><img src="../Lectures/figs/rmarkdown_example.gif" width = 70%></center>
 
 ## .Rmd Files
 .Rmd files will be the only file format we work in this class. .Rmd files contain three basic elements:
@@ -112,7 +112,7 @@ Now we're ready to load in data. The data frame will be our basic way of interac
 `tidyverse` includes a `read_rds()` function that can read data directly from the internet.
 
 ```{r}
-df <- read_rds('https://github.com/jbisbee1/DS1000_F2023/raw/main/Lectures/1_Intro_Data_Science/data/sc_debt.Rds')
+df <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/sc_debt.Rds')
 ```
 
 You'll notice that the code above starts with `df`. This is just an arbitrary name for an object. You could name it `dat` or `raw` or `debt` or whatever you want. Then there's an arrow `<-`. This is an assignment operator. Then there's a  function, `readRDS`, with parentheses, and an argument "sc_debt.Rds". Here's how to think about this.
