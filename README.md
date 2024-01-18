@@ -52,9 +52,9 @@ You are expected to adopt the following workflow for this class:
 
 1. Prior to each lecture, download the appropriate `.Rmd` file, open it in `RStudio`, and read through it. **This is your primary homework assignment!** As you work through it, try to tweak some of the code and answer the toy examples where provided. Each time you make a change, click the `knit` button in `RStudio` to see if everything still loads.
 	
-2. During each lecture, extend and modify the `.Rmd` file to follow along with me as I present. You should think of each lecture's `.Rmd` file as your homework, your in-class notes, and your study guide for problem sets + exams.
+2. During each lecture, create a new `.Rmd` file to take notes in. As with the homework, you should be tweaking and adjusting things on your own, extending your learning beyond what is covered in lecture.
 	
-3. After each lecture, tweak the `.Rmd` file further to test out new ideas that you come up with which were not covered in class. Each lecture's slides will be made available as `PDF` for you use to help you review. Thinking creatively about how to modify and extend what we do together might mean you already guess some of the exam questions!
+3. After each lecture, tweak the notes `.Rmd` file further to test out new ideas that you come up with which were not covered in class. Each lecture's slides will be made available as `PDF` for you use to help you review. Thinking creatively about how to modify and extend what we do together might mean you already guess some of the exam questions!
 
 *[Back to ToC](#table-of-contents)*
 

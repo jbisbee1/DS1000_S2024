@@ -28,7 +28,7 @@ class: center, middle, inverse, title-slide
 ### Vanderbilt University
 ]
 .date[
-### Slides Updated: 2024-01-08
+### Slides Updated: 2024-01-17
 ]
 
 ---
@@ -53,7 +53,7 @@ class: center, middle, inverse, title-slide
 
   - Using packages: `install.packages()` &amp; `require()`
   
-  - Loading and manipulating data: `readRDS()` and `%&gt;%`
+  - Loading and manipulating data: `read_rds()` and `%&gt;%`
   
 --
 
@@ -321,86 +321,75 @@ colnames(df) # Prints the variable names
 
 ---
 
+# Looking at data
+
+- Looking at data is **crucial**
+
+
+```r
+# First 6 rows
+df %&gt;% head()
+```
+
+```
+## # A tibble: 6 × 16
+##   unitid instnm  stabbr grad_debt_mdn control region preddeg
+##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+## 1 100654 Alabam… AL             33375 Public  South… Bachel…
+## 2 100663 Univer… AL             22500 Public  South… Bachel…
+## 3 100690 Amridg… AL             27334 Private South… Associ…
+## 4 100706 Univer… AL             21607 Public  South… Bachel…
+## 5 100724 Alabam… AL             32000 Public  South… Bachel…
+## 6 100751 The Un… AL             23250 Public  South… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+- (Same as `head(df)`)
+
+---
+
+# Looking at data
+
+- Looking at data is **crucial**
+
+
+```r
+# Last 6 rows
+df %&gt;% tail()
+```
+
+```
+## # A tibble: 6 × 16
+##   unitid instnm  stabbr grad_debt_mdn control region preddeg
+##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+## 1 493716 Yeshiv… NJ                NA Private North… Associ…
+## 2 493725 Univer… AR                NA Public  South… Bachel…
+## 3 493822 Colleg… RI                NA Private New E… Bachel…
+## 4 494630 Christ… TX                NA Private South… Bachel…
+## 5 494685 Urshan… MO                NA Private Plains Bachel…
+## 6 494737 Yeshiv… NY                NA Private North… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+- (Same as `tail(df)`)
+
+
+---
+
 # Manipulating the Data
 
---
-
-- These data are cool!
-
---
-
-- But TMI at first
-
---
-
-- I want to know...
+- Last lecture, we wanted to know...
 
 --
 
   1. Where is `Vanderbilt University`?
   
---
-
-  2. Which school is the most selective?
-  
---
-
-  3. Which schools produce the richest grads?
-  
----
-
-# Manipulating with `tidyverse`
-
-- The code process of `tidyverse` relies on a "pipe" symbol: `%&gt;%`
-
---
-
-  - I don't like this name
-  
-  - I think it should be called a "chain" because it **links code together**
-  
-  - Or maybe a "do" symbol because it tells `R` what to do
-  
-  - Others refer to it as a "then" symbol, which is a little better
-  
---
-
-- The basic grammar of `R` is: object, `%&gt;%`, verb
-
-
-```r
-object %&gt;%  # This is the object
-   function() # This is the verb
-```
-
----
-
-# Manipulating with `tidyverse`
-
-- `tidyverse` has many useful "verbs" (i.e., functions)
-
-  - `filter()`: subsets **rows**
-  
-  - `select()`: subsets **columns**
-  
-  - `arrange()`: sorts **rows** based on **columns**
-  
-  - `summarise()`: collapses **rows**
-  
-  - `group_by()`: groups **rows** by **columns**
-  
----
-
-# Manipulating: `filter()`
-
-- So let's look at Vandy
-
---
-
-- `filter` will select **rows** of the data based on some criteria
-
---
-
 
 ```r
 df %&gt;%
@@ -420,13 +409,267 @@ df %&gt;%
 
 ---
 
+# Manipulating the Data
+
+- What if we don't know precisely how Vandy is spelled in these data?
+
+--
+
+- `str_detect()` and `grepl()` to the rescue!
+
+
+```r
+df %&gt;%
+  filter(str_detect(instnm,'Vand'))
+```
+
+```
+## # A tibble: 2 × 16
+##   unitid instnm  stabbr grad_debt_mdn control region preddeg
+##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+## 1 149639 Vander… IL             27000 Private Great… Bachel…
+## 2 221999 Vander… TN             14962 Private South… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- What if we don't know precisely how Vandy is spelled in these data?
+
+- `str_detect()` and `grepl()` to the rescue!
+
+
+```r
+df %&gt;%
+  filter(grepl('Vand',instnm))
+```
+
+```
+## # A tibble: 2 × 16
+##   unitid instnm  stabbr grad_debt_mdn control region preddeg
+##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+## 1 149639 Vander… IL             27000 Private Great… Bachel…
+## 2 221999 Vander… TN             14962 Private South… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- We can go deeper with this logic
+
+  - "or" denoted with `|`
+  
+  - "and" denoted with `&amp;`
+
+--
+
+
+```r
+df %&gt;%
+  filter(str_detect(instnm,"Vand") | str_detect(instnm,"Tenn"))
+```
+
+```
+## # A tibble: 12 × 16
+##    unitid instnm stabbr grad_debt_mdn control region preddeg
+##     &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+##  1 149639 Vande… IL             27000 Private Great… Bachel…
+##  2 220075 East … TN             20500 Public  South… Bachel…
+##  3 220978 Middl… TN             21500 Public  South… Bachel…
+##  4 221485 South… TN                NA Public  South… Associ…
+##  5 221731 Tenne… TN             21500 Private South… Bachel…
+##  6 221740 The U… TN             20635 Public  South… Bachel…
+##  7 221759 The U… TN             20500 Public  South… Bachel…
+##  8 221768 The U… TN             22500 Public  South… Bachel…
+##  9 221838 Tenne… TN             27000 Public  South… Bachel…
+## 10 221847 Tenne… TN             17000 Public  South… Bachel…
+## 11 221999 Vande… TN             14962 Private South… Bachel…
+## 12 487010 The U… TN             13500 Public  South… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- We can go deeper with this logic
+
+  - "or" denoted with `|`
+  
+  - "and" denoted with `&amp;`
+
+--
+
+
+```r
+df %&gt;%
+  filter(str_detect(instnm,"Vand") &amp; str_detect(instnm,"Univ"))
+```
+
+```
+## # A tibble: 1 × 16
+##   unitid instnm  stabbr grad_debt_mdn control region preddeg
+##    &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+## 1 221999 Vander… TN             14962 Private South… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- Can also put `|` or `&amp;` in a single `str_detect()`
+
+
+```r
+df %&gt;%
+  filter(str_detect(instnm,'Vand|Tenn'))
+```
+
+```
+## # A tibble: 12 × 16
+##    unitid instnm stabbr grad_debt_mdn control region preddeg
+##     &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+##  1 149639 Vande… IL             27000 Private Great… Bachel…
+##  2 220075 East … TN             20500 Public  South… Bachel…
+##  3 220978 Middl… TN             21500 Public  South… Bachel…
+##  4 221485 South… TN                NA Public  South… Associ…
+##  5 221731 Tenne… TN             21500 Private South… Bachel…
+##  6 221740 The U… TN             20635 Public  South… Bachel…
+##  7 221759 The U… TN             20500 Public  South… Bachel…
+##  8 221768 The U… TN             22500 Public  South… Bachel…
+##  9 221838 Tenne… TN             27000 Public  South… Bachel…
+## 10 221847 Tenne… TN             17000 Public  South… Bachel…
+## 11 221999 Vande… TN             14962 Private South… Bachel…
+## 12 487010 The U… TN             13500 Public  South… Bachel…
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- But **can't** do the same with `&amp;`
+
+
+```r
+df %&gt;%
+  filter(str_detect(instnm,'Vand&amp;Univ'))
+```
+
+```
+## # A tibble: 0 × 16
+## # ℹ 16 variables: unitid &lt;int&gt;, instnm &lt;chr&gt;, stabbr &lt;chr&gt;,
+## #   grad_debt_mdn &lt;int&gt;, control &lt;chr&gt;, region &lt;chr&gt;,
+## #   preddeg &lt;chr&gt;, openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- Negations are handled with `!`
+
+--
+
+  - Literally means "not"
+  
+--
+
+- Drop rows with "of" in the school name
+
+
+```r
+df %&gt;%
+  filter(!str_detect(instnm,"of"))
+```
+
+```
+## # A tibble: 2,025 × 16
+##    unitid instnm stabbr grad_debt_mdn control region preddeg
+##     &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+##  1 100654 Alaba… AL             33375 Public  South… Bachel…
+##  2 100690 Amrid… AL             27334 Private South… Associ…
+##  3 100724 Alaba… AL             32000 Public  South… Bachel…
+##  4 100760 Centr… AL             12500 Public  South… Associ…
+##  5 100812 Athen… AL             19500 Public  South… Bachel…
+##  6 100830 Aubur… AL             24826 Public  South… Bachel…
+##  7 100858 Aubur… AL             21281 Public  South… Bachel…
+##  8 100937 Birmi… AL             25773 Private South… Bachel…
+##  9 101028 Chatt… AL             11931 Public  South… Associ…
+## 10 101161 Coast… AL             11000 Public  South… Associ…
+## # ℹ 2,015 more rows
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+---
+
+# Manipulating the Data
+
+- (same as...)
+
+
+```r
+df %&gt;%
+  filter(!grepl("of",instnm))
+```
+
+```
+## # A tibble: 2,025 × 16
+##    unitid instnm stabbr grad_debt_mdn control region preddeg
+##     &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;          &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  
+##  1 100654 Alaba… AL             33375 Public  South… Bachel…
+##  2 100690 Amrid… AL             27334 Private South… Associ…
+##  3 100724 Alaba… AL             32000 Public  South… Bachel…
+##  4 100760 Centr… AL             12500 Public  South… Associ…
+##  5 100812 Athen… AL             19500 Public  South… Bachel…
+##  6 100830 Aubur… AL             24826 Public  South… Bachel…
+##  7 100858 Aubur… AL             21281 Public  South… Bachel…
+##  8 100937 Birmi… AL             25773 Private South… Bachel…
+##  9 101028 Chatt… AL             11931 Public  South… Associ…
+## 10 101161 Coast… AL             11000 Public  South… Associ…
+## # ℹ 2,015 more rows
+## # ℹ 9 more variables: openadmp &lt;int&gt;, adm_rate &lt;dbl&gt;,
+## #   ccbasic &lt;int&gt;, sat_avg &lt;int&gt;, md_earn_wne_p6 &lt;int&gt;,
+## #   ugds &lt;int&gt;, costt4_a &lt;int&gt;, selective &lt;dbl&gt;,
+## #   research_u &lt;dbl&gt;
+```
+
+
+---
+
 # Manipulating: `select()`
 
 - Still TMI!
 
 --
 
-- I only care about the admissions rate (`adm_rate`), the SAT scores (`sat_avg`), and the future earnings (`md_earn_wne_p6`)
+- Before, I only cared about the admissions rate (`adm_rate`), the SAT scores (`sat_avg`), and the future earnings (`md_earn_wne_p6`)
 
 --
 
@@ -448,316 +691,34 @@ df %&gt;%
 
 ---
 
-# Manipulating: `arrange()`
+# Manipulating: `select()`
 
-- How does Vandy compare...?
-
---
-
-  - to other schools in terms of SAT scores?
-  
-  - to other schools in terms of future earnings?
-  
-  - to other schools in terms of admissions rates?
-
---
-
-- `arrange` will sort the data based on a column (ascending!)
+- We can use `matches()` function with `select()` in a manner similar to `str_detect()`
 
 
 ```r
 df %&gt;%
-  arrange(sat_avg) %&gt;% # Sort data by SAT scores
-  select(instnm,sat_avg) # Only look at name and SAT scores
+  select(matches("_"))
 ```
 
 ```
-## # A tibble: 2,546 × 2
-##    instnm                        sat_avg
-##    &lt;chr&gt;                           &lt;int&gt;
-##  1 Morgan State University           737
-##  2 Saint Augustine's University      847
-##  3 Albany State University           849
-##  4 Holy Names University             851
-##  5 Livingstone College               854
-##  6 Virginia Union University         855
-##  7 Manor College                     861
-##  8 Saint Louis Christian College     865
-##  9 Bacone College                    875
-## 10 Paine College                     876
+## # A tibble: 2,546 × 6
+##    grad_debt_mdn adm_rate sat_avg md_earn_wne_p6 costt4_a
+##            &lt;int&gt;    &lt;dbl&gt;   &lt;int&gt;          &lt;int&gt;    &lt;int&gt;
+##  1         33375    0.918     939          25200    23053
+##  2         22500    0.737    1234          35100    24495
+##  3         27334   NA          NA          30700    14800
+##  4         21607    0.826    1319          36200    23917
+##  5         32000    0.969     946          22600    21866
+##  6         23250    0.827    1261          37400    29872
+##  7         12500   NA          NA          23100    10493
+##  8         19500   NA          NA          33400       NA
+##  9         24826    0.904    1082          30100    19849
+## 10         21281    0.807    1300          39500    31590
 ## # ℹ 2,536 more rows
+## # ℹ 1 more variable: research_u &lt;dbl&gt;
 ```
 
----
-
-# Manipulating: `arrange()`
-
-- Vandy is not in the bottom 10 schools
-
-
-```r
-df %&gt;%
-  arrange(sat_avg) %&gt;% # Sort data by SAT scores
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
-```
-## # A tibble: 2,546 × 2
-##    instnm                        sat_avg
-##    &lt;chr&gt;                           &lt;int&gt;
-##  1 Morgan State University           737
-##  2 Saint Augustine's University      847
-##  3 Albany State University           849
-##  4 Holy Names University             851
-##  5 Livingstone College               854
-##  6 Virginia Union University         855
-##  7 Manor College                     861
-##  8 Saint Louis Christian College     865
-##  9 Bacone College                    875
-## 10 Paine College                     876
-## # ℹ 2,536 more rows
-```
-
----
-
-# Manipulating: `arrange()`
-
-- Use `desc()` to order in descending values...Vandy not in top 10 either
-
-
-```r
-df %&gt;%
-  arrange(desc(sat_avg)) %&gt;% # Sort data by SAT scores (descending)
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
-```
-## # A tibble: 2,546 × 2
-##    instnm                                 sat_avg
-##    &lt;chr&gt;                                    &lt;int&gt;
-##  1 California Institute of Technology        1557
-##  2 Massachusetts Institute of Technology     1547
-##  3 University of Chicago                     1528
-##  4 Harvey Mudd College                       1526
-##  5 Duke University                           1522
-##  6 Franklin W Olin College of Engineering    1522
-##  7 Washington University in St Louis         1520
-##  8 Rice University                           1520
-##  9 Yale University                           1517
-## 10 Harvard University                        1517
-## # ℹ 2,536 more rows
-```
-
----
-
-# Manipulating: `arrange()`
-
-- What if we look only at "selective" schools?
-
---
-
-
-```r
-df %&gt;%
-  filter(adm_rate &lt; .1) %&gt;% # Only schools who accept &lt; 10%
-  arrange(sat_avg,adm_rate) %&gt;% # Sort by SAT scores (ascending)
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
-```
-## # A tibble: 25 × 2
-##    instnm                                      sat_avg
-##    &lt;chr&gt;                                         &lt;int&gt;
-##  1 Colby College                                  1456
-##  2 Swarthmore College                             1469
-##  3 Pomona College                                 1480
-##  4 Dartmouth College                              1500
-##  5 Stanford University                            1503
-##  6 Northwestern University                        1506
-##  7 Columbia University in the City of New York    1511
-##  8 Brown University                               1511
-##  9 University of Pennsylvania                     1511
-## 10 Vanderbilt University                          1515
-## # ℹ 15 more rows
-```
-
-
----
-
-# How does Vandy compare?
-
-- `arrange` in descending order
-
-
-```r
-df %&gt;%
-  filter(adm_rate &lt; .1) %&gt;% # Only schools who accept &lt; 10%
-  arrange(desc(sat_avg),adm_rate) %&gt;% # Descending SAT scores
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
-```
-## # A tibble: 25 × 2
-##    instnm                                      sat_avg
-##    &lt;chr&gt;                                         &lt;int&gt;
-##  1 California Institute of Technology             1557
-##  2 Massachusetts Institute of Technology          1547
-##  3 University of Chicago                          1528
-##  4 Duke University                                1522
-##  5 Rice University                                1520
-##  6 Harvard University                             1517
-##  7 Princeton University                           1517
-##  8 Yale University                                1517
-##  9 Vanderbilt University                          1515
-## 10 Columbia University in the City of New York    1511
-## # ℹ 15 more rows
-```
-
-
-
----
-
-# More complicated? More `%&gt;%`!
-
---
-
-- Less selective schools by SAT with debt and state
-
-
-```r
-df %&gt;%
-  # Less selective schools (accept 20% to 30%)
-  filter(adm_rate &gt; .2 &amp; adm_rate &lt; .3) %&gt;%
-  # Sort by state name, then by SAT scores (descending)
-  arrange(stabbr,desc(sat_avg)) %&gt;% 
-  # Only look at variables of interest
-  select(instnm,sat_avg,grad_debt_mdn,stabbr) 
-```
-
-```
-## # A tibble: 37 × 4
-##    instnm                       sat_avg grad_debt_mdn stabbr
-##    &lt;chr&gt;                          &lt;int&gt;         &lt;int&gt; &lt;chr&gt; 
-##  1 Heritage Christian Universi…      NA            NA AL    
-##  2 University of California-Sa…    1370         15000 CA    
-##  3 California Polytechnic Stat…    1342         19501 CA    
-##  4 University of California-Ir…    1306         15488 CA    
-##  5 California Institute of the…      NA         27000 CA    
-##  6 University of Miami             1371         17125 FL    
-##  7 Georgia Institute of Techno…    1418         23000 GA    
-##  8 Point University                 986         26000 GA    
-##  9 Grinnell College                1457         17500 IA    
-## 10 St Luke's College                 NA         17750 IA    
-## # ℹ 27 more rows
-```
-
----
-
-# A quick aside on missingness
-
---
-
-- Some rows have `NA` in some columns, indicating **missing data**
-  
-  - Data can be missing for many different reasons
-
---
-
-- `NA` values will produce `NA` summaries for common functions
-
-
-```r
-mean(c(1,2,3))
-```
-
-```
-## [1] 2
-```
-
-```r
-mean(c(1,2,3,NA))
-```
-
-```
-## [1] NA
-```
---
-
-- Helpers: `is.na()` and `na.rm=T`
-
-
-```r
-mean(c(1,2,3,NA),na.rm=T)
-```
-
-```
-## [1] 2
-```
-  
----
-
-# A quick aside on missingness
-
-- Use `is.na()` and `filter()` to see how many schools don't report SATs
-
-
-```r
-df %&gt;%
-  filter(is.na(sat_avg)) %&gt;% # Only schools that DON'T report SATs
-  select(instnm,stabbr) # Only view name and state
-```
-
-```
-## # A tibble: 1,317 × 2
-##    instnm                                         stabbr
-##    &lt;chr&gt;                                          &lt;chr&gt; 
-##  1 Amridge University                             AL    
-##  2 Central Alabama Community College              AL    
-##  3 Athens State University                        AL    
-##  4 Chattahoochee Valley Community College         AL    
-##  5 Coastal Alabama Community College              AL    
-##  6 Gadsden State Community College                AL    
-##  7 George C Wallace State Community College-Selma AL    
-##  8 Heritage Christian University                  AL    
-##  9 Jefferson State Community College              AL    
-## 10 Lurleen B Wallace Community College            AL    
-## # ℹ 1,307 more rows
-```
-
-
----
-
-# Stepping back
-
---
-
-- Thus far, lots of .red[data]
-
---
-
-- Not a lot of .blue[science]
-
---
-
-- But remember the .blue[Research] camp!
-
---
-
-  1. .red[Observation] &amp;rarr; .blue[Question]
-
-  2. .blue[Theory] &amp;rarr; .blue[Hypothesis]
-
-  3. .red[Data Collection / Wrangling] &amp;rarr; .red[Analysis]
-
-  4. .red[Results] &amp;rarr; .blue[Conclusion]
-  
---
-
-- We have been doing lots of .red[Observation]!
-
---
-
-- Do we have any good .blue[Research questions]?
 
 ---
 
@@ -1543,7 +1504,7 @@ name: end
   
   1. Work through ds1000_hw_3.Rmd
 
-  2. Make sure to submit Pset 1 to Brightspace by Friday at midnight!
+  2. Make sure to submit Pset 1 to Brightspace by Saturday at midnight!
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>

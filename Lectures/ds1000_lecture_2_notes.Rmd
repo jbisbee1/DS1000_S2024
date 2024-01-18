@@ -1,0 +1,224 @@
+---
+title: "DS-1000 Lecture 2 Notes"
+output: html_document
+date: "2024-01-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# This is a header
+## This is a subheader
+### This is a subsubheader
+This is plain text.
+
+The first part of this lecture is just about how to format text in an `.Rmd` file.
+
+- Point 1: blah blah blah
+
+- Point 2: Teaching is **boring**
+
+  - Point 2.a: *very* very boring
+  
+```{r}
+2 + 2
+objectText <- "This is a test"
+
+objectText
+```
+
+# OOL (Object Oriented Language)
+
+- `R` can save anything (almost) to an **object** using the *object assignment operator* `<-`
+
+```{r}
+object1 <- 2+2
+
+object1
+```
+
+# Different types of objects
+
+- A vector is denoted with the `c()`
+
+```{r}
+a_vector <- c(1,5,10,100,1000)
+a_vector
+```
+
+Do some other stuff here...create a gap in the code. 
+
+```{r}
+a_vector
+object1
+```
+
+- A list is dnoted with the `list()` function
+
+```{r}
+a_list <- list(element1 = 2+2,
+               element2 = object1,
+               vector1 = c(1,100,5,.2,-5),
+               vector2 = c("hello world!","My name is Jim."))
+
+a_list
+
+a_list$vector2
+```
+
+# Comments
+
+We can take notes out here (i.e., not inside an `R` code chunk).
+
+```{r}
+# Or we can write comments in here
+
+a_vector_of_words <- c('This is an','example of a vector','of words') # This creates a new object containing three sentences
+
+a_vector_of_words
+```
+
+
+# Slide 19 example
+
+```{r}
+# Create object a containing product of 3 and 5
+a <- 3*5
+
+# Create object b containing five numbers
+b <- c(10,21,43,87,175)
+
+# Create object c which is a minus b
+c <- a - b
+
+a / b
+```
+
+# Functions and Packages
+
+```{r}
+vector_1 <- c(1,2,3)
+
+sum(vector_1)
+sum(1,2,3)
+
+mean(vector_1)
+median(vector_1)
+
+# Don't do this
+# install.packages('tidyverse')
+
+require(tidyverse)
+```
+
+# Loading data
+
+- We want to load data using some of the new functions in the `tidyverse` package
+
+- In particular, we can load data directly from the internet using the `read_rds()` or `read_csv()` functions
+
+  - These are both **not** included with the base `R` functions, but instead need to be required with `require(tidyverse)`
+  
+```{r}
+# Loading data from the internet using read_rds()
+df <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/sc_debt.Rds')
+
+df
+```
+
+# Looking at Vandy
+
+```{r}
+df %>% 
+  filter(instnm == "Vanderbilt University") %>%
+  select(instnm,sat_avg,adm_rate,md_earn_wne_p6)
+```
+
+# Looking at schools with a 1515 SAT score
+
+```{r}
+df %>%
+  filter(sat_avg == 1515)
+```
+
+# `arrange()` example
+
+```{r}
+df %>%
+  arrange(sat_avg) %>% # Sort data by SAT scores
+  select(instnm,sat_avg) # Only look at name and SAT scores
+```
+
+```{r}
+df %>%
+  arrange(desc(sat_avg)) %>% # Sort data by SAT scores (descending order with desc())
+  select(instnm,sat_avg)  %>%# Only look at name and SAT scores
+  print(n = 20)
+```
+
+# Combining functions
+
+```{r}
+df %>%
+  filter(adm_rate < .1) %>%
+  arrange(sat_avg,adm_rate) %>%
+  select(instnm,sat_avg,adm_rate) %>%
+  print(n = 25)
+```
+
+# Digging into missingness
+
+- First, I want to see ONLY the schools who don't report SAT scores
+
+```{r}
+df %>%
+  filter(is.na(sat_avg)) %>%
+  select(instnm,stabbr)
+```
+
+- Second, I want to see only the schools who **DO** report SAT scores
+
+```{r}
+df %>%
+  filter(!is.na(sat_avg)) %>%
+  select(instnm,stabbr)
+```
+
+
+# Relationship between admissions rate and SAT scores
+
+- Theory: selective schools have higher criteria for SAT scores
+
+- Hypothesis: admissions rates and SAT scores should be **negatively** related
+
+```{r}
+df %>%
+  summarise(overall_avg_sat = mean(sat_avg,na.rm=T))
+
+# Compare selective versus non-selective schools
+df %>%
+  filter(adm_rate < .1) %>% # Selective schools only
+  summarise(overall_avg_sat = mean(sat_avg,na.rm=T))
+
+df %>%
+  filter(adm_rate > .1) %>% # Non-Selective schools only
+  summarise(overall_avg_sat = mean(sat_avg,na.rm=T))
+```
+
+- More efficient coding with the `group_by()`
+
+```{r}
+df %>%
+  select(selective,adm_rate) %>%
+  arrange(adm_rate) %>%
+  print(n = 50)
+
+df %>%
+  group_by(selective) %>%
+  summarise(overall_avg_sat = mean(sat_avg,na.rm=T))
+```
+
+
+
+

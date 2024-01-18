@@ -52,7 +52,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
   - Using packages: `install.packages()` & `require()`
   
-  - Loading and manipulating data: `readRDS()` and `%>%`
+  - Loading and manipulating data: `read_rds()` and `%>%`
   
 --
 
@@ -230,89 +230,160 @@ defs %>%
 
 ---
 
+# Looking at data
+
+- Looking at data is **crucial**
+
+```{r}
+# First 6 rows
+df %>% head()
+```
+
+- (Same as `head(df)`)
+
+---
+
+# Looking at data
+
+- Looking at data is **crucial**
+
+```{r}
+# Last 6 rows
+df %>% tail()
+```
+
+- (Same as `tail(df)`)
+
+
+---
+
 # Manipulating the Data
 
---
-
-- These data are cool!
-
---
-
-- But TMI at first
-
---
-
-- I want to know...
+- Last lecture, we wanted to know...
 
 --
 
   1. Where is `Vanderbilt University`?
   
---
-
-  2. Which school is the most selective?
-  
---
-
-  3. Which schools produce the richest grads?
-  
----
-
-# Manipulating with `tidyverse`
-
-- The code process of `tidyverse` relies on a "pipe" symbol: `%>%`
-
---
-
-  - I don't like this name
-  
-  - I think it should be called a "chain" because it **links code together**
-  
-  - Or maybe a "do" symbol because it tells `R` what to do
-  
-  - Others refer to it as a "then" symbol, which is a little better
-  
---
-
-- The basic grammar of `R` is: object, `%>%`, verb
-
-```{r,eval=FALSE}
-object %>%  # This is the object
-   function() # This is the verb
+```{r}
+df %>%
+  filter(instnm == "Vanderbilt University") # Only select rows with Vandy
 ```
 
 ---
 
-# Manipulating with `tidyverse`
+# Manipulating the Data
 
-- `tidyverse` has many useful "verbs" (i.e., functions)
-
-  - `filter()`: subsets **rows**
-  
-  - `select()`: subsets **columns**
-  
-  - `arrange()`: sorts **rows** based on **columns**
-  
-  - `summarise()`: collapses **rows**
-  
-  - `group_by()`: groups **rows** by **columns**
-  
----
-
-# Manipulating: `filter()`
-
-- So let's look at Vandy
+- What if we don't know precisely how Vandy is spelled in these data?
 
 --
 
-- `filter` will select **rows** of the data based on some criteria
+- `str_detect()` and `grepl()` to the rescue!
+
+```{r}
+df %>%
+  filter(str_detect(instnm,'Vand'))
+```
+
+---
+
+# Manipulating the Data
+
+- What if we don't know precisely how Vandy is spelled in these data?
+
+- `str_detect()` and `grepl()` to the rescue!
+
+```{r}
+df %>%
+  filter(grepl('Vand',instnm))
+```
+
+---
+
+# Manipulating the Data
+
+- We can go deeper with this logic
+
+  - "or" denoted with `|`
+  
+  - "and" denoted with `&`
 
 --
 
 ```{r}
 df %>%
-  filter(instnm == "Vanderbilt University") # Only select rows with Vandy
+  filter(str_detect(instnm,"Vand") | str_detect(instnm,"Tenn"))
 ```
+
+---
+
+# Manipulating the Data
+
+- We can go deeper with this logic
+
+  - "or" denoted with `|`
+  
+  - "and" denoted with `&`
+
+--
+
+```{r}
+df %>%
+  filter(str_detect(instnm,"Vand") & str_detect(instnm,"Univ"))
+```
+
+---
+
+# Manipulating the Data
+
+- Can also put `|` or `&` in a single `str_detect()`
+
+```{r}
+df %>%
+  filter(str_detect(instnm,'Vand|Tenn'))
+```
+
+---
+
+# Manipulating the Data
+
+- But **can't** do the same with `&`
+
+```{r}
+df %>%
+  filter(str_detect(instnm,'Vand&Univ'))
+```
+
+---
+
+# Manipulating the Data
+
+- Negations are handled with `!`
+
+--
+
+  - Literally means "not"
+  
+--
+
+- Drop rows with "of" in the school name
+
+```{r}
+df %>%
+  filter(!str_detect(instnm,"of"))
+```
+
+---
+
+# Manipulating the Data
+
+- (same as...)
+
+```{r}
+df %>%
+  filter(!grepl("of",instnm))
+```
+
 
 ---
 
@@ -322,7 +393,7 @@ df %>%
 
 --
 
-- I only care about the admissions rate (`adm_rate`), the SAT scores (`sat_avg`), and the future earnings (`md_earn_wne_p6`)
+- Before, I only cared about the admissions rate (`adm_rate`), the SAT scores (`sat_avg`), and the future earnings (`md_earn_wne_p6`)
 
 --
 
@@ -336,173 +407,15 @@ df %>%
 
 ---
 
-# Manipulating: `arrange()`
+# Manipulating: `select()`
 
-- How does Vandy compare...?
-
---
-
-  - to other schools in terms of SAT scores?
-  
-  - to other schools in terms of future earnings?
-  
-  - to other schools in terms of admissions rates?
-
---
-
-- `arrange` will sort the data based on a column (ascending!)
+- We can use `matches()` function with `select()` in a manner similar to `str_detect()`
 
 ```{r}
 df %>%
-  arrange(sat_avg) %>% # Sort data by SAT scores
-  select(instnm,sat_avg) # Only look at name and SAT scores
+  select(matches("_"))
 ```
 
----
-
-# Manipulating: `arrange()`
-
-- Vandy is not in the bottom 10 schools
-
-```{r}
-df %>%
-  arrange(sat_avg) %>% # Sort data by SAT scores
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
----
-
-# Manipulating: `arrange()`
-
-- Use `desc()` to order in descending values...Vandy not in top 10 either
-
-```{r}
-df %>%
-  arrange(desc(sat_avg)) %>% # Sort data by SAT scores (descending)
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
----
-
-# Manipulating: `arrange()`
-
-- What if we look only at "selective" schools?
-
---
-
-```{r}
-df %>%
-  filter(adm_rate < .1) %>% # Only schools who accept < 10%
-  arrange(sat_avg,adm_rate) %>% # Sort by SAT scores (ascending)
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
-
----
-
-# How does Vandy compare?
-
-- `arrange` in descending order
-
-```{r}
-df %>%
-  filter(adm_rate < .1) %>% # Only schools who accept < 10%
-  arrange(desc(sat_avg),adm_rate) %>% # Descending SAT scores
-  select(instnm,sat_avg) # Only look at name and SAT scores
-```
-
-
-
----
-
-# More complicated? More `%>%`!
-
---
-
-- Less selective schools by SAT with debt and state
-
-```{r}
-df %>%
-  # Less selective schools (accept 20% to 30%)
-  filter(adm_rate > .2 & adm_rate < .3) %>%
-  # Sort by state name, then by SAT scores (descending)
-  arrange(stabbr,desc(sat_avg)) %>% 
-  # Only look at variables of interest
-  select(instnm,sat_avg,grad_debt_mdn,stabbr) 
-```
-
----
-
-# A quick aside on missingness
-
---
-
-- Some rows have `NA` in some columns, indicating **missing data**
-  
-  - Data can be missing for many different reasons
-
---
-
-- `NA` values will produce `NA` summaries for common functions
-
-```{r}
-mean(c(1,2,3))
-mean(c(1,2,3,NA))
-```
---
-
-- Helpers: `is.na()` and `na.rm=T`
-
-```{r}
-mean(c(1,2,3,NA),na.rm=T)
-```
-  
----
-
-# A quick aside on missingness
-
-- Use `is.na()` and `filter()` to see how many schools don't report SATs
-
-```{r}
-df %>%
-  filter(is.na(sat_avg)) %>% # Only schools that DON'T report SATs
-  select(instnm,stabbr) # Only view name and state
-```
-
-
----
-
-# Stepping back
-
---
-
-- Thus far, lots of .red[data]
-
---
-
-- Not a lot of .blue[science]
-
---
-
-- But remember the .blue[Research] camp!
-
---
-
-  1. .red[Observation] &rarr; .blue[Question]
-
-  2. .blue[Theory] &rarr; .blue[Hypothesis]
-
-  3. .red[Data Collection / Wrangling] &rarr; .red[Analysis]
-
-  4. .red[Results] &rarr; .blue[Conclusion]
-  
---
-
-- We have been doing lots of .red[Observation]!
-
---
-
-- Do we have any good .blue[Research questions]?
 
 ---
 
@@ -997,4 +910,4 @@ name: end
   
   1. Work through ds1000_hw_3.Rmd
 
-  2. Make sure to submit Pset 1 to Brightspace by Friday at midnight!
+  2. Make sure to submit Pset 1 to Brightspace by Saturday at midnight!
