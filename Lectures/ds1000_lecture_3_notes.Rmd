@@ -1,0 +1,106 @@
+---
+title: "Lecture 3 Notes"
+output: html_document
+date: "2024-01-18"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Lecture 3: Working with `tidyverse()`
+
+- This is bullet 1
+
+- This is bullet 2
+
+```{r}
+2+2
+
+mean(c(1,50,120,-3))
+```
+
+# Downloading data with `tidyverse()`
+
+```{r}
+require(tidyverse)
+
+df <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/sc_debt.Rds")
+
+df
+
+df %>%
+  head()
+
+df %>%
+  tail()
+
+tail(df)
+```
+
+# Looking for Vandy
+
+```{r}
+df %>%
+  filter(instnm == "Vanderbilt University") %>%
+  select(instnm,md_earn_wne_p6)
+
+# arrange()
+df %>%
+  select(instnm,md_earn_wne_p6) %>%
+  arrange(md_earn_wne_p6)
+
+df %>%
+  select(instnm,md_earn_wne_p6) %>%
+  arrange(desc(md_earn_wne_p6))
+
+df %>%
+  filter(instnm == 'Vanderbilt')
+
+df %>%
+  filter(str_detect(instnm,"Vand")) %>%
+  select(instnm,stabbr)
+
+df %>%
+  filter(grepl("Vand",instnm)) %>%
+  select(instnm,stabbr,md_earn_wne_p6,grad_debt_mdn)
+
+# Negation: !
+df %>%
+  filter(instnm != "Vanderbilt University")
+
+```
+
+# Summarizing data with `summarise()`
+
+```{r}
+df %>%
+  summarise(avg_earn = mean(md_earn_wne_p6,na.rm=T),
+            avg_debt = mean(grad_debt_mdn,na.rm=T))
+
+# Comparing with filter
+df %>%
+  filter(sat_avg > 1200) %>%
+  summarise(avg_earn = mean(md_earn_wne_p6,na.rm=T))
+
+df %>%
+  filter(sat_avg < 1200) %>%
+  summarise(avg_earn = mean(md_earn_wne_p6,na.rm=T))
+```
+
+# Introducing `group_by()`
+
+```{r}
+df %>%
+  mutate(sat_HL = ifelse(sat_avg > 1200,
+                         "High SAT",
+                         "Low SAT")) %>%
+  group_by(sat_HL) %>%
+  summarise(avg_earn = mean(md_earn_wne_p6,na.rm=T))
+```
+
+
+
+
+
+
