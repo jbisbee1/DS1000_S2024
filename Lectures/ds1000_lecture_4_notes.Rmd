@@ -1,0 +1,101 @@
+---
+title: "Lecture 4 Notes"
+output: html_document
+date: "2024-01-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ # Getting Started
+ 
+ Loading data
+ 
+```{r}
+require(tidyverse)
+
+df <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/sc_debt.Rds")
+```
+
+# `group_by()` and `summarize()`
+
+```{r}
+df %>%
+  mutate(sat_category = ifelse(sat_avg > 1200,
+                               "high sat",
+                               "low sat")) %>%
+  group_by(sat_category) %>%
+  summarise(mean_earnings = mean(md_earn_wne_p6,na.rm=T))
+```
+
+# Visualization
+
+```{r}
+df %>%
+  ggplot(aes(x = sat_avg,
+             y = md_earn_wne_p6)) +
+  geom_point(size = .8,
+             color = 'blue') +
+  geom_smooth(method = "lm")
+
+colnames(df)
+df %>%
+  ggplot(aes(x = sat_avg,
+             y = md_earn_wne_p6,
+             color = region,
+             size = ugds,
+             group = 1)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+require(plotly)
+scatter_plot <- df %>%
+  ggplot(aes(x = sat_avg,
+             y = md_earn_wne_p6,
+             text=instnm,
+             group = 1)) +
+  geom_point() +
+  geom_point(size = .8,
+             color = 'blue') +
+  geom_smooth(method = "lm") +
+  labs(x = "Average SAT Score",
+       y = "Future Earnings",
+       title = "Relationship between SAT Scores and Future Earnings",
+       subtitle = "Sample of 2,546 schools in 2019")
+
+ggplotly(p = scatter_plot,tooltip = 'text')
+```
+
+# Poor choices of `geom_...()`
+
+```{r}
+df %>%
+  group_by(stabbr) %>%
+  summarise(mean_earn = mean(md_earn_wne_p6,na.rm=T)) %>%
+  ggplot(aes(y = reorder(stabbr,mean_earn),
+             x = mean_earn)) + 
+  geom_bar(stat = "identity") + 
+  labs(x = "Average Future Earnings",
+       y = "State",
+       title = 'Future Earnings by State')
+```
+
+
+# Using `geom_histogram()` or `geom_density()`
+
+```{r}
+df %>%
+  ggplot(aes(x = sat_avg)) + 
+  geom_histogram()
+
+df %>%
+  ggplot(aes(x = md_earn_wne_p6)) + 
+  geom_histogram()
+
+df %>%
+  ggplot(aes(x = md_earn_wne_p6)) + 
+  geom_density()
+```
+
+
