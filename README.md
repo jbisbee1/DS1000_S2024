@@ -195,7 +195,7 @@ All these can also be found on the [Campuswire calendar](https://campuswire.com/
 04/04 | NLP 1 | k-means clustering on text | [Lecture 19](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_19_slides.html#1)<br/>[Notes 19](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/ds1000_lecture_19_notes.Rmd)<br/>[Recording]() | [HW 19](https://github.com/jbisbee1/DS1000_S2024/blob/main/Homeworks/ds1000_hw_19.Rmd) | 
 04/09 | NLP 2 | Sentiment analysis | [Lecture 20](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_20_slides.html#1)<br/>[Notes 20](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/ds1000_lecture_20_notes.Rmd)<br/>[Recording]() |  | [PS 11](https://github.com/jbisbee1/DS1000_S2024/blob/main/Psets/ds1000_pset_11.Rmd)
 04/11 | Review Session | Clustering | [Notes R4](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/ds1000_lecture_R4_notes.Rmd)<br/>[Recording]() |  | 
-04/16 | Ethics | The risks of rapid technological change | [Lecture 21](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_21_slides.html#1)<br/><br/>[Recording]() |  | 
+04/16 | Ethics | The risks of rapid technological change | [Lecture 21](https://www.jamesbisbee.com/DS1000_S2024/Lectures/ds1000_lecture_21_slides.html#1)<br/>[Recording]() |  | 
 04/18 | Review Session | Cumulative | [Notes R5](https://github.com/jbisbee1/DS1000_S2024/blob/main/Lectures/ds1000_lecture_R5_notes.Rmd)<br/>[Recording]() |  | 
 04/23 | Final Exam |  | <br/> |  | 
 04/25 | Final Exam |  | <br/> |  | 
