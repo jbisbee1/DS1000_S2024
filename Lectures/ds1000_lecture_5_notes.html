@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="[YOUR NAME]" />
 
+<meta name="date" content="2024-01-30" />
 
-<title>Problem Set 3</title>
+<title>Lecture 5 Notes</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,148 +349,363 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Problem Set 3</h1>
-<h3 class="subtitle">Data Wrangling</h3>
-<h4 class="author">[YOUR NAME]</h4>
-<h4 class="date">Due Date: 2024-02-02</h4>
+<h1 class="title toc-ignore">Lecture 5 Notes</h1>
+<h4 class="date">2024-01-30</h4>
 
 </div>
 
 
-<div id="getting-set-up" class="section level2">
-<h2>Getting Set Up</h2>
-<p>Open <code>RStudio</code> and create a new RMarkDown file
-(<code>.Rmd</code>) by going to
-<code>File -&gt; New File -&gt; R Markdown...</code>. Accept defaults
-and save this file as <code>[LAST NAME]_ps3.Rmd</code> to your
-<code>code</code> folder.</p>
-<p>Copy and paste the contents of this <code>.Rmd</code> file into your
-<code>[LAST NAME]_ps3.Rmd</code> file. Then change the
-<code>author: [Your Name]</code> to your name.</p>
-<p>We will be using the <code>MI2020_ExitPoll.Rds</code> file from the
-course <a href="https://github.com/jbisbee1/DS1000_S2024/blob/main/data/MI2020_ExitPoll.Rds">github
-page</a>.</p>
-<p>All of the following questions should be answered in this
-<code>.Rmd</code> file. There are code chunks with incomplete code that
-need to be filled in.</p>
-<p>This problem set is worth 8 total points, plus two extra credit
-points. The point values for each question are indicated in brackets
-below. To receive full credit, you must have the correct code. In
-addition, some questions ask you to provide a written response in
-addition to the code.</p>
-<p>You are free to rely on whatever resources you need to complete this
-problem set, including lecture notes, lecture presentations, Google,
-your classmates…you name it. However, the final submission must be
-complete by you. There are no group assignments. To submit, compiled the
-completed problem set and upload the PDF file to Brightspace on Friday
-by midnight. Also note that the TAs and professors will not respond to
-Campuswire posts after 5PM on Friday, so don’t wait until the last
-minute to get started!</p>
-<p><strong>Good luck!</strong></p>
-<p>*Copy the link to ChatGPT you used here: _________________</p>
+<div id="opening-data-and-looking-at-it" class="section level1">
+<h1>Opening data and looking at it</h1>
+<pre class="r"><code>require(tidyverse)</code></pre>
+<pre><code>## Loading required package: tidyverse</code></pre>
+<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.2</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>require(labelled)</code></pre>
+<pre><code>## Loading required package: labelled</code></pre>
+<pre><code>## Warning: package &#39;labelled&#39; was built under R version 4.3.2</code></pre>
+<pre class="r"><code>MI_raw &lt;- read_rds(&quot;https://github.com/jbisbee1/DS1000_S2024/raw/main/data/MI2020_ExitPoll.rds&quot;)
+
+view(MI_raw)</code></pre>
 </div>
-<div id="question-0" class="section level2">
-<h2>Question 0</h2>
-<p>Require <code>tidyverse</code> and an additional package called
-<code>labelled</code> (remember to
-<code>install.packages(&quot;labelled&quot;)</code> if you don’t have it yet) and
-load the <code>MI2020_ExitPoll.Rds</code> data to an object called
-<code>MI_raw</code>. (Tip: use the <code>read_rds()</code> function with
-the link to the raw data.)</p>
-<pre class="r"><code># INSERT CODE HERE</code></pre>
+<div id="ways-of-looking-at-data" class="section level1">
+<h1>Ways of looking at data</h1>
+<pre class="r"><code># Simplest: look
+MI_raw</code></pre>
+<pre><code>## # A tibble: 1,231 × 63
+##       ID WEIGHT LALVOTERID     GROUP       ZIP DISTRICT    Z1 S1       
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;          &lt;dbl+lbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl+lbl&gt;
+##  1     9  0.405 LALMI6290066   3 [3]     49327        2    NA 1 [Yes]  
+##  2    66  1.81  LALMI2492492   1 [1]     48234       14    NA 1 [Yes]  
+##  3   225  0.860 LALMI548981440 4 [4]     48301        9 48322 1 [Yes]  
+##  4   243  0.199 LALMI505377239 1 [1]     48130        7 48130 1 [Yes]  
+##  5   286  0.177 LALMI6831689   1 [1]     49946        1    NA 1 [Yes]  
+##  6   293  0.492 LALMI4019782   1 [1]     48615        4    NA 1 [Yes]  
+##  7   365  1.37  LALMI4151378   1 [1]     48906        4 48813 1 [Yes]  
+##  8   367  1.15  LALMI5912584   1 [1]     49442        2    NA 1 [Yes]  
+##  9   388  1.50  LALMI6635050   1 [1]     48451        5    NA 1 [Yes]  
+## 10   417  1.30  LALMI3567125   1 [1]     48197       12    NA 1 [Yes]  
+## # ℹ 1,221 more rows
+## # ℹ 55 more variables: S2A &lt;dbl+lbl&gt;, S2B &lt;dbl+lbl&gt;, S3 &lt;dbl+lbl&gt;,
+## #   S4 &lt;dbl+lbl&gt;, VERSION &lt;dbl+lbl&gt;, PRSMI20 &lt;dbl+lbl&gt;, SENMI20 &lt;dbl+lbl&gt;,
+## #   TIME16 &lt;dbl+lbl&gt;, ISSUE20 &lt;dbl+lbl&gt;, QLT20 &lt;dbl+lbl&gt;, TEMPBIDEN &lt;dbl+lbl&gt;,
+## #   TEMPTRUMP &lt;dbl+lbl&gt;, CONTROLSEN &lt;dbl+lbl&gt;, FINSIT &lt;dbl+lbl&gt;,
+## #   ECONVCORONA20 &lt;dbl+lbl&gt;, FAVBIDEN2 &lt;dbl+lbl&gt;, FAVTRUMP &lt;dbl+lbl&gt;,
+## #   FORCAND &lt;dbl+lbl&gt;, NEWVOTER &lt;dbl+lbl&gt;, NEC &lt;dbl+lbl&gt;, …</code></pre>
+<pre class="r"><code># More advanced: glimpse()
+glimpse(MI_raw)</code></pre>
+<pre><code>## Rows: 1,231
+## Columns: 63
+## $ ID             &lt;dbl&gt; 9, 66, 225, 243, 286, 293, 365, 367, 388, 417, 563, 572…
+## $ WEIGHT         &lt;dbl&gt; 0.4045421, 1.8052619, 0.8601966, 0.1991648, 0.1772090, …
+## $ LALVOTERID     &lt;chr&gt; &quot;LALMI6290066&quot;, &quot;LALMI2492492&quot;, &quot;LALMI548981440&quot;, &quot;LALM…
+## $ GROUP          &lt;dbl+lbl&gt; 3, 1, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 1, 4, 2, 1, …
+## $ ZIP            &lt;dbl&gt; 49327, 48234, 48301, 48130, 49946, 48615, 48906, 49442,…
+## $ DISTRICT       &lt;dbl&gt; 2, 14, 9, 7, 1, 4, 4, 2, 5, 12, 7, 2, 5, 9, 1, 5, 8, 2,…
+## $ Z1             &lt;dbl&gt; NA, NA, 48322, 48130, NA, NA, 48813, NA, NA, NA, NA, NA…
+## $ S1             &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ S2A            &lt;dbl+lbl&gt; 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 1, 2, …
+## $ S2B            &lt;dbl+lbl&gt; NA,  1,  1,  1,  2,  1,  1,  1, NA,  1, NA,  1,  1,…
+## $ S3             &lt;dbl+lbl&gt;  1, NA, NA, NA, NA, NA, NA, NA,  1, NA,  1, NA, NA,…
+## $ S4             &lt;dbl+lbl&gt;  1, NA, NA, NA, NA, NA, NA, NA,  1, NA,  1, NA, NA,…
+## $ VERSION        &lt;dbl+lbl&gt; 1, 2, 2, 1, 1, 2, 2, 2, 1, 1, 1, 1, 1, 2, 1, 2, 2, …
+## $ PRSMI20        &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 2, …
+## $ SENMI20        &lt;dbl+lbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 2, …
+## $ TIME16         &lt;dbl+lbl&gt;  5, NA, NA,  5,  5, NA, NA, NA,  5,  5,  5,  5,  5,…
+## $ ISSUE20        &lt;dbl+lbl&gt;  5, NA, NA,  9,  1, NA, NA, NA,  4,  9,  3,  3,  1,…
+## $ QLT20          &lt;dbl+lbl&gt;  4, NA, NA,  4,  3, NA, NA, NA,  3,  3,  2,  2,  3,…
+## $ TEMPBIDEN      &lt;dbl+lbl&gt;  1, NA, NA,  1,  1, NA, NA, NA,  2,  1,  2,  2,  1,…
+## $ TEMPTRUMP      &lt;dbl+lbl&gt;  2, NA, NA,  2,  2, NA, NA, NA,  1,  2,  1,  1,  2,…
+## $ CONTROLSEN     &lt;dbl+lbl&gt;  9, NA, NA,  1,  1, NA, NA, NA,  2,  1,  2,  2,  9,…
+## $ FINSIT         &lt;dbl+lbl&gt;  3, NA, NA,  3,  3, NA, NA, NA,  3,  3,  3,  3,  2,…
+## $ ECONVCORONA20  &lt;dbl+lbl&gt;  1, NA, NA,  1,  1, NA, NA, NA,  2,  1,  9,  2,  1,…
+## $ FAVBIDEN2      &lt;dbl+lbl&gt;  1, NA, NA,  1,  1, NA, NA, NA,  2,  1,  2,  2,  1,…
+## $ FAVTRUMP       &lt;dbl+lbl&gt;  2, NA, NA,  2,  2, NA, NA, NA,  1,  2,  1,  1,  2,…
+## $ FORCAND        &lt;dbl+lbl&gt; NA,  1,  1, NA, NA,  1,  2,  1, NA, NA, NA, NA, NA,…
+## $ NEWVOTER       &lt;dbl+lbl&gt; NA,  2,  2, NA, NA,  2,  2,  2, NA, NA, NA, NA, NA,…
+## $ NEC            &lt;dbl+lbl&gt; NA,  4,  4, NA, NA,  4,  4,  4, NA, NA, NA, NA, NA,…
+## $ HANDLEECON20   &lt;dbl+lbl&gt; NA,  1,  1, NA, NA,  1,  1,  1, NA, NA, NA, NA, NA,…
+## $ HANDLECORONA20 &lt;dbl+lbl&gt; NA,  1,  1, NA, NA,  1,  1,  1, NA, NA, NA, NA, NA,…
+## $ RACISM20       &lt;dbl+lbl&gt; NA,  2,  2, NA, NA,  2,  2,  2, NA, NA, NA, NA, NA,…
+## $ VOTE2016       &lt;dbl+lbl&gt; NA,  1,  1, NA, NA,  1,  1,  1, NA, NA, NA, NA, NA,…
+## $ COUNTACC       &lt;dbl+lbl&gt; NA,  2,  2, NA, NA,  1,  2,  1, NA, NA, NA, NA, NA,…
+## $ TRUMP4         &lt;dbl+lbl&gt; NA,  4,  4, NA, NA,  4,  4,  4, NA, NA, NA, NA, NA,…
+## $ CONTAINCOVID   &lt;dbl+lbl&gt; NA,  4,  4, NA, NA,  4,  3,  4, NA, NA, NA, NA, NA,…
+## $ COVIDHARDSHIP  &lt;dbl+lbl&gt; NA,  3,  1, NA, NA,  2,  2,  2, NA, NA, NA, NA, NA,…
+## $ AGE10          &lt;dbl+lbl&gt;  2, 10,  7,  9,  8,  7,  9,  8,  6,  8,  9, 10,  1,…
+## $ SEX            &lt;dbl+lbl&gt; 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, …
+## $ EDUC18         &lt;dbl+lbl&gt; 4, 1, 5, 4, 5, 3, 3, 3, 4, 4, 5, 5, 4, 1, 1, 1, 5, …
+## $ QRACEAI        &lt;dbl+lbl&gt; 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 9, 1, 1, 1, 1, 1, 3, …
+## $ LATINOS        &lt;dbl+lbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, …
+## $ PARTYID        &lt;dbl+lbl&gt; 3, 1, 1, 3, 3, 3, 1, 1, 2, 1, 3, 2, 4, 4, 1, 1, 3, …
+## $ PHIL3          &lt;dbl+lbl&gt; 2, 2, 1, 9, 1, 2, 9, 2, 3, 2, 3, 3, 1, 3, 9, 2, 2, …
+## $ INCOME20       &lt;dbl+lbl&gt;  3, NA, NA,  9,  4, NA, NA, NA,  4,  4,  4,  2,  1,…
+## $ BRNAGAIN       &lt;dbl+lbl&gt; NA,  1,  2, NA, NA,  2,  1,  2, NA, NA, NA, NA, NA,…
+## $ CHILD12        &lt;dbl+lbl&gt; NA,  2,  2, NA, NA,  1,  2,  1, NA, NA, NA, NA, NA,…
+## $ LGBT           &lt;dbl+lbl&gt; NA,  2,  2, NA, NA,  2,  2,  2, NA, NA, NA, NA, NA,…
+## $ UNIONHH12      &lt;dbl+lbl&gt;  2, NA, NA,  2,  2, NA, NA, NA,  2,  2,  2,  2,  2,…
+## $ QN5            &lt;dbl+lbl&gt; 3, 2, 3, 2, 2, 3, 2, 2, 3, 2, 2, 1, 4, 2, 2, 1, 3, …
+## $ QN6A           &lt;dbl+lbl&gt; NA, NA,  2,  1, NA, NA,  2, NA, NA, NA, NA, NA,  1,…
+## $ QN6B           &lt;dbl+lbl&gt;  1,  1, NA, NA,  1,  1, NA,  1,  2,  1,  1,  1, NA,…
+## $ QN6C           &lt;dbl+lbl&gt; 4, 0, 0, 0, 2, 1, 0, 2, 1, 1, 2, 1, 4, 0, 1, 1, 1, …
+## $ County         &lt;chr&gt; &quot;NEWAYGO&quot;, &quot;WAYNE&quot;, &quot;OAKLAND&quot;, &quot;WASHTENAW&quot;, &quot;BARAGA&quot;, &quot;…
+## $ SMPFIPS        &lt;dbl&gt; 26123, 26163, 26125, 26161, 26013, 26057, 26037, 26121,…
+## $ TTID           &lt;dbl&gt; 94989, 94079, 94040, 94468, 94564, 93952, 93930, 94021,…
+## $ GEOCODE        &lt;dbl&gt; 5, 1, 2, 2, 5, 3, 2, 5, 2, 2, 3, 4, 3, 3, 5, 3, 2, 5, 2…
+## $ a1age5         &lt;dbl&gt; 1, 5, 4, 5, 4, 4, 5, 4, 3, 4, 5, 5, 1, 3, 5, 5, 4, 2, 1…
+## $ A1RACE         &lt;dbl+lbl&gt; 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 1, 1, 3, …
+## $ A1RACE3        &lt;dbl+lbl&gt; 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 3, 1, 1, 1, 1, 1, 3, …
+## $ A1SEX          &lt;dbl+lbl&gt; 2, 2, 2, 1, 2, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1, …
+## $ A1EDUC         &lt;dbl+lbl&gt; 2, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 2, …
+## $ EDUCWHITE      &lt;dbl+lbl&gt; 1, 4, 1, 1, 1, 2, 2, 2, 1, 3, 3, 1, 1, 2, 2, 2, 3, …
+## $ VOTEMETHOD     &lt;dbl&gt; 1, 2, 2, 2, 3, 2, 2, 2, 1, 2, 1, 2, 2, 1, 1, 3, 3, 2, 1…</code></pre>
+<pre class="r"><code># More advanced: summary()
+summary(MI_raw)</code></pre>
+<pre><code>##        ID             WEIGHT        LALVOTERID            GROUP      
+##  Min.   :     9   Min.   :0.1003   Length:1231        Min.   :1.000  
+##  1st Qu.: 21009   1st Qu.:0.3775   Class :character   1st Qu.:1.000  
+##  Median : 52928   Median :0.8020   Mode  :character   Median :2.000  
+##  Mean   : 68332   Mean   :1.0000                      Mean   :2.648  
+##  3rd Qu.:118105   3rd Qu.:1.4498                      3rd Qu.:3.000  
+##  Max.   :190467   Max.   :5.0853                      Max.   :9.000  
+##                                                                      
+##       ZIP           DISTRICT            Z1              S1         S2A       
+##  Min.   :48001   Min.   : 1.000   Min.   :48002   Min.   :1   Min.   :1.000  
+##  1st Qu.:48221   1st Qu.: 3.000   1st Qu.:48188   1st Qu.:1   1st Qu.:1.000  
+##  Median :48744   Median : 6.000   Median :48502   Median :1   Median :1.000  
+##  Mean   :48783   Mean   : 6.707   Mean   :48699   Mean   :1   Mean   :1.419  
+##  3rd Qu.:49327   3rd Qu.:10.000   3rd Qu.:49124   3rd Qu.:1   3rd Qu.:2.000  
+##  Max.   :49968   Max.   :14.000   Max.   :49931   Max.   :1   Max.   :9.000  
+##                                   NA&#39;s   :732                                
+##       S2B              S3            S4           VERSION       PRSMI20    
+##  Min.   :1.000   Min.   :1     Min.   :1.000   Min.   :1.0   Min.   :0.00  
+##  1st Qu.:1.000   1st Qu.:1     1st Qu.:1.000   1st Qu.:1.0   1st Qu.:1.00  
+##  Median :1.000   Median :1     Median :1.000   Median :2.0   Median :1.00  
+##  Mean   :1.328   Mean   :1     Mean   :1.285   Mean   :1.5   Mean   :1.63  
+##  3rd Qu.:1.000   3rd Qu.:1     3rd Qu.:1.000   3rd Qu.:2.0   3rd Qu.:2.00  
+##  Max.   :9.000   Max.   :1     Max.   :3.000   Max.   :2.0   Max.   :9.00  
+##  NA&#39;s   :508     NA&#39;s   :722   NA&#39;s   :722                                 
+##     SENMI20          TIME16        ISSUE20          QLT20         TEMPBIDEN    
+##  Min.   :0.000   Min.   :2.00   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:1.000   1st Qu.:5.00   1st Qu.:2.000   1st Qu.:2.000   1st Qu.:1.000  
+##  Median :1.000   Median :5.00   Median :3.000   Median :3.000   Median :1.000  
+##  Mean   :1.526   Mean   :4.85   Mean   :3.489   Mean   :2.956   Mean   :1.496  
+##  3rd Qu.:2.000   3rd Qu.:5.00   3rd Qu.:5.000   3rd Qu.:4.000   3rd Qu.:2.000  
+##  Max.   :9.000   Max.   :9.00   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##                  NA&#39;s   :616    NA&#39;s   :616     NA&#39;s   :616     NA&#39;s   :616    
+##    TEMPTRUMP       CONTROLSEN        FINSIT      ECONVCORONA20  
+##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000  
+##  Median :2.000   Median :1.000   Median :2.000   Median :1.000  
+##  Mean   :1.686   Mean   :1.873   Mean   :2.211   Mean   :1.901  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:3.000   3rd Qu.:2.000  
+##  Max.   :9.000   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##  NA&#39;s   :616     NA&#39;s   :616     NA&#39;s   :616     NA&#39;s   :616    
+##    FAVBIDEN2        FAVTRUMP        FORCAND         NEWVOTER    
+##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:2.000  
+##  Median :1.000   Median :2.000   Median :1.000   Median :2.000  
+##  Mean   :1.528   Mean   :1.756   Mean   :1.838   Mean   :1.971  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:2.000  
+##  Max.   :9.000   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##  NA&#39;s   :616     NA&#39;s   :616     NA&#39;s   :615     NA&#39;s   :615    
+##       NEC         HANDLEECON20   HANDLECORONA20     RACISM20    
+##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:2.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:2.000  
+##  Median :3.000   Median :1.000   Median :1.000   Median :2.000  
+##  Mean   :2.804   Mean   :1.799   Mean   :1.753   Mean   :2.325  
+##  3rd Qu.:4.000   3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:3.000  
+##  Max.   :9.000   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##  NA&#39;s   :615     NA&#39;s   :615     NA&#39;s   :615     NA&#39;s   :615    
+##     VOTE2016        COUNTACC         TRUMP4       CONTAINCOVID  
+##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:2.000  
+##  Median :2.000   Median :1.500   Median :4.000   Median :3.000  
+##  Mean   :1.776   Mean   :1.808   Mean   :2.878   Mean   :3.092  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:4.000   3rd Qu.:4.000  
+##  Max.   :9.000   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##  NA&#39;s   :615     NA&#39;s   :615     NA&#39;s   :615     NA&#39;s   :615    
+##  COVIDHARDSHIP       AGE10             SEX           EDUC18     
+##  Min.   :1.000   Min.   : 1.000   Min.   :1.00   Min.   :1.000  
+##  1st Qu.:2.000   1st Qu.: 6.000   1st Qu.:1.00   1st Qu.:2.000  
+##  Median :3.000   Median : 8.000   Median :2.00   Median :3.000  
+##  Mean   :2.596   Mean   : 8.476   Mean   :1.53   Mean   :3.288  
+##  3rd Qu.:3.000   3rd Qu.: 9.000   3rd Qu.:2.00   3rd Qu.:5.000  
+##  Max.   :9.000   Max.   :99.000   Max.   :2.00   Max.   :9.000  
+##  NA&#39;s   :615                                                    
+##     QRACEAI         LATINOS         PARTYID          PHIL3      
+##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:1.000   1st Qu.:2.000   1st Qu.:1.000   1st Qu.:1.000  
+##  Median :1.000   Median :2.000   Median :2.000   Median :2.000  
+##  Mean   :1.572   Mean   :2.175   Mean   :2.236   Mean   :2.295  
+##  3rd Qu.:1.000   3rd Qu.:2.000   3rd Qu.:3.000   3rd Qu.:3.000  
+##  Max.   :9.000   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##                                                                 
+##     INCOME20        BRNAGAIN        CHILD12           LGBT      
+##  Min.   :1.000   Min.   :1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:2.000   1st Qu.:1.000   1st Qu.:2.000   1st Qu.:2.000  
+##  Median :3.000   Median :2.000   Median :2.000   Median :2.000  
+##  Mean   :3.891   Mean   :1.907   Mean   :1.815   Mean   :2.224  
+##  3rd Qu.:4.000   3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:2.000  
+##  Max.   :9.000   Max.   :9.000   Max.   :9.000   Max.   :9.000  
+##  NA&#39;s   :616     NA&#39;s   :615     NA&#39;s   :615     NA&#39;s   :615    
+##    UNIONHH12          QN5              QN6A            QN6B      
+##  Min.   :1.000   Min.   : 1.000   Min.   :1.000   Min.   :1.000  
+##  1st Qu.:2.000   1st Qu.: 2.000   1st Qu.:2.000   1st Qu.:1.000  
+##  Median :2.000   Median : 2.000   Median :2.000   Median :1.000  
+##  Mean   :1.837   Mean   : 3.219   Mean   :1.782   Mean   :1.178  
+##  3rd Qu.:2.000   3rd Qu.: 3.000   3rd Qu.:2.000   3rd Qu.:1.000  
+##  Max.   :9.000   Max.   :99.000   Max.   :9.000   Max.   :9.000  
+##  NA&#39;s   :616                      NA&#39;s   :732     NA&#39;s   :499    
+##       QN6C           County             SMPFIPS           TTID      
+##  Min.   : 0.000   Length:1231        Min.   :   -1   Min.   :93814  
+##  1st Qu.: 0.000   Class :character   1st Qu.:   -1   1st Qu.:94122  
+##  Median : 1.000   Mode  :character   Median :26063   Median :94429  
+##  Mean   : 2.317                      Mean   :16835   Mean   :94429  
+##  3rd Qu.: 2.000                      3rd Qu.:26125   3rd Qu.:94737  
+##  Max.   :99.000                      Max.   :26165   Max.   :95044  
+##                                                                     
+##     GEOCODE          a1age5          A1RACE         A1RACE3          A1SEX     
+##  Min.   :1.000   Min.   : 1.00   Min.   :1.000   Min.   :1.000   Min.   :1.00  
+##  1st Qu.:2.000   1st Qu.: 3.00   1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.00  
+##  Median :3.000   Median : 4.00   Median :1.000   Median :1.000   Median :2.00  
+##  Mean   :3.084   Mean   : 4.06   Mean   :1.348   Mean   :1.184   Mean   :1.53  
+##  3rd Qu.:4.000   3rd Qu.: 5.00   3rd Qu.:1.000   3rd Qu.:1.000   3rd Qu.:2.00  
+##  Max.   :5.000   Max.   :11.00   Max.   :5.000   Max.   :3.000   Max.   :2.00  
+##                                                                                
+##      A1EDUC        EDUCWHITE       VOTEMETHOD  
+##  Min.   :1.000   Min.   :1.000   Min.   :1.00  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:1.00  
+##  Median :1.000   Median :2.000   Median :2.00  
+##  Mean   :1.501   Mean   :1.861   Mean   :1.81  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:2.00  
+##  Max.   :3.000   Max.   :4.000   Max.   :3.00  
+##                  NA&#39;s   :11      NA&#39;s   :12</code></pre>
+<pre class="r"><code># Most advanced: count()
+MI_raw %&gt;%
+  count(PRSMI20)</code></pre>
+<pre><code>## # A tibble: 6 × 2
+##   PRSMI20                                      n
+##   &lt;dbl+lbl&gt;                                &lt;int&gt;
+## 1 0 (NA) [Will/Did not vote for president]     6
+## 2 1 [Joe Biden, the Democrat]                723
+## 3 2 [Donald Trump, the Republican]           459
+## 4 7 [Undecided/Don’t know]                     4
+## 5 8 [Refused]                                 14
+## 6 9 [Another candidate]                       25</code></pre>
+<pre class="r"><code># Counting doesn&#39;t always work
+MI_raw %&gt;%
+  count(WEIGHT)</code></pre>
+<pre><code>## # A tibble: 411 × 2
+##    WEIGHT     n
+##     &lt;dbl&gt; &lt;int&gt;
+##  1  0.100     1
+##  2  0.113     1
+##  3  0.119     1
+##  4  0.133     2
+##  5  0.141     1
+##  6  0.142     1
+##  7  0.144     1
+##  8  0.146     1
+##  9  0.147     1
+## 10  0.149     5
+## # ℹ 401 more rows</code></pre>
+<pre class="r"><code>summary(MI_raw %&gt;% select(WEIGHT))</code></pre>
+<pre><code>##      WEIGHT      
+##  Min.   :0.1003  
+##  1st Qu.:0.3775  
+##  Median :0.8020  
+##  Mean   :1.0000  
+##  3rd Qu.:1.4498  
+##  Max.   :5.0853</code></pre>
+<pre class="r"><code># Looking at PARTYID
+
+glimpse(MI_raw %&gt;% select(PARTYID))</code></pre>
+<pre><code>## Rows: 1,231
+## Columns: 1
+## $ PARTYID &lt;dbl+lbl&gt; 3, 1, 1, 3, 3, 3, 1, 1, 2, 1, 3, 2, 4, 4, 1, 1, 3, 3, 3, 1…</code></pre>
+<pre class="r"><code>MI_raw %&gt;%
+  count(PARTYID)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   PARTYID                                 n
+##   &lt;dbl+lbl&gt;                           &lt;int&gt;
+## 1 1 [Democrat]                          425
+## 2 2 [Republican]                        280
+## 3 3 [Independent]                       416
+## 4 4 [Something else]                     94
+## 5 9 [[DON&#39;T READ] Don’t know/refused]    16</code></pre>
 </div>
-<div id="question-1-2-points" class="section level2">
-<h2>Question 1 [2 points]</h2>
-<p>Create a new object called <code>MI_clean</code> that contains only
-the following variables:</p>
-<ul>
-<li>AGE10</li>
-<li>SEX</li>
-<li>PARTYID</li>
-<li>EDUC18</li>
-<li>PRSMI20</li>
-<li>QLT20</li>
-<li>LGBT</li>
-<li>BRNAGAIN</li>
-<li>LATINOS</li>
-<li>QRACEAI</li>
-<li>WEIGHT</li>
-</ul>
-<p>and then list which of these variables contain missing data recorded
-as <code>NA</code>. How many respondents were not asked certain
-questions?</p>
-<pre class="r"><code>MI_clean &lt;- MI_raw %&gt;% 
-  select() # Select the requested variables</code></pre>
-<pre><code>## Error in MI_raw %&gt;% select(): could not find function &quot;%&gt;%&quot;</code></pre>
-<pre class="r"><code># Identify which have missing data recorded as NA
-# INSERT CODE HERE</code></pre>
-<blockquote>
-<p>Write answer here.</p>
-</blockquote>
-</div>
-<div id="question-2-2-points" class="section level2">
-<h2>Question 2 [2 points]</h2>
-<p>Are there <strong>unit non-response</strong> data in the
-<code>AGE10</code> variable? If so, how are they recorded? What about
-the <code>PARTYID</code> variable? How many people refused to answer
-both of these questions?</p>
-<pre class="r"><code># INSERT CODE HERE</code></pre>
-<blockquote>
-<p>Write answer here.</p>
-</blockquote>
-</div>
-<div id="question-3-2-points" class="section level2">
-<h2>Question 3 [2 points]</h2>
-<p>Let’s create a new variable called <code>preschoice</code> that
-converts <code>PRSMI20</code> to a character. To do this, install the
-<code>labelled</code> package if you haven’t already, then use the
-<code>to_character()</code> function from the <code>labelled</code>
-package. Now <code>count()</code> the number of respondents who reported
-voting for each candidate. How many respondents voted for candidate
-Trump in 2020? How many respondents refused to tell us who they voted
-for?</p>
-<pre class="r"><code># INSERT CODE HERE</code></pre>
-<blockquote>
-<p>Write answer here.</p>
-</blockquote>
-</div>
-<div id="question-4-1-point" class="section level2">
-<h2>Question 4 [1 point]</h2>
-<p>Now do the same for the <code>QLT20</code> variable, the
-<code>AGE10</code> variable, and the <code>LGBT</code> variable. For
-each variable, make the character version <code>Qlty</code> for
-<code>QLT20</code>, <code>Age</code> for <code>AGE10</code>, and
-<code>Lgbt_clean</code> for <code>LGBT</code>. Now, for each of these
-new variables (including <code>preschoice</code> from the previous
-question), replace the unit non-response label with <code>NA</code>.
-(<strong>HINT</strong>: Use <code>grepl()</code> or
-<code>str_match()</code> to make it easier.)</p>
-<pre class="r"><code># QLT20
-MI_clean &lt;- MI_clean %&gt;%
-  mutate(Qlty = , # Create new variable with text
-         Age = ,  # Create new variable with text
-         Lgbt_clean = ) # Create new variable with text</code></pre>
-<pre><code>## Error in MI_clean %&gt;% mutate(Qlty = , Age = , Lgbt_clean = ): could not find function &quot;%&gt;%&quot;</code></pre>
-<pre class="r"><code>MI_clean &lt;- MI_clean %&gt;%
-  mutate(Qlty = ifelse(grepl(&quot;SUBSTRING FOR UNIT NON-RESPONSE&quot;,Qlty),NA,Qlty), # Replace unit non-response with NA
-         Lgbt_clean = ifelse(grepl(&quot;SUBSTRING FOR UNIT NON-RESPONSE&quot;,Lgbt_clean),NA,Lgbt_clean), # Replace unit non-response with NA
-         Age = ifelse(grepl(&quot;SUBSTRING FOR UNIT NON-RESPONSE&quot;,Age),NA,Age), # Replace unit non-response with NA
-         preschoice = ifelse(grepl(&quot;SUBSTRING FOR UNIT NON-RESPONSE&quot;,preschoice),NA,preschoice)) # Replace unit non-response with NA</code></pre>
-<pre><code>## Error in MI_clean %&gt;% mutate(Qlty = ifelse(grepl(&quot;SUBSTRING FOR UNIT NON-RESPONSE&quot;, : could not find function &quot;%&gt;%&quot;</code></pre>
-</div>
-<div id="question-5-1-point" class="section level2">
-<h2>Question 5 [1 point]</h2>
-<p>What proportion of women supported Trump? What proportion of
-LGBTQ-identifying respondents supported Trump?</p>
-<pre class="r"><code># INSERT CODE HERE</code></pre>
-<blockquote>
-<p>Write answer here.</p>
-</blockquote>
-</div>
-<div id="extra-credit-2-points" class="section level2">
-<h2>Extra Credit [2 points]</h2>
-<p>Plot the relationship between Trump support and gender.</p>
-<pre class="r"><code># INSERT CODE HERE</code></pre>
+<div id="variable-types" class="section level1">
+<h1>Variable Types</h1>
+<pre class="r"><code># Combining as.character() with haven::as_factor()
+MI_final &lt;- MI_raw %&gt;%
+  mutate(AGE10_new = ifelse(AGE10 == 99,NA,AGE10))
+
+MI_final &lt;- MI_final %&gt;%
+  mutate(AGE10_labs = as.character(haven::as_factor(AGE10)))
+
+MI_final %&gt;%
+  filter(!is.na(AGE10_new)) %&gt;%
+  ggplot(aes(x = AGE10_labs)) + 
+  geom_bar()</code></pre>
+<p><img src="data:image/png;base64,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cVQQKFxVcGZuq7l24EoUjqOCQOGqgjNzW821A1eicBwVBApXFZyZ22quHbgSheOoIFC4quDM3FZz7cCVKBxHBYHCVQVn5raaaweuROE4KggUrio4M7fVXDtwJQrHUUGgcFXBmbmt5tqBK1E4jgoChasKzsxtNdcOXInCcVQQKFxVcGZuq7l24EoUjqOCQOGqgjNzW821A1eicBwVBApXFZyZ22quHbgSheOoIFC4quDM3FZz7cCVKBxHBYHCVQVn5raaaweuROE4KggUrio4M7fVXDtwJQrHUUGgcFXBmbmt5tqBK1E4jgoChasKzsxtNdcOXInCcVQQKFxVcGZuq7l24EoUjqOCQOGqgjNzW821A1eicBwVBApXFZyZ22quHbgSheOoIFC4quDM3FZz7cCVKBxHBYHCVQVn5raaaweuROE4KggUrio4M7fVXDtwJQrHUUGgcFXBmbmt5tqBK1E4jgoChasKzsxtNdcOXInCcVQQKFxVcGZuq7l24EoUjqOCQOGqgjNzW821A1eicBwVBApXFZyZ22quHbgSheOoIFC4quDM3FZz7cCVKBxHBYHCVQVn5raaaweuROE4KggUrio4M7fVXDtwJQrHUUGgcFXBmbmt5tqBK1E4jgoChasKHoFbc7wk5tqBK1E4jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChasKRqBwpcC7jigChVsB3OqY1+RKzLUDV6JwCQKFWwXc6pjX5ErMtQNXonAJAoVbBdzqmNfkSsy1A1eicAkChVsF3OqY1+RKzLUDV6JwCQKFWwXc6pjX5ErMtQNXonAJAoVbBdzqmNfkSsy1A1eicAkChVsF3OqY1+RKzLUDV6JwCQKFWwXc6pjX5ErMtQNXonAJAoVbBdzqmNfkSsy1A1eicAkChVsF3OqY1+RKzLUDV6JwCQKFWwXc6pjX5ErMtQNXonAJAoVbBdzqmNfkSsy1A1eicAkChVsF3OqY1+RKzLUDV6JwCQKFWwXc6pjX5ErMtQNXonAJAoVbBdzqmNfkSsy1A1eicAkChVsF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" width="672" /></p>
+<pre class="r"><code># Converting from labelled to character
+MI_final &lt;- MI_final %&gt;%
+  mutate(preschoice = as.character(haven::as_factor(PRSMI20)),
+         Qlty = as.character(haven::as_factor(QLT20)),
+         LGBT_lab = as.character(haven::as_factor(LGBT)))
+
+MI_final %&gt;%
+  select(preschoice,Qlty,LGBT_lab)</code></pre>
+<pre><code>## # A tibble: 1,231 × 3
+##    preschoice                   Qlty                       LGBT_lab
+##    &lt;chr&gt;                        &lt;chr&gt;                      &lt;chr&gt;   
+##  1 Joe Biden, the Democrat      Has good judgment          &lt;NA&gt;    
+##  2 Joe Biden, the Democrat      &lt;NA&gt;                       No      
+##  3 Joe Biden, the Democrat      &lt;NA&gt;                       No      
+##  4 Joe Biden, the Democrat      Has good judgment          &lt;NA&gt;    
+##  5 Joe Biden, the Democrat      Cares about people like me &lt;NA&gt;    
+##  6 Joe Biden, the Democrat      &lt;NA&gt;                       No      
+##  7 Joe Biden, the Democrat      &lt;NA&gt;                       No      
+##  8 Joe Biden, the Democrat      &lt;NA&gt;                       No      
+##  9 Donald Trump, the Republican Cares about people like me &lt;NA&gt;    
+## 10 Joe Biden, the Democrat      Cares about people like me &lt;NA&gt;    
+## # ℹ 1,221 more rows</code></pre>
+<pre class="r"><code># Converting unit non-response to NA
+MI_final %&gt;%
+  count(preschoice)</code></pre>
+<pre><code>## # A tibble: 6 × 2
+##   preschoice                          n
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 Another candidate                  25
+## 2 Donald Trump, the Republican      459
+## 3 Joe Biden, the Democrat           723
+## 4 Refused                            14
+## 5 Undecided/Don’t know                4
+## 6 Will/Did not vote for president     6</code></pre>
+<pre class="r"><code># Need to use either str_detect() or grepl()
+MI_final %&gt;%
+  mutate(preschoice = ifelse(grepl(&#39;Refuse|know&#39;,preschoice),
+                             NA,
+                             preschoice)) %&gt;%
+  count(preschoice)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   preschoice                          n
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 Another candidate                  25
+## 2 Donald Trump, the Republican      459
+## 3 Joe Biden, the Democrat           723
+## 4 Will/Did not vote for president     6
+## 5 &lt;NA&gt;                               18</code></pre>
 </div>
 
 

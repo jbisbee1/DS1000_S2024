@@ -47,7 +47,7 @@ Create a new object called `MI_clean` that contains only the following variables
 * SEX
 * PARTYID
 * EDUC18
-* PRMSI20
+* PRSMI20
 * QLT20
 * LGBT
 * BRNAGAIN

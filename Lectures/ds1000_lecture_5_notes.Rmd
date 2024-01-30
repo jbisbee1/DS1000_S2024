@@ -1,0 +1,87 @@
+---
+title: "Lecture 5 Notes"
+output: html_document
+date: "2024-01-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Opening data and looking at it
+
+```{r}
+require(tidyverse)
+require(labelled)
+MI_raw <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/MI2020_ExitPoll.rds")
+
+view(MI_raw)
+```
+
+# Ways of looking at data
+
+```{r}
+# Simplest: look
+MI_raw
+
+# More advanced: glimpse()
+glimpse(MI_raw)
+
+# More advanced: summary()
+summary(MI_raw)
+
+# Most advanced: count()
+MI_raw %>%
+  count(PRSMI20)
+
+# Counting doesn't always work
+MI_raw %>%
+  count(WEIGHT)
+
+summary(MI_raw %>% select(WEIGHT))
+
+# Looking at PARTYID
+
+glimpse(MI_raw %>% select(PARTYID))
+
+MI_raw %>%
+  count(PARTYID)
+```
+
+# Variable Types
+
+```{r}
+# Combining as.character() with haven::as_factor()
+MI_final <- MI_raw %>%
+  mutate(AGE10_new = ifelse(AGE10 == 99,NA,AGE10))
+
+MI_final <- MI_final %>%
+  mutate(AGE10_labs = as.character(haven::as_factor(AGE10)))
+
+MI_final %>%
+  filter(!is.na(AGE10_new)) %>%
+  ggplot(aes(x = AGE10_labs)) + 
+  geom_bar()
+
+# Converting from labelled to character
+MI_final <- MI_final %>%
+  mutate(preschoice = as.character(haven::as_factor(PRSMI20)),
+         Qlty = as.character(haven::as_factor(QLT20)),
+         LGBT_lab = as.character(haven::as_factor(LGBT)))
+
+MI_final %>%
+  select(preschoice,Qlty,LGBT_lab)
+
+# Converting unit non-response to NA
+MI_final %>%
+  count(preschoice)
+
+# Need to use either str_detect() or grepl()
+MI_final %>%
+  mutate(preschoice = ifelse(grepl('Refuse|know',preschoice),
+                             NA,
+                             preschoice)) %>%
+  count(preschoice)
+
+```
+
