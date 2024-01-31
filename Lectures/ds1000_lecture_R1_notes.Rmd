@@ -10,9 +10,15 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Testing Pset 3 Data
 
+- This following chunk of code will open the data from github and then manipulate it in the following ways:
+  - convert Trump favorability to numeric
+  - Convert trump favorability to text
+
 ```{r}
+rm(list = ls())
 require(tidyverse)
 
+# This line opens the raw data from github
 dat <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/MI2020_ExitPoll.rds")
 
 

@@ -298,17 +298,23 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+content: "";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "\e258";
-font-family: 'Glyphicons Halflings';
+content: "";
 border: none;
+}
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "";
+font-family: 'Glyphicons Halflings';
+display: inline-block;
+padding: 10px;
+border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -359,20 +365,17 @@ display: none;
 <h1>Opening data and looking at it</h1>
 <pre class="r"><code>require(tidyverse)</code></pre>
 <pre><code>## Loading required package: tidyverse</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.3.2</code></pre>
-<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.2     ✔ readr     2.1.4
-## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.3.6      ✔ purrr   0.3.4 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.2      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>require(labelled)</code></pre>
 <pre><code>## Loading required package: labelled</code></pre>
-<pre><code>## Warning: package &#39;labelled&#39; was built under R version 4.3.2</code></pre>
+<pre><code>## Warning: package &#39;labelled&#39; was built under R version 4.2.3</code></pre>
 <pre class="r"><code>MI_raw &lt;- read_rds(&quot;https://github.com/jbisbee1/DS1000_S2024/raw/main/data/MI2020_ExitPoll.rds&quot;)
 
 view(MI_raw)</code></pre>
@@ -382,25 +385,25 @@ view(MI_raw)</code></pre>
 <pre class="r"><code># Simplest: look
 MI_raw</code></pre>
 <pre><code>## # A tibble: 1,231 × 63
-##       ID WEIGHT LALVOTERID     GROUP       ZIP DISTRICT    Z1 S1       
-##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;          &lt;dbl+lbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl+lbl&gt;
-##  1     9  0.405 LALMI6290066   3 [3]     49327        2    NA 1 [Yes]  
-##  2    66  1.81  LALMI2492492   1 [1]     48234       14    NA 1 [Yes]  
-##  3   225  0.860 LALMI548981440 4 [4]     48301        9 48322 1 [Yes]  
-##  4   243  0.199 LALMI505377239 1 [1]     48130        7 48130 1 [Yes]  
-##  5   286  0.177 LALMI6831689   1 [1]     49946        1    NA 1 [Yes]  
-##  6   293  0.492 LALMI4019782   1 [1]     48615        4    NA 1 [Yes]  
-##  7   365  1.37  LALMI4151378   1 [1]     48906        4 48813 1 [Yes]  
-##  8   367  1.15  LALMI5912584   1 [1]     49442        2    NA 1 [Yes]  
-##  9   388  1.50  LALMI6635050   1 [1]     48451        5    NA 1 [Yes]  
-## 10   417  1.30  LALMI3567125   1 [1]     48197       12    NA 1 [Yes]  
-## # ℹ 1,221 more rows
-## # ℹ 55 more variables: S2A &lt;dbl+lbl&gt;, S2B &lt;dbl+lbl&gt;, S3 &lt;dbl+lbl&gt;,
+##       ID WEIGHT LALVOTERID GROUP       ZIP DISTR…¹    Z1 S1        S2A      
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl+lbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;
+##  1     9  0.405 LALMI6290… 3 [3]     49327       2    NA 1 [Yes]   2 [No]   
+##  2    66  1.81  LALMI2492… 1 [1]     48234      14    NA 1 [Yes]   1 [Yes]  
+##  3   225  0.860 LALMI5489… 4 [4]     48301       9 48322 1 [Yes]   1 [Yes]  
+##  4   243  0.199 LALMI5053… 1 [1]     48130       7 48130 1 [Yes]   1 [Yes]  
+##  5   286  0.177 LALMI6831… 1 [1]     49946       1    NA 1 [Yes]   1 [Yes]  
+##  6   293  0.492 LALMI4019… 1 [1]     48615       4    NA 1 [Yes]   1 [Yes]  
+##  7   365  1.37  LALMI4151… 1 [1]     48906       4 48813 1 [Yes]   1 [Yes]  
+##  8   367  1.15  LALMI5912… 1 [1]     49442       2    NA 1 [Yes]   1 [Yes]  
+##  9   388  1.50  LALMI6635… 1 [1]     48451       5    NA 1 [Yes]   2 [No]   
+## 10   417  1.30  LALMI3567… 1 [1]     48197      12    NA 1 [Yes]   1 [Yes]  
+## # … with 1,221 more rows, 54 more variables: S2B &lt;dbl+lbl&gt;, S3 &lt;dbl+lbl&gt;,
 ## #   S4 &lt;dbl+lbl&gt;, VERSION &lt;dbl+lbl&gt;, PRSMI20 &lt;dbl+lbl&gt;, SENMI20 &lt;dbl+lbl&gt;,
 ## #   TIME16 &lt;dbl+lbl&gt;, ISSUE20 &lt;dbl+lbl&gt;, QLT20 &lt;dbl+lbl&gt;, TEMPBIDEN &lt;dbl+lbl&gt;,
 ## #   TEMPTRUMP &lt;dbl+lbl&gt;, CONTROLSEN &lt;dbl+lbl&gt;, FINSIT &lt;dbl+lbl&gt;,
 ## #   ECONVCORONA20 &lt;dbl+lbl&gt;, FAVBIDEN2 &lt;dbl+lbl&gt;, FAVTRUMP &lt;dbl+lbl&gt;,
-## #   FORCAND &lt;dbl+lbl&gt;, NEWVOTER &lt;dbl+lbl&gt;, NEC &lt;dbl+lbl&gt;, …</code></pre>
+## #   FORCAND &lt;dbl+lbl&gt;, NEWVOTER &lt;dbl+lbl&gt;, NEC &lt;dbl+lbl&gt;,
+## #   HANDLEECON20 &lt;dbl+lbl&gt;, HANDLECORONA20 &lt;dbl+lbl&gt;, RACISM20 &lt;dbl+lbl&gt;, …</code></pre>
 <pre class="r"><code># More advanced: glimpse()
 glimpse(MI_raw)</code></pre>
 <pre><code>## Rows: 1,231
@@ -618,7 +621,7 @@ MI_raw %&gt;%
 ##  8  0.146     1
 ##  9  0.147     1
 ## 10  0.149     5
-## # ℹ 401 more rows</code></pre>
+## # … with 401 more rows</code></pre>
 <pre class="r"><code>summary(MI_raw %&gt;% select(WEIGHT))</code></pre>
 <pre><code>##      WEIGHT      
 ##  Min.   :0.1003  
@@ -679,7 +682,7 @@ MI_final %&gt;%
 ##  8 Joe Biden, the Democrat      &lt;NA&gt;                       No      
 ##  9 Donald Trump, the Republican Cares about people like me &lt;NA&gt;    
 ## 10 Joe Biden, the Democrat      Cares about people like me &lt;NA&gt;    
-## # ℹ 1,221 more rows</code></pre>
+## # … with 1,221 more rows</code></pre>
 <pre class="r"><code># Converting unit non-response to NA
 MI_final %&gt;%
   count(preschoice)</code></pre>
@@ -706,6 +709,90 @@ MI_final %&gt;%
 ## 3 Joe Biden, the Democrat           723
 ## 4 Will/Did not vote for president     6
 ## 5 &lt;NA&gt;                               18</code></pre>
+</div>
+<div id="testing-quiz-possibilities" class="section level1">
+<h1>Testing quiz possibilities</h1>
+<pre class="r"><code>MI_final %&gt;%
+  summarise(preschoice)</code></pre>
+<pre><code>## # A tibble: 1,231 × 1
+##    preschoice                  
+##    &lt;chr&gt;                       
+##  1 Joe Biden, the Democrat     
+##  2 Joe Biden, the Democrat     
+##  3 Joe Biden, the Democrat     
+##  4 Joe Biden, the Democrat     
+##  5 Joe Biden, the Democrat     
+##  6 Joe Biden, the Democrat     
+##  7 Joe Biden, the Democrat     
+##  8 Joe Biden, the Democrat     
+##  9 Donald Trump, the Republican
+## 10 Joe Biden, the Democrat     
+## # … with 1,221 more rows</code></pre>
+<pre class="r"><code>MI_final %&gt;%
+  mutate(preschoice)</code></pre>
+<pre><code>## # A tibble: 1,231 × 68
+##       ID WEIGHT LALVOTERID GROUP       ZIP DISTR…¹    Z1 S1        S2A      
+##    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;      &lt;dbl+lbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl+lbl&gt; &lt;dbl+lbl&gt;
+##  1     9  0.405 LALMI6290… 3 [3]     49327       2    NA 1 [Yes]   2 [No]   
+##  2    66  1.81  LALMI2492… 1 [1]     48234      14    NA 1 [Yes]   1 [Yes]  
+##  3   225  0.860 LALMI5489… 4 [4]     48301       9 48322 1 [Yes]   1 [Yes]  
+##  4   243  0.199 LALMI5053… 1 [1]     48130       7 48130 1 [Yes]   1 [Yes]  
+##  5   286  0.177 LALMI6831… 1 [1]     49946       1    NA 1 [Yes]   1 [Yes]  
+##  6   293  0.492 LALMI4019… 1 [1]     48615       4    NA 1 [Yes]   1 [Yes]  
+##  7   365  1.37  LALMI4151… 1 [1]     48906       4 48813 1 [Yes]   1 [Yes]  
+##  8   367  1.15  LALMI5912… 1 [1]     49442       2    NA 1 [Yes]   1 [Yes]  
+##  9   388  1.50  LALMI6635… 1 [1]     48451       5    NA 1 [Yes]   2 [No]   
+## 10   417  1.30  LALMI3567… 1 [1]     48197      12    NA 1 [Yes]   1 [Yes]  
+## # … with 1,221 more rows, 59 more variables: S2B &lt;dbl+lbl&gt;, S3 &lt;dbl+lbl&gt;,
+## #   S4 &lt;dbl+lbl&gt;, VERSION &lt;dbl+lbl&gt;, PRSMI20 &lt;dbl+lbl&gt;, SENMI20 &lt;dbl+lbl&gt;,
+## #   TIME16 &lt;dbl+lbl&gt;, ISSUE20 &lt;dbl+lbl&gt;, QLT20 &lt;dbl+lbl&gt;, TEMPBIDEN &lt;dbl+lbl&gt;,
+## #   TEMPTRUMP &lt;dbl+lbl&gt;, CONTROLSEN &lt;dbl+lbl&gt;, FINSIT &lt;dbl+lbl&gt;,
+## #   ECONVCORONA20 &lt;dbl+lbl&gt;, FAVBIDEN2 &lt;dbl+lbl&gt;, FAVTRUMP &lt;dbl+lbl&gt;,
+## #   FORCAND &lt;dbl+lbl&gt;, NEWVOTER &lt;dbl+lbl&gt;, NEC &lt;dbl+lbl&gt;,
+## #   HANDLEECON20 &lt;dbl+lbl&gt;, HANDLECORONA20 &lt;dbl+lbl&gt;, RACISM20 &lt;dbl+lbl&gt;, …</code></pre>
+<pre class="r"><code>MI_final %&gt;%
+  select(preschoice)</code></pre>
+<pre><code>## # A tibble: 1,231 × 1
+##    preschoice                  
+##    &lt;chr&gt;                       
+##  1 Joe Biden, the Democrat     
+##  2 Joe Biden, the Democrat     
+##  3 Joe Biden, the Democrat     
+##  4 Joe Biden, the Democrat     
+##  5 Joe Biden, the Democrat     
+##  6 Joe Biden, the Democrat     
+##  7 Joe Biden, the Democrat     
+##  8 Joe Biden, the Democrat     
+##  9 Donald Trump, the Republican
+## 10 Joe Biden, the Democrat     
+## # … with 1,221 more rows</code></pre>
+<pre class="r"><code>MI_final %&gt;%
+  count(preschoice)</code></pre>
+<pre><code>## # A tibble: 6 × 2
+##   preschoice                          n
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 Another candidate                  25
+## 2 Donald Trump, the Republican      459
+## 3 Joe Biden, the Democrat           723
+## 4 Refused                            14
+## 5 Undecided/Don’t know                4
+## 6 Will/Did not vote for president     6</code></pre>
+<pre class="r"><code>MI_final %&gt;%
+  select(SEX | starts_with(&#39;P&#39;))</code></pre>
+<pre><code>## # A tibble: 1,231 × 5
+##    SEX        PRSMI20                          PARTYID       PHIL3       presc…¹
+##    &lt;dbl+lbl&gt;  &lt;dbl+lbl&gt;                        &lt;dbl+lbl&gt;     &lt;dbl+lbl&gt;   &lt;chr&gt;  
+##  1 2 [Female] 1 [Joe Biden, the Democrat]      3 [Independe… 2 [Moderat… Joe Bi…
+##  2 2 [Female] 1 [Joe Biden, the Democrat]      1 [Democrat]  2 [Moderat… Joe Bi…
+##  3 2 [Female] 1 [Joe Biden, the Democrat]      1 [Democrat]  1 [Liberal] Joe Bi…
+##  4 1 [Male]   1 [Joe Biden, the Democrat]      3 [Independe… 9 [[DON&#39;T … Joe Bi…
+##  5 2 [Female] 1 [Joe Biden, the Democrat]      3 [Independe… 1 [Liberal] Joe Bi…
+##  6 2 [Female] 1 [Joe Biden, the Democrat]      3 [Independe… 2 [Moderat… Joe Bi…
+##  7 1 [Male]   1 [Joe Biden, the Democrat]      1 [Democrat]  9 [[DON&#39;T … Joe Bi…
+##  8 1 [Male]   1 [Joe Biden, the Democrat]      1 [Democrat]  2 [Moderat… Joe Bi…
+##  9 2 [Female] 2 [Donald Trump, the Republican] 2 [Republica… 3 [Conserv… Donald…
+## 10 1 [Male]   1 [Joe Biden, the Democrat]      1 [Democrat]  2 [Moderat… Joe Bi…
+## # … with 1,221 more rows, and abbreviated variable name ¹​preschoice</code></pre>
 </div>
 
 

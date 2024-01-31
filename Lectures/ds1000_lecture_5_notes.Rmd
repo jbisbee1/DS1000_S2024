@@ -85,3 +85,24 @@ MI_final %>%
 
 ```
 
+# Testing quiz possibilities
+
+```{r}
+MI_final %>%
+  summarise(preschoice)
+
+MI_final %>%
+  mutate(preschoice)
+
+MI_final %>%
+  select(preschoice)
+
+MI_final %>%
+  count(preschoice)
+
+
+MI_final %>%
+  select(SEX | starts_with('P'))
+```
+
+
