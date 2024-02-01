@@ -1,0 +1,160 @@
+---
+title: "Lecture 6 Notes"
+output: html_document
+date: "2024-02-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Two quick notes
+
+1. `as_factor()` (from `haven`) versus `to_character()` (from `labelled`)
+
+2. Proportions
+
+```{r}
+rm(list = ls())
+require(tidyverse)
+
+# This line opens the raw data from github
+dat <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/MI2020_ExitPoll.rds")
+
+dat %>%
+  count(FAVTRUMP)
+
+dat %>%
+  mutate(FAVTRUMP_1 = as.character(haven::as_factor(FAVTRUMP)),
+         FAVTRUMP_2 = labelled::to_character(FAVTRUMP)) %>%
+  count(FAVTRUMP,
+        FAVTRUMP_1,
+        FAVTRUMP_2)
+
+dat <- dat %>%
+  mutate(fav_trump_text = labelled::to_character(FAVTRUMP))
+```
+
+# 2. Proportions
+
+```{r}
+dat %>%
+  count(fav_trump_text)
+
+# Manually
+220 / (220+385+10)
+
+# Using code
+dat %>%
+  count(fav_trump_text) %>%
+  filter(!is.na(fav_trump_text)) %>%
+  mutate(totVoters = sum(n)) %>%
+  mutate(prop = n / totVoters)
+
+# Proportion of trump approvers by gender
+dat %>%
+  mutate(gender = labelled::to_character(SEX)) %>%
+  count(gender,fav_trump_text) %>%
+  filter(!is.na(fav_trump_text)) %>%
+  group_by(gender) %>%
+  mutate(totGender = sum(n)) %>%
+  ungroup() %>%
+  mutate(prop = n / totGender)
+
+view(dat)
+
+dat %>%
+  select(starts_with("LG"))
+```
+
+
+# Univariate Analysis
+- NBA data introduction
+
+```{r}
+nba <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/nba_players_2018.Rds")
+
+nba
+
+view(nba)
+
+```
+
+# Selecting variables
+
+```{r}
+nba %>%
+  select(pts)
+
+nba$pts
+
+summary(nba$pts)
+```
+
+# Categorical versus Continuous
+```{r}
+nba %>%
+  select(namePlayer)
+
+mean(nba$namePlayer)
+
+nba %>%
+  count(pts)
+
+# Visualization
+# nba %>%
+#   ggplot(aes(x = namePlayer)) + 
+#   geom_histogram()
+
+nba %>%
+  ggplot(aes(y = slugTeam)) + 
+  geom_bar()
+
+nba %>%
+  count(slugTeam) %>%
+  ggplot(aes(x = n,y = slugTeam)) + 
+  geom_bar(stat = 'identity')
+
+# nba %>%
+#   ggplot(aes(x = slugTeam)) + 
+#   geom_histogram()
+
+nba %>%
+  ggplot(aes(x = minutes)) + 
+  geom_bar()
+
+```
+
+# Applying the process
+
+1. Look
+2. Create (a plot)
+3. Evaluate
+
+```{r}
+nba %>%
+  select(pctFG)
+
+nba %>%
+  ggplot(aes(x = pctFG)) + 
+  geom_bar()
+
+nba %>%
+  ggplot(aes(x = pctFG)) + 
+  geom_histogram()
+
+# Looking at age
+nba %>%
+  select(agePlayer)
+
+nba %>%
+  ggplot(aes(x = agePlayer)) + 
+  geom_histogram(bins = 23)
+
+nba %>%
+  ggplot(aes(x = agePlayer)) + 
+  geom_bar()
+
+```
+
+
