@@ -1,0 +1,82 @@
+---
+title: "Lecture 7 Notes"
+output: html_document
+date: "2024-02-06"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(tidyverse)
+
+mi_ep <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/MI2020_ExitPoll_small.rds')
+```
+
+# Look
+
+```{r}
+view(mi_ep)
+```
+
+# Wrangle
+```{r}
+mi_ep_clean <- mi_ep %>%
+  filter(preschoice == 'Donald Trump, the Republican' | preschoice == 'Joe Biden, the Democrat') %>%
+  mutate(TrumpVoter = ifelse(preschoice == 'Donald Trump, the Republican',1,0)) %>%
+  mutate(BIdenVoter = ifelse(TrumpVoter == 1,0,1)) %>%
+  mutate(AGE10 = ifelse(AGE10 == 99,NA,AGE10))
+```
+
+# Evaluate
+
+- Theory: women should support Trump less than men
+
+```{r}
+# Dumb bad way of conditional support
+mi_ep_clean %>%
+  count(preschoice,SEX) %>%
+  mutate(PctSupport = n/sum(n))
+
+# Cool good way of conditional support
+toplot <- mi_ep_clean %>%
+  count(preschoice,SEX) %>%
+  group_by(SEX) %>%
+  mutate(totGender = sum(n)) %>%
+  mutate(pctSupport = n/totGender)
+```
+
+# Visualize conditional relationships
+
+```{r}
+toplot %>%
+  mutate(SEX = ifelse(SEX == 1,'Male','Female')) %>%
+  ggplot(aes(x = SEX,y = pctSupport,fill = preschoice)) + 
+  geom_bar(stat = 'identity',position = 'dodge') + 
+  labs(x = 'Gender',
+       y = '% Supporting',
+       fill = 'President')
+```
+
+# Understand voter's own explanations
+
+```{r}
+toplot2 <- mi_ep_clean %>%
+  filter(!is.na(Quality)) %>%
+  count(preschoice,Quality) %>%
+  group_by(preschoice) %>%
+  mutate(totN = sum(n), # This is the total # of trump and biden voters
+         pctExplain = n / sum(n)) # THis is the proportion
+```
+
+# Visualize the data
+
+```{r}
+toplot2 %>%
+  ggplot(aes(y = Quality,x = pctExplain,
+             fill = preschoice)) + 
+  geom_bar(stat = 'identity',position = 'dodge') + 
+  theme(legend.position = 'bottom')
+```
+
