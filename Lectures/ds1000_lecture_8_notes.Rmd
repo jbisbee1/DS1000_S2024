@@ -1,0 +1,112 @@
+---
+title: "Lecture 8 Notes"
+output: html_document
+date: "2024-02-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Downloading data
+
+```{r}
+require(tidyverse)
+poll <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Pres2020_PV.Rds")
+
+view(poll)
+
+# Quick wrangle
+poll <- poll %>%
+  mutate(Trump = Trump/100,
+         Biden = Biden/100,
+         margin = Biden - Trump)
+```
+
+# Multivariate Visualization: categorical by continuous
+
+```{r}
+poll %>%
+  filter(Mode == "IVR/Online" | Mode == "Live phone - RDD") %>%
+  ggplot(aes(x= margin,fill = Mode)) + 
+  geom_histogram(bins = 10,position = 'dodge')
+
+# Try a density instead
+toplot <- poll %>%
+  filter(Mode == "IVR/Online" | Mode == "Live phone - RDD")
+
+toplot %>%
+  ggplot(aes(x= margin,fill = Mode)) + 
+  geom_density(alpha = .3) + 
+  geom_vline(data = toplot %>%
+                group_by(Mode) %>%
+                summarise(margin_avg = mean(margin,na.rm=T)),
+              aes(xintercept = margin_avg,color = Mode),
+             linetype = 'dashed')
+```
+
+# More categories
+
+```{r}
+toKeep <- poll %>%
+  count(Mode) %>%
+  filter(n > 5) %>%
+  filter(!is.na(Mode))
+
+poll %>%
+  filter(Mode %in% toKeep$Mode) %>%
+  ggplot(aes(x = margin,fill = Mode)) + 
+  geom_histogram(bins = 10,position = 'dodge')
+
+poll %>%
+  filter(Mode %in% toKeep$Mode) %>%
+  ggplot(aes(x = margin,fill = Mode)) + 
+  geom_density(alpha = .3)
+
+# Better solution: geom_boxplot()
+poll %>%
+  filter(Mode %in% toKeep$Mode) %>%
+  ggplot(aes(x = margin,y = reorder(Mode,margin))) + 
+  geom_boxplot() + 
+  geom_vline(xintercept = .04,linetype = 'dashed')
+
+# Alternative: geom_violin()
+poll %>%
+  filter(Mode %in% toKeep$Mode) %>%
+  ggplot(aes(x = margin,y = reorder(Mode,margin))) + 
+  geom_violin() + 
+  geom_vline(xintercept = .04,linetype = 'dashed')
+
+```
+
+# Politically biased polling
+
+```{r}
+poll %>%
+  ggplot(aes(x = Biden,y = Trump)) + 
+  geom_point()
+
+# Illustrating multiple observations: alpha (opacity)
+poll %>%
+  ggplot(aes(x = Biden,y = Trump)) + 
+  geom_point(size = 3,alpha = .3)
+
+# Illustrating multiple observations: geom_jitter()
+poll %>%
+  ggplot(aes(x = Biden,y = Trump)) + 
+  geom_jitter()
+
+# Illustrating multiple observations: size
+poll %>%
+  count(Biden,Trump) %>%
+  ggplot(aes(x = Biden,y = Trump,size = n)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm',se = F)
+
+
+```
+
+
+
+
+
