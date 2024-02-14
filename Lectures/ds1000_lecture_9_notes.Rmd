@@ -1,0 +1,134 @@
+---
+title: "Lecture 9 Notes"
+output: html_document
+date: "2024-02-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(tidyverse)
+
+poll <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Pres2020_PV.Rds")
+
+# Initial Wrangling
+poll <- poll %>%
+  mutate(Trump = Trump/100,
+         Biden = Biden/100,
+         margin = Biden - Trump)
+```
+
+
+# Introducint `as.Date()`
+
+```{r}
+as.Date('02/13/2024','%m/%d/%Y') - as.Date('02/01/2021','%m/%d/%Y')
+
+as.Date('13/02/2024','%d/%m/%Y')
+
+as.Date('2024-02-13','%Y-%m-%d')
+
+election.day <- as.Date('11/3/2020','%m/%d/%Y')
+
+poll <- poll %>%
+  mutate(StartDate = as.Date(StartDate,'%m/%d/%Y'),
+         EndDate = as.Date(EndDate,'%m/%d/%Y'),
+         DaysToElection = as.numeric(election.day - EndDate))
+
+
+```
+
+# Multivariate VIsualization with Dates
+
+```{r}
+poll %>%
+  ggplot(aes(x = EndDate)) + 
+  geom_bar()
+
+poll %>%
+  ggplot(aes(x = EndDate)) + 
+  geom_histogram()
+```
+
+# Look at margin first
+
+```{r}
+poll %>%
+  ggplot(aes(x = EndDate,y = margin)) + 
+  geom_point(size = 3,alpha = .3) + 
+  geom_hline(yintercept = 0,linetype = 'dashed')
+```
+
+# Look at Trump and Biden separately
+
+```{r}
+poll %>%
+  ggplot(aes(x = EndDate)) + 
+  geom_point(aes(y = Trump),color = 'red',size = 3,alpha = .3) + 
+  geom_point(aes(y = Biden),color = 'blue',size = 3,alpha = .3) + 
+  geom_smooth(aes(y = Biden),color = 'blue',span = .3) +
+  geom_smooth(aes(y = Trump),color = 'red',span = .3)
+```
+
+# Look at prediction error
+
+```{r}
+poll <- poll %>%
+  mutate(errDem = Biden - DemCertVote/100,
+         errRep = Trump - RepCertVote/100)
+
+poll %>%
+  ggplot(aes(x = EndDate)) + 
+  geom_point(aes(y = errDem),color = 'blue',size = 3,alpha = .3) + 
+  geom_point(aes(y = errRep),color = 'red',size = 3,alpha = .3) + 
+  geom_hline(yintercept = 0,linetype = 'dashed')
+```
+
+# State-Level Polling
+
+```{r}
+statePoll <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Pres2020_StatePolls.Rds")
+
+statePoll
+```
+
+# Wrangling to analyze the data
+
+```{r}
+statePoll <- statePoll %>%
+  mutate(Biden2W = Biden / (Biden + Trump),
+         Biden = Biden / 100,
+         Trump = Trump / 100)
+
+view(statePoll)
+
+stateProbs <- statePoll %>%
+  group_by(State,EV) %>%
+  summarise(BidenProb1 = mean(Biden > Trump),
+            BidenProb2 = mean(Biden),
+            BidenProb3 = mean(Biden2W))
+
+```
+
+# Cool visualizations
+
+```{r}
+require(plotly)
+
+p <- stateProbs %>%
+  ggplot(aes(x = BidenProb2,y = BidenProb3,text = State)) + 
+  geom_point()
+
+ggplotly(p,tooltip = 'text')
+
+# Different visualization
+p <- stateProbs %>%
+  ggplot(aes(x = BidenProb2,y = BidenProb1,text = State,
+             color = BidenProb1)) + 
+  geom_point()
+
+
+
+
