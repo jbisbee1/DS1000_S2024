@@ -1,0 +1,24 @@
+---
+title: "Review Session 2 Notes"
+output: html_document
+date: "2024-02-15"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Using variables with ggplot
+
+# Linking questions with skills
+
+# New data
+
+```{r}
+require(tidyverse)
+gms <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_summary.Rds")
+
+gms
+
+```
+
