@@ -8,9 +8,6 @@ date: "2024-02-15"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Using variables with ggplot
-
-# Linking questions with skills
 
 # New data
 
@@ -20,5 +17,75 @@ gms <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_sum
 
 gms
 
+```
+
+
+# Using variables with ggplot
+
+- If a variable is **inside** the `aes()` function, you can use it by just referring to it
+
+```{r}
+gms %>%
+  ggplot(aes(x = tov)) + 
+  geom_density() + 
+  geom_vline(aes(xintercept = mean(tov)),linetype = 'dashed',color = 'red')
+```
+
+- If a variable is **not inside** the `aes()` function, you must tell `R` what object it can be found in using the `$` sign
+
+```{r}
+gms %>%
+  ggplot(aes(x = tov)) + 
+  geom_density() + 
+  geom_vline(xintercept = mean(gms$tov),linetype = 'dashed',color = 'green')
+```
+
+
+
+# Linking questions with skills
+
+```{r}
+gms %>%
+  group_by(locationGame) %>%
+  summarise(totPts = sum(pts,na.rm=T))
+
+gms %>%
+  group_by(locationGame) %>%
+  summarise(avgPts = mean(pts,na.rm=T)) %>%
+  ggplot(aes(x = locationGame,
+             y = avgPts)) + 
+  geom_bar(stat = 'identity')
+
+gms %>%
+  ggplot(aes(x = locationGame,
+             y = pts)) + 
+  geom_boxplot()
+
+# Wins instead of points
+toplot <- gms %>%
+  mutate(isWin = ifelse(isWin == TRUE,
+                        1,
+                        0)) %>%
+  group_by(locationGame) %>%
+  summarise(totWin = sum(isWin),
+            avgWin = mean(isWin))
+
+toplot %>%
+  ggplot(aes(x = locationGame,
+             y = avgWin)) + 
+  geom_bar(stat = 'identity')
+
+```
+
+- Turnovers versus points
+
+```{r}
+gms %>%
+  # group_by(tov) %>%
+  # summarise(avgPts = mean(pts)) %>%
+  ggplot(aes(x = tov,
+             y = pts)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm')
 ```
 
