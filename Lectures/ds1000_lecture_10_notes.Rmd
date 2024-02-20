@@ -1,0 +1,98 @@
+---
+title: "Lecture 10 Notes"
+output: html_document
+date: "2024-02-20"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading the data
+
+```{r}
+require(tidyverse)
+nba <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/nba_players_2018.Rds')
+glimpse(nba %>% select(tov,isRookie))
+```
+
+# Univariate visualizations of $X$ and $Y$
+
+```{r}
+# Y
+nba %>%
+  ggplot(aes(x = tov)) + 
+  geom_histogram() + 
+  labs(x = 'Number of turnovers',
+       y = 'Number of players',
+       title = 'Univariate visualization of turnovers',
+       subtitle = '2018-2019 NBA Season')
+
+# X
+nba %>%
+  count(isRookie) %>%
+  ggplot(aes(x = isRookie,y = n)) + 
+  geom_bar(stat = 'identity')
+
+nba %>%
+  count(isRookie) %>%
+  ggplot(aes(y = isRookie,x = n)) + 
+  geom_bar(stat = 'identity')
+
+nba %>%
+  ggplot(aes(x = isRookie)) + 
+  geom_bar()
+```
+
+# Multivariate Visualization
+
+```{r}
+nba %>%
+  group_by(isRookie) %>%
+  summarise(avgTov = mean(tov/minutes,na.rm=T)) %>%
+  ggplot(aes(x = isRookie,
+             y = avgTov)) + 
+  geom_bar(stat = 'identity')
+```
+
+# sample_n()
+
+```{r}
+set.seed(123)
+
+nba %>%
+  sample_n(size = 530,replace = T) %>%
+  select(namePlayer,isRookie,tov,minutes) %>%
+  group_by(isRookie) %>%
+  summarise(avgTov = mean(tov/minutes))
+```
+
+# for()
+
+```{r}
+results <- NULL
+for(i in 1:100) {
+  results <- results %>%
+    bind_rows(nba %>%
+                sample_n(size = nrow(nba),replace = T) %>%
+                select(namePlayer,isRookie,tov,minutes) %>%
+                group_by(isRookie) %>%
+                summarise(avgTov = mean(tov/minutes)) %>%
+                mutate(simNumber = i))
+}
+
+results %>%
+  pivot_wider(names_from = 'isRookie',
+              values_from = 'avgTov')
+
+results %>%
+  spread(isRookie,avgTov) %>%
+  # summarise(conf = mean(`FALSE` > `TRUE`))
+  rename(Veteran = `FALSE`,
+         Rookie = `TRUE`) %>%
+  mutate(rookieBetter = ifelse(Rookie < Veteran,
+                               'Rookie is better',
+                               'Veteran is better')) %>%
+  summarise(conf = mean(rookieBetter == 'Rookie is better'))
+```
+
