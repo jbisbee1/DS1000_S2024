@@ -1,0 +1,10 @@
+---
+title: "Lecture 11 NOtes"
+output: html_document
+date: "2024-02-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
