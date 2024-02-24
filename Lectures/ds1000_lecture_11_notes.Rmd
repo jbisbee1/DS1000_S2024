@@ -8,3 +8,96 @@ date: "2024-02-22"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+require(tidyverse)
+gms <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/game_summary.Rds')
+
+gms %>%
+  ggplot(aes(x = teamrest)) + 
+  geom_histogram()
+```
+
+# Calculating turnovers by seasons and winning
+```{r}
+gms %>%
+  group_by(isWin,yearSeason) %>%
+  summarise(avg_tov = mean(tov)) %>%
+  # spread(isWin,avg_tov)
+  pivot_wider(names_from = 'isWin',
+              values_from = 'avg_tov',
+              names_prefix = "win_") %>%
+  mutate(tov_diff = win_FALSE - win_TRUE)
+```
+
+# Bootstrap version
+
+```{r}
+set.seed(123)
+bs_tov <- NULL
+for(i in 1:100) {
+  tmp <- gms %>%
+    sample_n(size = 7380,replace = T) %>%
+  group_by(isWin,yearSeason) %>%
+  summarise(avg_tov = mean(tov)) %>%
+    mutate(simulation_number = i)
+  
+  bs_tov <- bs_tov %>%
+    bind_rows(tmp)
+}
+
+
+
+# Creating visualization
+bs_tov %>%
+  ggplot(aes(x = avg_tov,fill = isWin,alpha = .4)) + 
+  geom_density()
+```
+
+# Sampling with smaller numbers
+
+```{r}
+set.seed(123)
+bsRes <- NULL
+for(i in 1:500) {
+  tmp <- gms %>%
+    group_by(yearSeason) %>%
+    sample_n(size = 100,replace = T) %>%
+    group_by(yearSeason,isWin) %>%
+    summarise(avgTO = mean(tov),.groups = 'drop') %>%
+    mutate(bsInd = i)
+  
+  bsRes <- bsRes %>%
+    bind_rows(tmp)
+}
+
+bsRes %>%
+  ggplot(aes(x = avgTO,fill = isWin)) + 
+  geom_density(alpha = .3) + 
+  facet_wrap(~yearSeason)
+```
+
+# Visualizing Confidence
+
+```{r}
+toplot <- bsRes %>%
+  pivot_wider(names_from = "isWin",
+              values_from = "avgTO",
+              names_prefix = "win_") %>%
+  mutate(diff = win_FALSE - win_TRUE)
+
+toplot %>%
+  summarise(conf = mean(diff > 0))
+
+toplot %>%
+  ggplot(aes(x = diff)) + 
+  geom_density() + 
+  geom_vline(xintercept = 0) + 
+  facet_wrap(~yearSeason,ncol = 1)
+
+ggplot(bladh) +
+  geom_vline(data = vertLines,
+             aes(x = avg_pts,color = locationGame))
+```
+
+
+
