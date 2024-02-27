@@ -1,0 +1,46 @@
+---
+title: "Lecture 12 Notes"
+output: html_document
+date: "2024-02-27"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Regression examples
+
+```{r}
+require(tidyverse)
+
+debt <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/sc_debt.Rds')
+
+glimpse(debt)
+```
+
+# Running first regression
+
+```{r}
+model_earn_sat <- lm(formula = md_earn_wne_p6 ~ sat_avg,
+   data = debt)
+
+summary(model_earn_sat)
+
+# Predicting SAT scores of 400
+-12053.9 + 42.6*400
+
+# Predicting Vandy's future earnings
+debt %>%
+  filter(grepl('Vanderbil',instnm)) %>%
+  select(instnm,sat_avg,md_earn_wne_p6)
+
+-12053.9 + 42.6*1515
+
+debt %>%
+  ggplot(aes(x = adm_rate)) +
+  geom_histogram()
+lm(formula = md_earn_wne_p6 ~ adm_rate,
+   data = debt)
+```
+
+
