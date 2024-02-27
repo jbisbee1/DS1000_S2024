@@ -157,7 +157,7 @@ mean(cvRes < 1.98)
 > Write answer here
 
 ## Extra Credit [2 Points]
-Taking a step back, do you trust these results? What concerns might you have about the model? Can you propose a "control" to add that would speak to your concerns?
+Taking a step back, do you trust these results? What concerns might you have about the model? Can you propose a "control" to add that would speak to your concerns? Run the regression with this control and re-interpret the results.
 
 > Write answer here
 

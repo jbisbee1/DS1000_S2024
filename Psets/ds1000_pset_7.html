@@ -463,7 +463,7 @@ movies_analysis &lt;- movies %&gt;%
                                 data = ) # Put the data here</code></pre>
 <pre><code>## Error in terms.formula(formula, data = data): argument is not a valid model</code></pre>
 <pre class="r"><code>summary(model_gross_bechdel_score) # Interpret the regression output. Check here for help: https://learneconomicsonline.com/blog/archives/1095</code></pre>
-<pre><code>## Error in summary(model_gross_bechdel_score): object &#39;model_gross_bechdel_score&#39; not found</code></pre>
+<pre><code>## Error in eval(expr, envir, enclos): object &#39;model_gross_bechdel_score&#39; not found</code></pre>
 <blockquote>
 <p>Write answer here</p>
 </blockquote>
@@ -529,7 +529,8 @@ for(i in 1:100) { # Loop 100 times
 } </code></pre>
 <pre><code>## Error in sample(): argument &quot;x&quot; is missing, with no default</code></pre>
 <pre class="r"><code>mean(cvRes)</code></pre>
-<pre><code>## Warning in mean.default(cvRes): argument is not numeric or logical: returning NA</code></pre>
+<pre><code>## Warning in mean.default(cvRes): argument is not numeric or logical: returning
+## NA</code></pre>
 <pre><code>## [1] NA</code></pre>
 <pre class="r"><code>mean(cvRes &lt; 1.98)</code></pre>
 <pre><code>## [1] NaN</code></pre>
@@ -541,7 +542,8 @@ for(i in 1:100) { # Loop 100 times
 <h2>Extra Credit [2 Points]</h2>
 <p>Taking a step back, do you trust these results? What concerns might
 you have about the model? Can you propose a “control” to add that would
-speak to your concerns?</p>
+speak to your concerns? Run the regression with this control and
+re-interpret the results.</p>
 <blockquote>
 <p>Write answer here</p>
 </blockquote>
