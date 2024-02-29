@@ -43,15 +43,15 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 })
 ```
 
-# Agenda
+# Learning Goals
 
-1. Regression Recap
+1. Skew, logs, and coefficients
 
-2. Logs and Skew
+2. Evaluating a regression: Univariate and multivariate visualization of errors
 
-3. Evaluating a Regression
+3. Root Mean Squared Error (RMSE)
 
-4. Introducing Cross Validation
+4. Cross Validation
 
 ---
 
@@ -90,6 +90,11 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
   - Once you've minimized all the errors, you have the **line of best fit**
   
+---
+
+# Visual Intuition
+
+<center><img src="./figs/regression-line.gif" width = 80%></center>
 
 ---
 
@@ -142,14 +147,12 @@ mv <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/mv.Rds')
 
 # RQ: Hollywood Finances
 
---
-
-- .blue[Theory]: the more a movie costs, the more it should make
+- .blue[Research Question]: What is the relationship between a movie's budget (how much it costs to make a movie) and a movie's earnings (how much money people pay to see the movie in theaters)?
 
 --
 
-  - If not, Hollywood would go out of business!
-  
+- .blue[Theory]: More money spent means more famous actors, better special effects, stronger marketing
+
 --
 
 - .blue[Hypothesis]: earnings (`gross`) and costs (`budget`) should be **positively** correlated
@@ -180,15 +183,17 @@ summary(mv %>% select(gross,budget))
 
 --
 
-  - "Generalizability": Do our results with these data speak to other data?
+  - "Generalizability": Do our conclusions from this data extend ("generalize") to the population at large?
   
 ```{r}
 p <- mv %>%
   mutate(missing = ifelse(is.na(gross) | is.na(budget),1,0)) %>%
   group_by(year) %>%
-  summarise(propMissing = mean(missing)) %>%
+  summarise(propMissing = mean(missing)) %>% # Calculate the proportion of observations missing either gross or budget
   ggplot(aes(x = year,y = propMissing)) + 
-  geom_line()
+  geom_bar(stat = 'identity') + 
+  labs(x = 'Year',y = '% Missing') + 
+  scale_y_continuous(labels = scales::percent) # Format the y-axis labels
 ```
 
 ---
@@ -224,8 +229,8 @@ mv %>%
 ```{r,warning=F}
 mv %>%
   select(title,gross,budget) %>%
-  gather(metric,value,-title) %>%
-  ggplot(aes(x = value,color = metric)) + 
+  gather(metric,dollars,-title) %>%
+  ggplot(aes(x = dollars,color = metric)) + 
   geom_density()
 ```
 
@@ -236,7 +241,7 @@ mv %>%
 
 --
 
-- Univariate visualization higlights significant **skew** in both measures
+- Univariate visualization highlights significant **skew** in both measures
 
 --
 
@@ -265,22 +270,11 @@ mv <- mv %>%
 ```{r,warning=F}
 mv %>%
   select(title,gross_log,budget_log) %>%
-  gather(metric,value,-title) %>%
-  ggplot(aes(x = value,color = metric)) + 
+  gather(metric,log_dollars,-title) %>%
+  ggplot(aes(x = log_dollars,color = metric)) + 
   geom_density()
 ```
 
----
-
-# NB: Could also use `ggplot`
-
-```{r,warning=F}
-mv %>%
-  select(title,gross,budget) %>%
-  gather(metric,value,-title) %>%
-  ggplot(aes(x = value,color = metric)) + geom_density() + 
-  scale_x_log10(labels = scales::dollar) #<<
-```
 
 ---
 
@@ -300,27 +294,23 @@ mv %>%
 
 # 3. Conditional Analysis
 
---
-
-- Why did I choose to put budget on the x-axis and gross on the y-axis?
-
---
-
-  - Reveals .blue[assumption] about **causality**
-
---
-
 - (BTW, I know I've been violating the tenets of data viz for several slides now. Let's fix that.)
 
 ```{r}
-pClean <- mv %>%
-  ggplot(aes(x = budget,y = gross)) + 
+pSimple <- mv %>%
+  drop_na(budget,gross) %>%
+  mutate(profitable = ifelse(gross > budget,'Profitable','Unprofitable')) %>%
+  ggplot(aes(x = budget,y = gross,text = paste0(title,' (',genre,', ',year,')'))) + 
   geom_point() + 
   scale_x_log10(labels = scales::dollar) + 
   scale_y_log10(labels = scales::dollar) + 
   labs(title = "Movie Costs and Returns",
        x = "Costs (logged budget)",
        y = "Returns (logged gross)")
+
+pFancy <- pSimple + geom_point(aes(color = profitable)) + 
+  scale_color_manual(guide = 'none',values = rev(c('red','black'))) + 
+  geom_abline(intercept = 0,slope = 1)
 ```
 
 ---
@@ -328,16 +318,28 @@ pClean <- mv %>%
 # 3. Conditional Analysis
 
 ```{r,warning=F}
-pClean
+pFancy
 ```
+
+---
+
+# Look with `plotly`
+
+- If curious, can use `plotly` to see outliers
+
+```{r,warning=F,message=F}
+require(plotly)
+ggplotly(pFancy,tooltip = 'text')
+```
+
 
 ---
 
 # 4. Regression!
 
 ```{r,message = F,warning=F}
-pClean + 
-  geom_smooth(method = 'lm',se = F)
+pSimple + 
+  geom_smooth(aes(group = 1),method = 'lm',se = F)
 ```
 
 ---
@@ -351,15 +353,43 @@ summary(m)
 
 ---
 
+# Interpretation
+
+- Remember the equation: $Y = \alpha + \beta * X$
+
+- Our $Y$ is logged gross
+
+- Our $X$ is logged budget
+
+- Thus we can rewrite as $gross\_log = \alpha + \beta * budget\_log$
+
+- What is $\alpha$? What is $\beta$?
+
+--
+
+$gross\_log = 1.26 + 0.96 * budget\_log$
+
+---
+
 # Interpreting with Logs
 
-- For the $\alpha$ coefficient, when the budget is \$1, the movie makes $3.53
+- Previously, we said:
+
+  - $\alpha$ is the value of $Y$ when $X$ is zero
+  
+  - We need to convert back out of logged values using the `exp()` function
+  
+  - When `budget_log` is zero, the budget is `exp(0)` or $1
+
+- Thus, we say when the budget is \$1, the movie makes 1.26 logged dollars, or $3.53
 
 ```{r}
 exp(1.26107)
 ```
 
---
+---
+
+# Interpreting with Logs
 
 - For the $\beta$ coefficient, it depends on where the logged variable appears:
 
@@ -375,6 +405,7 @@ exp(1.26107)
 
 - In our example, a 1% increase in the budget corresponds to a 0.96% increase in gross
 
+- You will either need to memorize these rules, or (like me) just look them up every time
 
 ---
 
@@ -384,15 +415,11 @@ exp(1.26107)
 
 - Every regression line makes mistakes
 
---
-
   - If they didn't, they wouldn't be good at **reducing complexity**!
 
 --
 
 - How bad do ours look?
-
---
 
   - How should we begin to answer this question!?
   
@@ -400,11 +427,7 @@ exp(1.26107)
 
 - Are there patterns to the mistakes?
 
---
-
   - We **overestimate** gross for movies that cost between $1m and $10m
-  
---
 
   - These are the "indies"
   
@@ -420,11 +443,7 @@ exp(1.26107)
 
 # Understanding Regression Lines
 
---
-
 - Regression lines choose $\alpha$ and $\beta$ to minimize mistakes
-
---
 
   - Mistakes (aka "errors" or "residuals") are captured in the $\varepsilon$ term
   
@@ -457,15 +476,11 @@ mv_analysis %>%
 
 # Univariate Viz of Errors
 
---
-
 - Note that they are on average zero
 
 --
 
   - Don't feel too proud! Mean 0 error is baked into the method
-  
---
 
   - More concerned about **skew**...there is evidence of overestimating
   
@@ -473,17 +488,46 @@ mv_analysis %>%
 
 - Can we do more? **Conditional Analysis**
 
---
-
-  - Conditional on the x-axis?
-  
---
-
   - Conditional on the **predictor** (the $X$ variable)
   
 ---
 
 # Multivariate Viz of Errors
+
+- Ideal is where errors are unrelated to predictor
+
+--
+
+  - This **should** appear as a rectangular cloud of points around zero
+
+```{r,echo=F,message=F,warning=F}
+X <- rnorm(1000)
+Y <- 2*X + rnorm(1000)
+
+m <- lm(Y~X)
+
+e <- Y - predict(m)
+
+pIdeal <- data.frame(X = X,
+           e = e) %>%
+ggplot(aes(x = X,y = e)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0,linetype = 'dashed') + 
+  geom_smooth() + 
+  labs(x = 'X variable',
+       y = 'Errors')
+```
+
+```{r,warning=F,message=F}
+pIdeal
+```
+
+
+---
+
+# Multivariate Viz of Errors
+
+- This is not the case for us!
 
 ```{r,message = F}
 mv_analysis %>%
@@ -496,23 +540,7 @@ mv_analysis %>%
 
 # Multivariate Viz of Errors
 
-- Ideal is where errors are unrelated to predictor
-
---
-
-  - I.e., predictor and errors should be unrelated
-  
-  - This **should** appear as a rectangular cloud of points around zero
-
---
-
-- This is not the case for us!
-
---
-
-  - Evidence of a U-shape &rarr; underpredict low and high budgets, overpredict middle budgets
-  
---
+- Evidence of a U-shape &rarr; underpredict low and high budgets, overpredict middle budgets
 
 - Ergo, our model is **not great**!
 
@@ -528,15 +556,11 @@ mv_analysis %>%
 
 - Univariate / Multivariate visualization of errors is **important**
 
---
-
 - But we want to summarize model quality in a simpler way
 
 --
 
 - **RMSE**: summarizes model performance with a *single number*
-
---
 
   - Useful for comparing multiple models to each other
 
@@ -545,19 +569,13 @@ mv_analysis %>%
 
 # RMSE
 
---
-
 - **E**rror ( $\varepsilon$ ): actual outcome ( $Y_i$ ) - predicted outcome ( $\hat{Y}_i$ )
-
---
 
   - The "distance" between the data and the model
   
 --
 
 - **S**quared: $\varepsilon^2$
-
---
 
   1. Makes all values positive
   
@@ -567,11 +585,7 @@ mv_analysis %>%
 
 - **M**ean: average these squared errors
 
---
-
 - **R**oot: take their square root (.blue[un-exaggerate])
-
---
 
 $$RMSE = \sqrt{\frac{1}{n}\sum_{i = 1}^n(Y_i - \hat{Y}_i)^2}$$
 
@@ -661,8 +675,6 @@ $${\color{red}R}MSE = \sqrt{(MSE)}$$
 
 # RMSE
 
---
-
 - RMSE is a **single measure that summarizes model performance**
 
 --
@@ -675,8 +687,6 @@ rmse <- sqrt(mse)
 # Or
 (rmseBudget <- sqrt(mean(mv_analysis$errors^2)))
 ```
-
---
 
 - Is this good? 
 

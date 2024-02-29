@@ -1,0 +1,18 @@
+---
+title: "Lecture 13 Notes"
+output: html_document
+date: "2024-02-29"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Opening the data
+ 
+```{r}
+require(tidyverse)
+mv <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/mv.Rds')
+mv
+```
+
