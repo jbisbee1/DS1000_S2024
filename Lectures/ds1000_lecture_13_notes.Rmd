@@ -16,3 +16,99 @@ mv <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/mv.Rds')
 mv
 ```
 
+# Univariate visualization
+
+```{r}
+mv %>%
+  ggplot(aes(x = budget)) + 
+  geom_density()
+
+# Combine both on a single plot
+mv %>%
+  drop_na(budget,gross) %>%
+  ggplot() + 
+  geom_density(aes(x = gross),color = 'red') + 
+  geom_density(aes(x = budget),color = 'darkgreen')
+
+# Transforming with log()
+mv %>%
+  drop_na(budget,gross) %>%
+  mutate(budget_log = log(budget),
+         gross_log = log(gross)) %>%
+  ggplot() + 
+  geom_density(aes(x = gross_log),color = 'red') + 
+  geom_density(aes(x = budget_log),color = 'darkgreen')
+
+```
+
+# Multivariate visualization
+
+```{r}
+mv_analysis <- mv %>%
+  drop_na(budget,gross) %>%
+  mutate(budget_log = log(budget),
+         gross_log = log(gross))
+
+mv_analysis %>%
+  ggplot(aes(x = budget_log,
+             y = gross_log)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm')
+```
+
+# Regression
+
+```{r}
+model_gross_budget <- lm(formula = gross_log ~ budget_log,
+                         data = mv_analysis)
+
+exp(1.26)
+exp(0)
+```
+
+# Calculating errors
+
+```{r}
+mv_analysis <- mv_analysis %>%
+  mutate(preds = predict(model_gross_budget))
+
+mv_analysis <- mv_analysis %>%
+  mutate(errors = gross_log - preds)
+
+mv_analysis %>%
+  ggplot(aes(x = errors)) + 
+  geom_histogram()
+
+mv_analysis %>%
+  ggplot(aes(x = budget_log,y = errors)) + 
+  geom_point() + 
+  geom_smooth()
+```
+
+# RMSE
+
+```{r}
+rmse <- mv_analysis %>%
+  mutate(se = errors^2) %>%
+  summarise(mse = mean(se)) %>%
+  mutate(rmse = sqrt(mse))
+```
+
+# Evaluating RMSE
+
+```{r}
+model_gross_budget
+
+predLog_gross <- 1.26 + .96*log(10000000)
+exp(predLog_gross)
+
+# Range: upper bound
+predLog_gross_ub <- 1.26 + .96*log(10000000) + rmse$rmse
+exp(predLog_gross_ub)
+
+# Range: lower bound
+predLog_gross_lb <- 1.26 + .96*log(10000000) - rmse$rmse
+exp(predLog_gross_lb)
+
+```
+
