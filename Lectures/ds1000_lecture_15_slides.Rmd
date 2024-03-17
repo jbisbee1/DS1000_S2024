@@ -1,0 +1,840 @@
+---
+title: "Classification"
+subtitle: "Part 1"
+author: "Prof. Bisbee"
+institute: "Vanderbilt University"
+date: "Slides Updated: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    # self_contained: true
+    chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    css:
+      - default
+      - css/lexis.css
+      - css/lexis-fonts.css
+    #seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      #ratio: "16:9"
+
+---
+
+```{css,echo = F}
+.small .remark-code { /*Change made here*/
+  font-size: 85% !important;
+}
+.tiny .remark-code { /*Change made here*/
+  font-size: 50% !important;
+}
+```
+
+```{r,include=F}
+options(width=60)
+knitr::opts_chunk$set(fig.align='center',fig.width=9,fig.height=5)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+```
+
+# Agenda
+
+1. Classification
+
+2. Fortnite gaming (i.e., Prof's desperate attempt to be relevant)
+
+```{r,message=F,warning=F}
+require(tidyverse)
+fn <- read_rds('C:/Users/bisbeejh/Dropbox/2024_spring/DS1000_S2024/data/fn_cleaned_final.rds')
+```
+
+
+---
+
+# Definitions
+
+- *Classification:* predicting the **class** of given data points via **predictive modeling**
+
+--
+
+  - *Class*: AKA targets, labels, or **categories**
+  
+--
+
+  - *Predictive Modeling*: Approximate mapping function $f: X \rightarrow Y$
+  
+--
+
+  - $X$: predictor variables
+  
+  - $Y$: outcome variable
+  
+  - $f$: ??
+  
+---
+
+# Mapping Functions
+
+- We have already used a mapping functions!
+
+--
+
+- Linear Regression
+
+--
+
+  - $f$: $Y = \alpha + \beta X + \varepsilon$
+  
+--
+
+- Underlying idea: $X$ contain information about $Y$
+
+---
+
+# It is in the $Y$
+
+- If $Y$ is continuous, we use OLS regression
+
+--
+
+- If $Y$ is **binary**, we use "logistic" regression (AKA "logit")
+
+--
+
+  - As always, this is a **deep** area of study for those interested
+  
+--
+
+- Today, using OLS for binary $Y$
+
+--
+
+  - Next few classes: replacing OLS regression with logit
+  
+
+---
+
+# Fortnite
+
+<center><img src="https://cdn2.unrealengine.com/blade-2560x1440-2560x1440-d4e556fb8166.jpg" width="90%"></center>
+
+---
+
+# Fortnite
+
+- Goal is to win (i.e., be the last player alive)
+
+- Professional e-sports teams want to maximize this probability
+
+- RQ: How can we increase the number of victories?
+
+--
+
+- NB: we are moving out of the **Research** camp now, and into the **Prediction** world
+
+--
+
+  - We don't care so much about *why* a relationship exists, we just want to get accurate predictions
+
+--
+
+  - Theory can still help us, but want to start with the data to get our thinking started
+
+---
+
+# The Data
+
+```{r, message=FALSE}
+glimpse(fn)
+```
+
+---
+
+# The Data
+
+- Start with the basics:
+
+--
+
+  1. What is the unit of analysis?
+  
+  2. Which variables are we interested in?
+
+
+---
+
+# Prediction
+
+$$Y = \alpha + \beta_1 X_1 + \beta_2 X_2 + \dots + \varepsilon$$
+
+--
+
+- $Y$: victory (`won`)
+
+--
+
+- $X$: ??
+
+--
+
+  - In prediction, we don't care about **theory** or **research questions**
+
+  - Just want to maximize **accuracy**...which $X$'s are the "best"?
+  
+  - But theory can still help us make sensible choices about which $X$'s to use
+  
+--
+
+- Look at univariate & conditional relationships
+
+---
+
+# The Data
+
+- Outcome $Y$: `won`
+
+```{r,message=F,warning=F}
+require(scales)
+fn %>%
+  summarise(`Win %` = percent(mean(won)))
+```
+
+--
+
+- Multivariate analysis?
+
+---
+
+# Which $X$?
+
+```{r}
+fn %>%
+  group_by(mental_state) %>%
+  summarise(pr_win = mean(won))
+```
+
+---
+
+# Which $X$?
+
+```{r}
+fn %>%
+  group_by(gameIdSession) %>%
+  summarise(pr_win = mean(won))
+```
+
+---
+
+# Which $X$?
+
+```{r}
+fn %>%
+  group_by(gameIdSession) %>%
+  summarise(pr_win = mean(won)) %>%
+  ggplot(aes(x = gameIdSession,
+             y = pr_win)) + 
+  geom_point()
+```
+
+---
+
+# Which $X$?
+
+```{r}
+fn %>%
+  ggplot(aes(x = hits,y = won)) + 
+  geom_point()
+```
+
+---
+
+# Which $X$?
+
+```{r}
+fn %>%
+  ggplot(aes(x = hits,y = won)) + 
+  geom_jitter()
+```
+
+---
+
+# Heatmaps
+
+- Look at 3-dimensions of data
+
+--
+
+  - Done this before by tweaking `fill`, `color`, or `size`
+  
+--
+
+- `geom_tile()`: create a heatmap
+
+```{r}
+p <- fn %>%
+  mutate(accuracy_decile = ntile(hits,n=10)) %>% # Bin hits by decile (10%)
+  group_by(accuracy_decile,mental_state) %>% # Calculate average winning by mental state and accuracy
+  summarise(pr_win = mean(won),
+            .groups = 'drop') %>%
+  ggplot(aes(x = factor(mental_state),
+             y = factor(accuracy_decile), # Both x and y-axes are factors
+             fill = pr_win)) + # Fill by third dimension
+  geom_tile() + # Creates rectangles
+  scale_fill_gradient(limits = c(0,1)) # Set fill color (can do much more here)
+```
+
+---
+
+# Heatmaps
+
+```{r}
+p
+```
+
+---
+
+# Simplest Predictions
+
+- Remember: regression is just fancier conditional means
+
+```{r}
+fn <- fn %>%
+  mutate(hits_decile = ntile(hits,n=10)) %>% # Bin hits by decile (10%)
+  group_by(hits_decile,mental_state) %>% # Calculate average winning by mental state and accuracy
+  mutate(prob_win = mean(won)) %>% # use mutate() instead of summarise() to avoid collapsing the data
+  mutate(pred_win = ifelse(prob_win > .5,1,0)) %>% # If the probability is greater than 50-50, predict a win
+  ungroup()
+```
+
+---
+
+# Simplest Predictions
+
+- Conditional means
+
+```{r}
+fn %>%
+  group_by(won,pred_win) %>%
+  summarise(nGames=n(),.groups = 'drop')
+```
+
+--
+
+- How good is this? Think about the underlying goal...we want a model that accurately predicts whether a game is won or not
+
+- The `won` column is the **truth**...it tells us whether the game was won or not
+
+- The `pred_win` column is our **prediction**
+
+---
+
+# Accuracy
+
+- What is "accuracy"?
+
+--
+
+  - Proportion "correct" predictions
+  
+--
+
+- For a binary outcome, "accuracy" has two dimensions
+
+--
+
+  - Proportion of correct `1`s: **Sensitivity**
+  
+  - Proportion of correct `0`s: **Specificity**
+  
+---
+
+# Accuracy
+
+```{r}
+(sumTab <- fn %>%
+  group_by(won) %>%
+  mutate(total_games = n()) %>%
+  group_by(won,pred_win,total_games) %>%
+  summarise(nGames=n(),.groups = 'drop') %>%
+  mutate(prop = nGames / total_games))
+```
+
+--
+
+- Overall accuracy: (`r (sumTab %>% filter(won == 0 & pred_win == 0) %>% pull(nGames))`+`r (sumTab %>% filter(won == 1 & pred_win == 1) %>% pull(nGames))`) / (`r (sumTab %>% filter(won == 0 & pred_win == 0) %>% pull(total_games))`+`r (sumTab %>% filter(won == 1 & pred_win == 1) %>% pull(total_games))`) = `r percent(((sumTab %>% filter(won == 0 & pred_win == 0) %>% pull(nGames)) + (sumTab %>% filter(won == 1 & pred_win == 1) %>% pull(nGames))) / ((sumTab %>% filter(won == 0 & pred_win == 0) %>% pull(total_games)) + (sumTab %>% filter(won == 1 & pred_win == 1) %>% pull(total_games))))`
+
+- But we are doing **great** at predicting losses (`r percent(sumTab %>% filter(won == 0 & pred_win == 0) %>% pull(prop))`)...
+
+- ...and **terribly** at predicting wins (`r percent(sumTab %>% filter(won == 1 & pred_win == 1) %>% pull(prop))`)
+
+---
+
+# Regression
+
+```{r,message = F}
+fn %>%
+  ggplot(aes(x = damage_to_players,y = won)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm')
+```
+
+---
+
+# Regression
+
+- Binary outcome variable!
+
+--
+
+  - A linear regression is not the best solution
+  
+--
+
+  - Predictions can exceed support of $Y$
+
+--
+
+- But it can still work! **linear probability model**
+
+```{r}
+mLM <- lm(won ~ hits + accuracy + mental_state,fn)
+```
+
+---
+
+# Linear Regression
+
+```{r}
+require(broom) # broom package makes it easy to read regression output
+tidy(mLM) %>% # This would be the same as summary(mLM)
+  mutate_at(vars(-term),function(x) round(x,5))
+```
+
+---
+
+# Linear Regression
+
+```{r}
+mLM <- lm(won ~ scale(hits) + scale(accuracy) + mental_state,fn)
+tidy(mLM)
+fn %>%
+  summarise_at(vars(hits,accuracy),function(x) round(sd(x),1))
+```
+
+---
+
+# Evaluating Predictions
+
+```{r}
+mLM <- lm(won ~ hits + accuracy + mental_state + damage_taken + head_shots + gameIdSession,fn)
+fn %>%
+  mutate(preds = predict(mLM)) %>%
+  mutate(predBinary = ifelse(preds > .5,1,0)) %>%
+  select(won,predBinary,preds)
+```
+
+---
+
+# Evaluating Predictions
+
+
+```{r}
+(sumTab <- fn %>%
+  mutate(pred_win = ifelse(predict(mLM) > .5,1,0)) %>%
+  group_by(won) %>%
+  mutate(total_games = n()) %>%
+  group_by(won,pred_win,total_games) %>%
+  summarise(nGames=n(),.groups = 'drop') %>%
+  mutate(prop = percent(nGames / total_games)) %>%
+  ungroup() %>%
+  mutate(accuracy = percent(sum((won == pred_win)*nGames) / sum(nGames))))
+```
+
+---
+
+# Evaluating Predictions
+
+- Overall accuracy is just the number of correct predictions (either `0` or `1`) out of all possible
+
+--
+
+  - Is `r sumTab$accuracy[1]` good?
+
+--
+
+  - What would the dumbest guess be? Never win! `r percent(1-mean(fn$won))`
+
+--
+
+- Might also want to care about just `1`s
+
+--
+
+  - **Sensitivity**: Predicted wins / actual wins = `r sumTab %>% filter(won == 1 & pred_win == 1) %>% pull(prop)`
+  
+--
+
+- Also might care about just `0`s
+
+--
+
+  - **Specificity**: Predicted losses / actual losses = `r sumTab %>% filter(won == 0 & pred_win == 0) %>% pull(prop)`
+  
+---
+
+# Thresholds
+
+- Shifting the threshold for `0` or `1` prediction can matter
+
+--
+
+```{r}
+fn %>%
+  mutate(pred_win = ifelse(predict(mLM) > .4,1,0)) %>%
+  group_by(won) %>%
+  mutate(total_games = n()) %>%
+  group_by(won,pred_win,total_games) %>%
+  summarise(nGames=n(),.groups = 'drop') %>%
+  mutate(prop = percent(nGames / total_games)) %>%
+  ungroup() %>%
+  mutate(accuracy = percent(sum((won == pred_win)*nGames) / sum(nGames)))
+```
+
+---
+
+# Thresholds
+
+- Shifting the threshold for `0` or `1` prediction can matter
+
+```{r}
+fn %>%
+  mutate(pred_win = ifelse(predict(mLM) > .7,1,0)) %>%
+  group_by(won) %>%
+  mutate(total_games = n()) %>%
+  group_by(won,pred_win,total_games) %>%
+  summarise(nGames=n(),.groups = 'drop') %>%
+  mutate(prop = percent(nGames / total_games)) %>%
+  ungroup() %>%
+  mutate(accuracy = percent(sum((won == pred_win)*nGames) / sum(nGames)))
+```
+
+- Restricting to above 70% means we don't think anyone wins!
+
+---
+
+# Thresholds
+
+- We could keep trying different values until we hit on one that maximizes our accuracy
+
+--
+
+- But this is inefficient! Let's loop it instead!
+
+--
+
+
+```{r}
+toplot <- NULL
+for(thresh in seq(0,1,by = .025)) {
+  toplot <- fn %>%
+  mutate(pred_win = ifelse(predict(mLM) > thresh,1,0)) %>%
+  group_by(won) %>%
+  mutate(total_games = n()) %>%
+  group_by(won,pred_win,total_games) %>%
+  summarise(nGames=n(),.groups = 'drop') %>%
+  mutate(prop = nGames / total_games) %>%
+  ungroup() %>%
+  mutate(accuracy = sum((won == pred_win)*nGames) / sum(nGames)) %>%
+  mutate(threshold = thresh) %>%
+    bind_rows(toplot)
+}
+```
+
+---
+
+# Thresholds
+
+- We might only care about accuracy by itself (although this is a bit naive)
+
+.small[
+```{r}
+toplot %>%
+  select(accuracy,threshold) %>%
+  distinct() %>%
+  ggplot(aes(x = threshold,y = accuracy)) + 
+  geom_line()
+```
+]
+
+---
+
+# Thresholds
+
+.small[
+```{r}
+toplot %>%
+  mutate(metric = ifelse(won == 1 & pred_win == 1,'Sensitivity',
+                         ifelse(won == 0 & pred_win == 0,'Specificity',NA))) %>%
+  drop_na(metric) %>%
+  ggplot(aes(x = threshold,y = prop,color = metric)) + 
+  geom_line()
+```
+]
+
+
+---
+
+# ROC Curve
+
+- Receiver-Operator Characteristic (ROC) Curve
+
+--
+
+- Commonly used to evaluate classification methods
+
+--
+
+  - X-axis: 1-specificity
+
+  - Y-axis: sensitivity
+
+--
+
+```{r}
+p <- toplot %>%
+  mutate(metric = ifelse(won == 1 & pred_win == 1,'Sensitivity',
+                         ifelse(won == 0 & pred_win == 0,'Specificity',NA))) %>%
+  drop_na(metric) %>%
+  select(prop,metric,threshold) %>%
+  spread(metric,prop) %>%
+  arrange(desc(Specificity),Sensitivity) %>%
+  ggplot(aes(x = 1-Specificity,y = Sensitivity)) + 
+  geom_line() + 
+  xlim(c(0,1)) + ylim(c(0,1)) + 
+  geom_abline(slope = 1,intercept = 0,linetype = 'dotted') + 
+  ggridges::theme_ridges()
+```
+
+---
+
+# ROC Curve
+
+```{r}
+p
+```
+
+--
+
+- Better models have high levels of sensitivity **and** specificity at every threshold
+
+---
+
+# AUC Measure
+
+- Area Under the Curve (AUC)
+
+--
+
+  - A single number summarizing classification performance
+  
+--
+
+```{r,message=F}
+require(tidymodels)
+roc_auc(data = fn %>%
+  mutate(pred_win = predict(mLM),
+         truth = factor(won,levels = c('1','0'))) %>%
+  select(truth,pred_win),truth,pred_win)
+```
+
+---
+
+# AUC
+
+- What is a "good" AUC?
+
+--
+
+  - We know it is bounded between 0 (i.e., it predicts everything **perfectly wrong**) and 1 (i.e., it predicts everything **perfectly correct**)
+  
+  - But typically we don't see AUC values less than 0.5 (why is this?)
+  
+--
+
+- AUC can be interpreted like numeric grades at Vandy (and for this class)
+
+  - 0.95+ is amazing
+  
+  - 0.9 - 0.95 is very good
+  
+  - 0.8-range is B-tier
+  
+  - 0.7-range is C-tier
+  
+  - 0.6-range is really bad
+  
+  - AUC values less than 0.6 are failing
+
+---
+
+# Party time!
+
+- Adding more variables / trying different combinations
+
+--
+
+- **Workflow**
+
+--
+
+  1. Train models
+  
+  2. Predict models
+  
+  3. Evaluate models
+  
+---
+
+# Train models
+
+```{r}
+m1 <- lm(won ~ hits,fn)
+m2 <- lm(won ~ hits + head_shots,fn)
+m3 <- lm(won ~ hits + accuracy + head_shots,fn)
+m4 <- lm(won ~ hits + accuracy + head_shots + mental_state,fn)
+m5 <- lm(won ~ hits + accuracy + head_shots + mental_state + distance_traveled,fn)
+m6 <- lm(won ~ hits + accuracy + mental_state + head_shots + distance_traveled + gameIdSession,fn)
+```
+
+---
+
+# Predict models
+
+```{r}
+toEval <- fn %>%
+  mutate(m1Preds = predict(m1),
+         m2Preds = predict(m2),
+         m3Preds = predict(m3),
+         m4Preds = predict(m4),
+         m5Preds = predict(m5),
+         m6Preds = predict(m6),
+         truth = factor(won,levels = c('1','0')))
+```
+
+---
+
+# Evaluate models
+
+```{r}
+rocRes <- NULL
+for(model in 1:6) {
+  rocRes <- roc_auc(toEval,truth,paste0('m',model,'Preds')) %>%
+    mutate(model = paste0('Model ',model)) %>%
+    bind_rows(rocRes)
+}
+```
+
+---
+
+# Evaluate models
+
+```{r}
+rocRes %>%
+  ggplot(aes(x = .estimate,y = reorder(model,.estimate))) + 
+  geom_bar(stat = 'identity') + 
+  ggridges::theme_ridges() + labs(x = 'AUC',y = 'Regression Model')
+```
+
+---
+
+# OVERFITTING
+
+- Cross validation to the rescue!
+
+.tiny[
+```{r}
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  # Cross validation prep
+  inds <- sample(1:nrow(fn),size = round(nrow(fn)*.8),replace = F)
+  train <- fn %>% slice(inds)
+  test <- fn %>% slice(-inds)
+
+  # Training models
+  m1 <- lm(won ~ hits,train)
+  m2 <- lm(won ~ hits + head_shots,train)
+  m3 <- lm(won ~ hits + accuracy + head_shots,train)
+  m4 <- lm(won ~ hits + accuracy + head_shots + mental_state,train)
+  m5 <- lm(won ~ hits + accuracy + head_shots + mental_state + distance_traveled,train)
+  m6 <- lm(won ~ hits + accuracy + mental_state + head_shots + distance_traveled + gameIdSession,train)
+
+  # Predicting models
+  toEval <- test %>%
+    mutate(m1Preds = predict(m1,newdata = test),
+           m2Preds = predict(m2,newdata = test),
+           m3Preds = predict(m3,newdata = test),
+           m4Preds = predict(m4,newdata = test),
+           m5Preds = predict(m5,newdata = test),
+           m6Preds = predict(m6,newdata = test),
+           truth = factor(won,levels = c('1','0')))
+
+  # Evaluating models
+  rocResBS <- NULL
+  for(model in 1:6) {
+    rocResBS <- roc_auc(toEval,truth,paste0('m',model,'Preds')) %>%
+      mutate(model = as.character(get(paste0('m',model))$call$formula)[3]) %>%
+      bind_rows(rocResBS)
+  }
+  cvRes <- rocResBS %>%
+    mutate(bsInd = i) %>%
+    bind_rows(cvRes)
+}
+```
+]
+---
+
+# Cross Validation AUC
+
+```{r}
+cvRes %>%
+  ggplot(aes(x = .estimate,y = factor(reorder(model,.estimate)))) + 
+  geom_boxplot() + labs(x = 'Distribution of AUC',y = 'Specification')
+```
+
+---
+
+# Conclusion
+
+- Classification is just a type of prediction
+
+--
+
+  - We used linear regression
+  
+--
+
+  - But there are **much** fancier algorithms out there
+  
+--
+
+- Next class:
+
+  - A *slightly* fancier algorithm: logistic regression
+  
+  - How to use the models to achieve the team's goals
+  
+- Go to Brightspace and take the **14th** quiz
+
+--
+
+- **Homework:**
+
+  - Problem Set 8 (due 2024-03-22 by 11:59PM)
+  
+  - HW 15
+

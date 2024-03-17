@@ -1,0 +1,230 @@
+---
+title: "Lecture 14 Notes"
+output: html_document
+date: "2024-03-05"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Opening the data
+ 
+```{r}
+require(tidyverse)
+mv <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/mv.Rds')
+
+mv_analysis <- mv %>%
+  drop_na(budget,gross) %>%
+  mutate(budget_log = log(budget),
+         gross_log = log(gross))
+
+```
+
+# Regression
+
+```{r}
+model_gross_budget <- lm(formula = gross_log ~ budget_log,
+                         data = mv_analysis)
+```
+
+# RMSE
+
+```{r}
+mv_analysis <- mv_analysis %>%
+  mutate(preds = predict(model_gross_budget)) %>%
+  mutate(errors = gross_log - preds)
+
+rmse <- mv_analysis %>%
+  mutate(se = errors^2) %>%
+  summarise(mse = mean(se)) %>%
+  mutate(rmse = sqrt(mse))
+```
+
+# Cross Validation
+
+```{r}
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  # Generating a random list of rows
+inds <- sample(x = 1:3179,
+       size = round(3179/2),
+       replace = FALSE)
+
+train <- mv_analysis %>%
+  slice(inds)
+
+test <- mv_analysis %>%
+  slice(-inds)
+
+# Training on the training data
+model_tmp <- lm(gross_log ~ budget_log,data = train)
+
+# Predicting on the test data
+test <- test %>%
+  mutate(preds = predict(model_tmp,
+                         newdata = test)) %>%
+  mutate(errors = gross_log - preds)
+
+rmse <- test %>%
+  mutate(se = errors^2) %>%
+  summarise(mse = mean(se)) %>%
+  mutate(rmse = sqrt(mse))
+
+cvRes <- cvRes %>%
+  bind_rows(rmse)
+}
+
+cvRes %>%
+  summarise(rmseOverall = mean(rmse))
+```
+
+# Alternative model
+
+```{r}
+mv_analysis %>%
+  select(gross_log,score)
+
+# Univariate viz
+mv_analysis %>%
+  ggplot(aes(x = score)) + 
+  geom_histogram()
+
+# Missingness
+summary(mv_analysis %>%
+          select(gross_log,score))
+
+# Multivariate visualization
+mv_analysis %>%
+  ggplot(aes(x = score,y = gross_log)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm')
+```
+
+# Cross Validation: Model 2
+
+```{r}
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  # Generating a random list of rows
+inds <- sample(x = 1:nrow(mv_analysis),
+       size = round(nrow(mv_analysis)/2),
+       replace = FALSE)
+
+train <- mv_analysis %>%
+  slice(inds)
+
+test <- mv_analysis %>%
+  slice(-inds)
+
+# Training on the training data
+model_tmp <- lm(gross_log ~ score,data = train)
+
+# Predicting on the test data
+test <- test %>%
+  mutate(preds = predict(model_tmp,
+                         newdata = test)) %>%
+  mutate(errors = gross_log - preds)
+
+rmse <- test %>%
+  mutate(se = errors^2) %>%
+  summarise(mse = mean(se)) %>%
+  mutate(rmse = sqrt(mse))
+
+cvRes <- cvRes %>%
+  bind_rows(rmse)
+}
+
+cvRes %>%
+  summarise(rmseOverall = mean(rmse))
+```
+
+# Multiple X Variables
+
+```{r}
+# Y = alpha + beta_1 X_1 + beta_2 X_2 + ... + e
+model_budg_score <- lm(gross_log ~ budget_log + score,
+                       mv_analysis)
+
+summary(model_budg_score)
+
+(exp(0.29740)-1)*100
+```
+
+# Cross Validation: Model 3
+
+```{r}
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  # Generating a random list of rows
+inds <- sample(x = 1:nrow(mv_analysis),
+       size = round(nrow(mv_analysis)/2),
+       replace = FALSE)
+
+train <- mv_analysis %>%
+  slice(inds)
+
+test <- mv_analysis %>%
+  slice(-inds)
+
+# Training on the training data
+model_tmp <- lm(gross_log ~ budget_log + score,data = train)
+
+# Predicting on the test data
+test <- test %>%
+  mutate(preds = predict(model_tmp,
+                         newdata = test)) %>%
+  mutate(errors = gross_log - preds)
+
+rmse <- test %>%
+  mutate(se = errors^2) %>%
+  summarise(mse = mean(se)) %>%
+  mutate(rmse = sqrt(mse))
+
+cvRes <- cvRes %>%
+  bind_rows(rmse)
+}
+
+cvRes %>%
+  summarise(rmseOverall = mean(rmse))
+```
+
+# Movie Ratings
+
+```{r}
+model_gross_rating <- lm(gross_log ~ rating,
+                         mv_analysis)
+
+summary(model_gross_rating)
+```
+
+# Movie Genre
+
+```{r}
+model_gross_genre <- lm(gross_log ~ genre,
+                         mv_analysis)
+
+summary(model_gross_genre)
+
+mv_analysis %>%
+  count(genre)
+```
+
+# Bechdel Score
+
+```{r}
+model_gross_BS <- lm(gross_log ~ bechdel_score,
+                         mv_analysis)
+
+summary(model_gross_BS)
+
+mv_analysis %>%
+  drop_na(bechdel_score) %>%
+  ggplot(aes(x = factor(bechdel_score),
+             y = gross_log)) + 
+  geom_violin()
+```
+
