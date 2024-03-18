@@ -1,0 +1,205 @@
+---
+title: "Problem Set 8"
+subtitle: "Classification"
+author: "[YOUR NAME]"
+institute: "Vanderbilt University"
+date: "Due Date: 2024-03-22"
+output:
+  html_document: default
+---
+
+```{r,include=F}
+knitr::opts_chunk$set(error=TRUE)
+```
+
+
+## Getting Set Up
+
+Open `RStudio` and create a new RMarkDown file (`.Rmd`) by going to `File -> New File -> R Markdown...`.
+Accept defaults and save this file as `[LAST NAME]_ps8.Rmd` to your `code` folder.
+
+Copy and paste the contents of this `.Rmd` file into your `[LAST NAME]_ps8.Rmd` file. Then change the `author: [Your Name]` to your name.
+
+We will be using the `fn_cleaned_final.Rds` file from the course [github page](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/fn_cleaned_final.Rds).
+
+All of the following questions should be answered in this `.Rmd` file. There are code chunks with incomplete code that need to be filled in. 
+
+This problem set is worth 8 total points, plus two extra credit points. The point values for each question are indicated in brackets below. To receive full credit, you must have the correct code. In addition, some questions ask you to provide a written response in addition to the code.
+
+You are free to rely on whatever resources you need to complete this problem set, including lecture notes, lecture presentations, Google, your classmates...you name it. However, the final submission must be complete by you. There are no group assignments. To submit, compiled the completed problem set and upload the PDF file to Brightspace on Friday by midnight. Also note that the TAs and professors will not respond to Campuswire posts after 5PM on Friday, so don't wait until the last minute to get started!
+
+**Good luck!**
+
+*Copy the link to ChatGPT you used here: _____________________
+
+## Question 0
+Require `tidyverse` and load the [`fn_cleaned_final.Rds`](https://github.com/jbisbee1/DS1000_S2023/blob/main/Lectures/5_Regression/data/fn_cleaned_final.Rds?raw=true') data to an object called `fn`.
+```{r}
+# INSERT CODE HERE
+```
+
+
+## Question 1 [2 points]
+In this problem set, we are interested in developing a classifier that maximizes our accuracy for predicting Fortnite victories. To do so we will use both a linear probability model and a logit, and then compare their predictive accuracy. We will use two $X$ variables to predict the probability of winning: accuracy (`accuracy`), and head shots (`head_shots`). Our outcome variable of interest $Y$ is whether the player won the game (`won`).
+
+Start by **looking** at these variables. Why types of variables are they? How much missingness do they have? What do their univariate visualizations look like? Then create two multivariate visualizations of the relationship between `won` and each of the two $X$ variables one-by-one. Finally, use `geom_tile()` to create a heatmap of the three-way relationship, where quintiles of `accuracy` is on the x-axis, quintiles of `head_shots` is on the y-axis, and tiles are filled according to the average winning probability. (NB: look up what "quintile" means if you are not sure.) Is there anything surprising about this result?
+
+```{r}
+# What types?
+# INSERT CODE HERE
+
+# How much missingness?
+# INSERT CODE HERE
+
+# Univariate
+# INSERT CODE HERE
+
+# Multivariate: one-by-one
+# INSERT CODE HERE
+
+# Multivariate: 3-dimensions
+# INSERT CODE HERE
+```
+
+
+> Write answer here
+
+## Question 2 [2 points]
+Now let's run a linear model and evaluate it in terms of overall accuracy, sensitivity and specificity using a threshold of 0.5. Then, determine the threshold that maximizes both specificity and sensitivity. Finally, calculate the area under the curve (AUC).
+
+```{r}
+require(...) # Require the scales package
+# Running linear model
+model_lm <- lm(formula = ..., # Define the regression equation
+               data = ...) # Provide the dataset
+
+# Calculating accuracy, sensitivity, and specificity
+fn %>%
+  mutate(prob_win = ...) %>% # Calculate the probability of winning
+  mutate(pred_win = ...) %>% # Convert the probability to a 1 if the probability is greater than 0.5, or zero otherwise
+  group_by(...) %>% # Calculate the total games by whether they were actually won or lost
+  mutate(total_games = ...) %>%
+  group_by(....) %>% # Calculate the number of games by whether they were actually won or lost, and by whether they were predicted to be won or lost
+  summarise(nGames=...,.groups = 'drop') %>%
+  mutate(prop = ...) %>% # Calculate the proportion of game by the total games
+  ungroup() %>%
+  mutate(accuracy = ...) # Calculate the overall accuracy
+
+# Create the sensitivity vs specificity plot
+toplot <- NULL # Instantiate an empty object
+for(thresh in seq(0,1,by = .025)) {
+  toplot <- fn %>%
+  mutate(prob_win = ...) %>% # Calculate the probability of winning
+  mutate(pred_win = ...) %>% # Convert the probability to a 1 if the probability is greater than the given threshold, or zero otherwise
+  group_by(...) %>% # Calculate the total games by whether they were actually won or lost
+  mutate(total_games = ...) %>%
+  group_by(...) %>% # Calculate the number of games by whether they were actually won or lost, and by whether they were predicted to be won or lost
+  summarise(nGames=...,.groups = 'drop') %>%
+  mutate(prop = ...) %>% # Calculate the proportion of game by the total games
+  ungroup() %>%
+  mutate(accuracy = ...) %>% # Calculate the overall accuracy
+  mutate(threshold = ...) %>% # Record the threshold level
+    bind_rows(toplot) # Add it to the toplot object
+}
+
+toplot %>%
+  mutate(metric = ifelse(...,
+                         ifelse(...,...))) %>% # Using a nested ifelse() function, label each row as either Sensitivity (if the predicted win is 1 and the true win is 1), Specificity (if the predicted win is 0 and the true win is 0), or NA
+  drop_na(...) %>% # Drop rows that are neither sensitivity nor specificity measures
+  ggplot(aes(x = ...,y = ...,color = ...)) + # Visualize the Sensitivity and Specificity curves by putting the threshold on the x-axis, the proportion of all games on the y-axis, and coloring by Sensitivity or Specificity
+  geom_...() + 
+  geom_vline(xintercept = ...) # Tweak the x-intercept to find the optimal threshold
+
+# Plot the AUC
+toplot %>%
+  mutate(metric = ifelse(...,
+                         ifelse(...,...))) %>% # Using a nested ifelse() function, label each row as either Sensitivity (if the predicted win is 1 and the true win is 1), Specificity (if the predicted win is 0 and the true win is 0), or NA
+  drop_na(...) %>% # Drop rows that are neither sensitivity nor specificity measures
+  select(...) %>% # Select only the prop, metric, and threshold columns
+  spread(...) %>% # Pivot the data to wide format using either spread() or pivot_wider(), where the new columns should be the metric
+  arrange(...) %>% # Arrange by descending specificity, and then by sensitivity
+  ggplot(aes(x = ..., # Plot 1 minus the Specificity on the x-axis
+             y = ...)) +  # Plot the Sensitivity on the y-axis
+  geom_...() + 
+  xlim(...) + ylim(...) + # Expand the x and y-axis limits to be between 0 and 1
+  geom_abline(...) + # Add a 45-degree line using geom_abline()
+  labs(x = '', # Add clear labels! (Make sure to indicate that this is the result of a linear regression model)
+       y = '',
+       title = '',
+       subtitle = '')
+
+# Calculate the AUC
+require(...) # Require the tidymodels package
+forAUC <- fn %>%
+  mutate(prob_win = ..., # Generate predicted probabilities of winning from our model
+         truth = ...) %>% # Convert the outcome to a factor with levels c('1','0')
+  select(truth,prob_win) # Select only the probability and true outcome columns
+
+roc_auc(data = forAUC, # Run the roc_auc() function on the dataset we just created
+        truth, # Tell it which column contains the true outcomes
+        prob_win) # Tell it which column contains our model's predicted probabilities
+```
+
+> The threshold that maximizes the sensitivity and specificity is about 0.31. 
+
+## Question 3 [2 points]
+Now let's re-do the exact same work, except use a logit model instead of a linear model. Based on your analysis, which mdoel has a larger AUC?
+
+```{r}
+# INSERT CODE HERE
+```
+
+
+> As before, the threshold that maximizes the sensitivity and specificity is about 0.31. There is no difference between the linear and logit models in this example.
+
+## Question 4 [2 points]
+Use 100-fold cross validation with a 60-40 split to calculate the average AUC for both the linear and logit models. Which is better?
+
+
+```{r}
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  # Cross validation prep
+  # INSERT CODE HERE
+
+  # Training models
+  mLM <- lm(...)
+  mGLM <- glm(...)
+  
+  # Predicting models
+  toEval <- test %>%
+    mutate(mLMPreds = ..., # Calculate the probability of winning from the linear model
+           mGLMPreds = ..., # Calculate the probability of winning from the logit
+           truth = ...) # Convert the outcome to a factor with levels c('1','0')
+
+  # Evaluating models
+  rocLM <- roc_auc(...) %>% # Calculate the AUC for the linear model
+    mutate(model = ...) %>% # Record the model type
+    rename(auc = .estimate) # Rename to 'auc'
+    
+  rocGLM <- roc_auc(...) %>% # Calculate the AUC for the logit model
+    mutate(model = ...) %>% # Record the model type
+    rename(auc = .estimate) # Rename to 'auc'
+
+  cvRes <- rocLM %>%
+    bind_rows(rocGLM) %>%
+    mutate(cvInd = i) %>%
+    bind_rows(cvRes)
+}
+
+cvRes %>%
+  group_by(model) %>%
+  summarise(mean_auc = mean(auc))
+```
+
+> Write answer here.
+
+## Extra Credit [2 Points + 2 points for winner]
+Can you improve on the best model identified above? You will receive two extra credit points for executing the analysis correctly. The student(s) who achieve the best cross-validated AUC in class will receive an additional 2 extra points on top of the EC.
+
+> Write answer here
+
+```{r}
+# INSERT CODE HERE
+```
