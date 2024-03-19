@@ -1,0 +1,142 @@
+---
+title: "Lecture 15 Notes"
+output: html_document
+date: "2024-03-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading the data
+
+```{r}
+require(tidyverse)
+
+fn <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/fn_cleaned_final.rds')
+```
+
+# Multivariate visualization
+
+```{r}
+fn %>%
+  group_by(gameIdSession) %>%
+  summarise(prob_win = mean(won)) %>%
+  ggplot(aes(x = gameIdSession,
+             y = prob_win)) + 
+  geom_point()
+
+fn %>%
+  ggplot(aes(x = hits,
+             y = won)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm',se = F)
+
+fn %>%
+  ggplot(aes(x = gameIdSession,
+             y = won)) + 
+  geom_point()
+
+fn %>%
+  group_by(mental_state) %>%
+  summarise(prob_win = mean(won)) %>%
+  ggplot(aes(x = mental_state,
+             y = prob_win)) + 
+  geom_bar(stat = 'identity')
+```
+
+# Heatmaps
+
+```{r}
+# ntile()
+fn %>%
+  mutate(accuracy_decile = ntile(accuracy,n = 10)) %>%
+  # select(accuracy,accuracy_decile)
+  group_by(accuracy_decile,mental_state) %>%
+  summarise(prob_win = mean(won)) %>%
+  ggplot(aes(x = mental_state,
+             y = accuracy_decile,
+             fill = prob_win)) +
+  geom_tile()
+
+```
+
+# Predicting wins / losses
+
+```{r}
+fn %>%
+  mutate(accuracy_decile = ntile(accuracy,n = 10)) %>%
+  group_by(accuracy_decile,mental_state) %>%
+  mutate(prob_win = mean(won)) %>%
+  select(accuracy_decile,mental_state,won,prob_win) %>%
+  mutate(pred_win = ifelse(prob_win > .5,1,0)) %>%
+  group_by(won,pred_win) %>%
+  summarise(nGames = n()) %>%
+  group_by(won) %>%
+  mutate(totGames = sum(nGames)) %>%
+  ungroup() %>%
+  mutate(proportion = nGames / totGames)
+
+(632 + 52) / (957)
+```
+
+# Running a linear regression
+
+```{r}
+m <- lm(formula = won ~ damage_to_players + mental_state + hits,data = fn)
+
+summary(m)
+
+fn %>%
+  mutate(prob_win = predict(m)) %>%
+  select(won,prob_win) %>%
+  mutate(pred_win = ifelse(prob_win > .45,1,0)) %>%
+  group_by(won,pred_win) %>%
+  summarise(nGames = n()) %>%
+  group_by(won) %>%
+  mutate(totGames = sum(nGames)) %>%
+  ungroup() %>%
+  mutate(proportion = nGames / totGames) %>%
+  mutate(overall_accuracy = (sum((won == pred_win)*nGames) / sum(nGames)))
+
+```
+
+
+# Sensitivity vs Specificity
+
+```{r}
+threshRes <- NULL
+for(thresh in seq(0,1,by = .01)) {
+  threshRes <- threshRes %>%
+    bind_rows(fn %>%
+  mutate(prob_win = predict(m)) %>%
+  select(won,prob_win) %>%
+  mutate(pred_win = ifelse(prob_win > thresh,1,0)) %>%
+  group_by(won,pred_win) %>%
+  summarise(nGames = n()) %>%
+  group_by(won) %>%
+  mutate(totGames = sum(nGames)) %>%
+  ungroup() %>%
+  mutate(proportion = nGames / totGames) %>%
+  mutate(overall_accuracy = (sum((won == pred_win)*nGames) / sum(nGames))) %>%
+    mutate(threshold = thresh))
+}
+
+threshRes %>%
+  ggplot(aes(x = threshold,
+             y = overall_accuracy)) + 
+  geom_line() + 
+  geom_vline(xintercept = .43)
+
+# Sensitivity vs specificity
+threshRes %>%
+  mutate(metric = ifelse(won == 0 & pred_win == 0,'Specificity',
+                         ifelse(won == 1 & pred_win == 1,'Sensitivity',NA))) %>%
+  drop_na(metric) %>%
+  ggplot(aes(x = threshold,
+             y = proportion,
+             color = metric)) + 
+  geom_line() + 
+  geom_vline(xintercept = .305)
+```
+
