@@ -49,7 +49,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 
 ```{r,message=F,warning=F}
 require(tidyverse)
-fn <- read_rds('C:/Users/bisbeejh/Dropbox/2024_spring/DS1000_S2024/data/fn_cleaned_final.rds')
+fn <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/fn_cleaned_final.rds')
 ```
 
 

@@ -4,7 +4,7 @@
     <title>Classification</title>
     <meta charset="utf-8" />
     <meta name="author" content="Prof. Bisbee" />
-    <script src="libs/header-attrs-2.23/header-attrs.js"></script>
+    <script src="libs/header-attrs-2.22/header-attrs.js"></script>
     <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/lexis.css" type="text/css" />
     <link rel="stylesheet" href="css/lexis-fonts.css" type="text/css" />
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 ### Vanderbilt University
 ]
 .date[
-### Slides Updated: 2024-03-16
+### Slides Updated: 2024-03-19
 ]
 
 ---
@@ -52,7 +52,7 @@ class: center, middle, inverse, title-slide
 
 ```r
 require(tidyverse)
-fn &lt;- read_rds('C:/Users/bisbeejh/Dropbox/2024_spring/DS1000_S2024/data/fn_cleaned_final.rds')
+fn &lt;- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/fn_cleaned_final.rds')
 ```
 
 
@@ -855,6 +855,58 @@ p
 
 ```r
 require(tidymodels)
+```
+
+```
+## Warning: package 'tidymodels' was built under R version
+## 4.3.3
+```
+
+```
+## Warning: package 'dials' was built under R version 4.3.3
+```
+
+```
+## Warning: package 'infer' was built under R version 4.3.3
+```
+
+```
+## Warning: package 'modeldata' was built under R version
+## 4.3.3
+```
+
+```
+## Warning: package 'parsnip' was built under R version 4.3.3
+```
+
+```
+## Warning: package 'recipes' was built under R version 4.3.3
+```
+
+```
+## Warning: package 'rsample' was built under R version 4.3.3
+```
+
+```
+## Warning: package 'tune' was built under R version 4.3.3
+```
+
+```
+## Warning: package 'workflows' was built under R version
+## 4.3.3
+```
+
+```
+## Warning: package 'workflowsets' was built under R version
+## 4.3.3
+```
+
+```
+## Warning: package 'yardstick' was built under R version
+## 4.3.3
+```
+
+```r
 roc_auc(data = fn %&gt;%
   mutate(pred_win = predict(mLM),
          truth = factor(won,levels = c('1','0'))) %&gt;%

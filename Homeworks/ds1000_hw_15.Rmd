@@ -1,9 +1,9 @@
 ---
-title: "College Admissions, Part 1"
+title: "College Admissions, Part 2"
 subtitle: "Homework"
 author: "Prof. Bisbee"
 institute: "Vanderbilt University"
-date: "Due Date: 2024-03-19 & 03-21"
+date: "Due Date: 2024-03-21"
 output: html_document
 ---
 
