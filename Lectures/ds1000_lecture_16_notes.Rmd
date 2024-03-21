@@ -1,0 +1,126 @@
+---
+title: "Lecture 16 Notes"
+output: html_document
+date: "2024-03-21"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading the data
+
+```{r}
+require(tidyverse)
+
+fn <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/fn_cleaned_final.rds')
+```
+
+# Regression
+
+```{r}
+m <- lm(won ~ mental_state + hits,fn)
+summary(m)
+
+fn %>%
+  ggplot(aes(x = hits,y = won)) +
+  geom_point() + 
+  geom_smooth(method = 'lm')
+
+# Create probability predictions
+fn %>%
+  mutate(prob_win = predict(m)) %>%
+  select(won,prob_win) %>%
+  mutate(pred_win = ifelse(prob_win > .3,1,0)) %>%
+  group_by(won,pred_win) %>%
+  summarise(nGames = n()) %>%
+  group_by(won) %>%
+  mutate(tot_games = sum(nGames)) %>%
+  ungroup() %>%
+  mutate(proportion = nGames / tot_games)
+
+# Make it efficient with a loop()
+threshRes <- NULL
+for(i in seq(0,1,by = .01)) {
+  tmp <- fn %>%
+  mutate(prob_win = predict(m)) %>%
+  select(won,prob_win) %>%
+  mutate(pred_win = ifelse(prob_win > i,1,0)) %>%
+  group_by(won,pred_win) %>%
+  summarise(nGames = n(),.groups = 'drop') %>%
+  group_by(won) %>%
+  mutate(tot_games = sum(nGames)) %>%
+  ungroup() %>%
+  mutate(proportion = nGames / tot_games)
+  
+  threshRes <- threshRes %>%
+    bind_rows(tmp %>%
+                mutate(threshold = i))
+}
+
+threshRes %>%
+  mutate(metric = ifelse(won == 1 & pred_win == 1,'Sensitivity',
+                         ifelse(won == 0 & pred_win == 0,'Specificity',NA))) %>%
+  drop_na(metric) %>%
+  ggplot(aes(x = threshold,y = proportion,color = metric)) + 
+  geom_line() + 
+  geom_vline(xintercept = .315)
+```
+
+# Receiver Operator Curve (ROC)
+
+```{r}
+threshRes %>%
+  mutate(metric = ifelse(won == 1 & pred_win == 1,'Sensitivity',
+                         ifelse(won == 0 & pred_win == 0,'Specificity',NA))) %>%
+  drop_na(metric) %>%
+  select(proportion,metric,threshold) %>%
+  spread(metric,proportion,fill = 0) %>%
+  arrange(desc(Specificity),Sensitivity) %>%
+  ggplot(aes(x = 1 - Specificity,
+             y = Sensitivity)) + 
+  geom_line() + 
+  geom_abline(intercept = 0,slope = 1)
+```
+
+# Calculate AUC (Area Under the Curve)
+
+```{r}
+require(tidymodels)
+
+toEval <- fn %>%
+  mutate(prob_win = predict(m),
+         truth = factor(won,levels = c('1','0'))) %>%
+  select(prob_win,truth)
+
+roc_auc(toEval,truth,prob_win)
+```
+
+# More X variables
+
+```{r}
+m2 <- lm(won ~ mental_state + hits + damage_taken + distance_traveled + head_shots + revives,fn)
+
+toEval2 <- fn %>%
+  mutate(prob_win = predict(m2)) %>%
+  mutate(truth = factor(won,levels = c('1','0')))
+
+roc_auc(toEval2,truth,prob_win)
+```
+
+# Logit function
+
+```{r}
+m3 <- glm(won ~ mental_state + hits + damage_taken + distance_traveled + head_shots + revives,
+          fn,
+          family = binomial(link = 'logit'))
+
+toEval3 <- fn %>%
+  mutate(prob_win = predict(m3,type = 'response')) %>%
+  mutate(truth = factor(won,levels = c('1','0')))
+
+roc_auc(toEval3,truth,prob_win)
+```
+
+
+

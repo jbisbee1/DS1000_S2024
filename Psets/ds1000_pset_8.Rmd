@@ -61,7 +61,6 @@ Start by **looking** at these variables. Why types of variables are they? How mu
 # INSERT CODE HERE
 ```
 
-
 > Write answer here
 
 ## Question 2 [2 points]
@@ -140,7 +139,7 @@ roc_auc(data = forAUC, # Run the roc_auc() function on the dataset we just creat
         prob_win) # Tell it which column contains our model's predicted probabilities
 ```
 
-> The threshold that maximizes the sensitivity and specificity is about 0.31. 
+> Write answer here
 
 ## Question 3 [2 points]
 Now let's re-do the exact same work, except use a logit model instead of a linear model. Based on your analysis, which mdoel has a larger AUC?
@@ -150,7 +149,7 @@ Now let's re-do the exact same work, except use a logit model instead of a linea
 ```
 
 
-> As before, the threshold that maximizes the sensitivity and specificity is about 0.31. There is no difference between the linear and logit models in this example.
+> Write answer here
 
 ## Question 4 [2 points]
 Use 100-fold cross validation with a 60-40 split to calculate the average AUC for both the linear and logit models. Which is better?
