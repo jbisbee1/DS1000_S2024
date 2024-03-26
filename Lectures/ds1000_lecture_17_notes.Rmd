@@ -1,0 +1,163 @@
+---
+title: "Lecture 17 Notes"
+output: html_document
+date: "2024-03-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducing Random Forests with ranger
+
+```{r}
+require(tidyverse)
+
+fn <- read_rds("https://github.com/jbisbee1/DS1000_S2024/raw/main/data/fn_cleaned_final.rds")
+
+form.perf <- 'won ~ hits + assists + accuracy + head_shots + damage_to_players'
+
+form.games <- 'won ~ eliminations + revives + distance_traveled + materials_gathered'
+
+form.context <- 'won ~ mental_state + startTime + gameIdSession'
+
+form.full <- 'won ~ hits + assists + accuracy + head_shots + damage_to_players + eliminations + revives + distance_traveled + materials_gathered + mental_state + startTime + gameIdSession'
+```
+
+# Start simple: lm()
+
+```{r}
+m_perf <- lm(as.formula(form.perf),data = fn)
+
+summary(m_perf)
+
+require(tidymodels)
+
+toEval <- fn %>%
+  mutate(prob_win = predict(m_perf),
+         won = factor(won,levels =c('1','0')))
+
+roc_auc(toEval,won,prob_win)
+
+m_games <- lm(as.formula(form.games),data = fn)
+m_context <- lm(as.formula(form.context),data = fn)
+m_full <- lm(as.formula(form.full),data = fn)
+
+toEval <- fn %>%
+  mutate(prob_win_perf = predict(m_perf),
+         prob_win_games = predict(m_games),
+         prob_win_context = predict(m_context),
+         prob_win_full = predict(m_full),
+         won = factor(won,levels =c('1','0')))
+
+auc_perf <- roc_auc(toEval,won,prob_win_perf)
+auc_games <- roc_auc(toEval,won,prob_win_games)
+auc_context <- roc_auc(toEval,won,prob_win_context)
+auc_full <- roc_auc(toEval,won,prob_win_full)
+
+auc_perf
+auc_games
+auc_context
+auc_full
+
+# Using a logit instead
+m_perf <- glm(as.formula(form.perf),data = fn,family = binomial(link = 'logit'))
+m_games <- glm(as.formula(form.games),data = fn,family = binomial(link = 'logit'))
+m_context <- glm(as.formula(form.context),data = fn,family = binomial(link = 'logit'))
+m_full <- glm(as.formula(form.full),data = fn,family = binomial(link = 'logit'))
+
+toEval <- fn %>%
+  mutate(prob_win_perf = predict(m_perf,type = 'response'),
+         prob_win_games = predict(m_games,type = 'response'),
+         prob_win_context = predict(m_context,type = 'response'),
+         prob_win_full = predict(m_full,type = 'response'),
+         won = factor(won,levels =c('1','0')))
+
+auc_perf_logit <- roc_auc(toEval,won,prob_win_perf)
+auc_games_logit <- roc_auc(toEval,won,prob_win_games)
+auc_context_logit <- roc_auc(toEval,won,prob_win_context)
+auc_full_logit <- roc_auc(toEval,won,prob_win_full)
+
+auc_perf
+auc_perf_logit
+auc_games
+auc_games_logit
+auc_context
+auc_context_logit
+auc_full
+auc_full_logit
+```
+
+# Ranger
+
+```{r}
+require(ranger)
+
+m_ranger_full <- ranger(formula = as.formula(form.full),
+                        data = fn,num.trees = 2000,
+                        importance = 'permutation')
+
+
+toEval <- fn %>%
+  mutate(prob_win = m_ranger_full$predictions,
+         won = factor(won,levels = c('1','0')))
+
+auc_ranger <- roc_auc(toEval,won,prob_win)
+```
+
+# Look at variable importance
+
+```{r}
+toplot <- data.frame(vimp = m_ranger_full$variable.importance,
+                     variable = names(m_ranger_full$variable.importance))
+
+toplot %>%
+  ggplot(aes(x = vimp,y = reorder(variable,vimp))) + 
+  geom_bar(stat = 'identity')
+```
+
+# Cross validation with a random forest
+
+```{r}
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  inds <- sample(1:nrow(fn),size = round(nrow(fn)*.6),replace = F)
+  train <- fn %>% slice(inds)
+  test <- fn %>% slice(-inds)
+  
+  m_lm <- lm(as.formula(form.full),train)
+  m_glm <- glm(as.formula(form.full),train,family = binomial(link = 'logit'))
+  m_rf <- ranger(as.formula(form.full),train,importance = 'none')
+  
+  tmp_rf_preds <- predict(m_rf,data = test)
+  
+  toEval <- test %>%
+    mutate(prob_win_lm = predict(m_lm,newdata = test),
+           prob_win_glm = predict(m_glm,newdata = test,type = 'response'),
+           prob_win_rf = tmp_rf_preds$predictions,
+           won = factor(won,levels = c('1','0')))
+  
+  auc_lm <- roc_auc(toEval,won,prob_win_lm) %>% mutate(model = 'linear')
+  auc_glm <- roc_auc(toEval,won,prob_win_glm) %>% mutate(model = 'logit')
+  auc_rf <- roc_auc(toEval,won,prob_win_rf) %>% mutate(model = 'random forest')
+  
+  tmp <- auc_lm %>%
+    bind_rows(auc_glm) %>%
+    bind_rows(auc_rf)
+  
+  cvRes <- cvRes %>%
+    bind_rows(tmp)
+}
+
+cvRes %>%
+  group_by(model) %>%
+  summarise(avg_auc = mean(.estimate))
+
+cvRes %>%
+  ggplot(aes(x = .estimate,y = model)) + 
+  geom_boxplot()
+```
+
+
+
