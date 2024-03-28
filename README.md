@@ -67,7 +67,7 @@ There are also two exams. The first is a mid-term exam that is scheduled for Mar
 The final grade is calculated as a weighted average of these components with the following weights:
 
 - **Problem sets:** 11 in total, only 10 of which are worth 4% of your final grade. I will automatically drop the lowest-scoring problem sets from your final grade. 
-- **Exams:** Midterm and final, both of which are in-class. The midterm is worth 20%, and the final worth 25% of your final grade.
+- **Exams:** Midterm and final. The midterm is worth 20% and is in-class, and the final worth 25% of your final grade and is a take-home.
 - **Quizzes:** There are 19 quizzes over the course of the semester which can only be taken if you attend class. Each consist of several questions plus an attendance statement. 50% of the quiz grade comes from accurately answering all five questions, and 50% comes from signing the attendance statement. Each quiz is worth 1% of your final grade, and combined comprise the final 15%, meaning that 4 are not counted.
 
 See the table below for a breakdown of the percentages, points, and extra credit. 

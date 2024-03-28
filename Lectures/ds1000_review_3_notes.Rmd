@@ -1,0 +1,93 @@
+---
+title: "Review Session 3"
+output: html_document
+date: "2024-03-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introducing education acceptance
+
+```{r}
+require(tidyverse)
+
+ad <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/admit_data.rds')
+
+# Simple Variable Importance
+mCost <- glm(yield ~ net_price,ad,family = binomial(link = 'logit'))
+summary(mCost)
+
+mVisit <- glm(yield ~ visit,ad,family = binomial)
+summary(mVisit)
+
+mLegacy <- glm(yield ~ legacy,ad,family = binomial)
+summary(mLegacy)
+
+# Calculate AUC
+require(tidymodels)
+toEval <- ad %>%
+  mutate(prob_yield_cost = predict(mCost,type = 'response'),
+         prob_yield_visit = predict(mVisit,type = 'response'),
+         prob_yield_legacy = predict(mLegacy,type = 'response'),
+         yield = factor(yield,levels = c('1','0')))
+
+roc_auc(toEval,yield,prob_yield_cost)
+roc_auc(toEval,yield,prob_yield_visit)
+roc_auc(toEval,yield,prob_yield_legacy)
+
+colnames(ad)
+
+mFull <- glm(yield ~ income + sat + gpa + visit + legacy + registered + sent_scores + distance + need_aid + merit_aid + net_price,ad,family = binomial)
+
+summary(mFull)
+
+toEval <- ad %>%
+  mutate(prob_yield_full = predict(mFull,type = 'response'),
+         yield = factor(yield,levels = c('1','0')))
+
+roc_auc(toEval,yield,prob_yield_full)
+
+# Cross validation
+set.seed(123)
+cvRes <- NULL
+for(i in 1:100) {
+  inds <- sample(1:nrow(ad),size = round(nrow(ad)*.6),replace = F)
+  train <- ad %>% slice(inds)
+  test <- ad %>% slice(-inds)
+  
+  # Train the model
+  mFull <- glm(yield ~ income + sat + gpa + visit + legacy + registered + sent_scores + distance + need_aid + merit_aid + net_price,train,family = binomial)
+  
+  # Predicting model on test data
+  toEval <- test %>%
+  mutate(prob_yield_full = predict(mFull,newdata = test,type = 'response'),
+         yield = factor(yield,levels = c('1','0')))
+
+  # Evaluating model performance
+  cvRes <- cvRes %>%
+    bind_rows(roc_auc(toEval,yield,prob_yield_full) %>%
+                mutate(cvInd = i))
+}
+
+cvRes %>%
+  summarise(mean_auc = mean(.estimate))
+```
+
+# Random Forest for VIMP
+
+```{r}
+require(ranger)
+
+mRanger <- ranger(yield ~ income + sat + gpa + visit + legacy + registered + sent_scores + distance + need_aid + merit_aid + net_price,
+                  ad,
+                  importance = 'permutation')
+
+data.frame(vimp = mRanger$variable.importance,
+           variable = names(mRanger$variable.importance)) %>%
+  ggplot(aes(x = vimp,y = reorder(variable,vimp))) + 
+  geom_bar(stat = 'identity')
+```
+
+
