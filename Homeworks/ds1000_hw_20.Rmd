@@ -301,15 +301,15 @@ _OPTIONAL_ Here is some code that I used to create the `countycovid.Rds` file we
 
 Let's grab the data from out plotting assignment that had votes and pandemic information at the county level.  Need to change the county fips code (a standard unqiue identifier used by the US Government to identify counties) to numeric.
 
-```{r eval=FALSE}
-covidvote <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/data/COVID.Death.Voting.Rds") 
+```{r,eval=F}
+covidvote <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/COVID.Death.Voting.Rds") 
 covidvote <- covidvote %>%
   mutate(fips = as.numeric(fips.code))
 ```
 
 Now join `covidvote` with a dataset in `maps` that connects the county name to the fips code for merging.  Then parse this and break it apart.
 
-```{r eval = FALSE}
+```{r,eval=F}
 covidvote <- inner_join(covidvote,county.fips)
 library(stringr) 
 covidvote <- covidvote %>%
@@ -317,8 +317,6 @@ covidvote <- covidvote %>%
          subregion = word(polyname,2,sep=","))
 
 countycovid  <- inner_join(covidvote,counties48)
-saveRDS(countycovid,file="countycovid.Rds")
-
 ```
 
 
@@ -327,7 +325,7 @@ _LECTURE COVERAGE STARTS HERE:_
 Load in the data!
 
 ```{r}
-countycovid <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/data/countycovid.Rds")
+countycovid <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/countycovid.Rds")
 ```
 
 Now lets just see what happens if we plot.
@@ -409,7 +407,7 @@ countycovid %>%
 #   Now let's do this over time!
 
 ```{r}
-PollDat <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/data/PresStatePolls04to20.Rds") %>%
+PollDat <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/PresStatePolls04to20.Rds") %>%
   rename(region=state.name)
 ```
 
