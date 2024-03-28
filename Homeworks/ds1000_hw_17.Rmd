@@ -82,7 +82,7 @@ library(tidyverse)
 library(tidymodels)
 library(plotly)
 
-dat <- readRDS(file="../data/FloridaCountyData.Rds")
+dat <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/FloridaCountyData.Rds")
 glimpse(dat)
 ```
 
@@ -364,7 +364,7 @@ This means...
 Perhaps we need more data. Lets get all of the county (or town) level data from 2004 up through 2020.  Let's focus on Florida again.
 
 ```{r}
-dat.all <- readRDS(file="../data/CountyVote2004_2020.Rds")
+dat.all <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/CountyVote2004_2020.Rds")
 
 dat.fl <- dat.all %>%
   filter(state=="FL")
