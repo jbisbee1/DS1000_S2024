@@ -1,0 +1,45 @@
+---
+title: "Lecture 18 Notes"
+output: html_document
+date: "2024-04-02"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Loading data
+
+```{r}
+require(tidyverse)
+dat <- read_csv("https://raw.githubusercontent.com/jbisbee1/DS1000_S2024/main/data/H097_members.csv")
+
+dat %>%
+  ggplot(aes(x = nominate_dim1,
+             y = nominate_dim2)) + 
+  geom_point()
+
+# kmeans() function
+forAnalysis <- dat %>%
+  select(nominate_dim1,
+         nominate_dim2) %>%
+  drop_na()
+# set.seed(123)
+kRes <- kmeans(x = forAnalysis,
+               centers = 2,
+               nstart = 20)
+
+kRes
+
+toplot <- forAnalysis %>%
+  mutate(cluster = kRes$cluster)
+
+summary(lm(nominate_dim1 ~ factor(cluster),toplot))
+
+toplot %>%
+  ggplot(aes(x = nominate_dim1,
+             y = nominate_dim2,
+             color = factor(cluster))) + 
+  geom_point()
+```
+
