@@ -1,0 +1,92 @@
+---
+title: "Lecture 19 Notes"
+output: html_document
+date: "2024-04-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(tidyverse)
+
+tweets <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Trumptweets.Rds')
+
+# Looking at tweet volume over time
+tweets %>%
+  count(Tweeting.date) %>%
+  ggplot(aes(x = Tweeting.date,
+             y = n)) + 
+  geom_point()
+
+summary(tweets)
+
+# Look at tweet popularity over time
+tweets %>%
+  group_by(Tweeting.date) %>%
+  summarise(tot_favorites = sum(favorites,na.rm=T),
+            mean_favorites = mean(favorites,na.rm=T)) %>%
+  ggplot(aes(x = Tweeting.date,y = tot_favorites)) + 
+  geom_point() + 
+  scale_y_log10()
+
+tweets %>%
+  group_by(Tweeting.date) %>%
+  summarise(tot_favorites = sum(favorites,na.rm=T),
+            mean_favorites = mean(favorites,na.rm=T)) %>%
+  ggplot(aes(x = Tweeting.date,y = mean_favorites)) + 
+  geom_point()
+```
+
+# Load the word-level data
+```{r}
+tweet_words <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Trump_tweet_words.Rds")
+```
+
+# Convert to DTM
+```{r}
+tweet_words %>%
+  count(word) %>%
+  arrange(desc(n))
+
+# Create DTM
+dtm <- tweet_words %>%
+  filter(Tweeting.year == 2017) %>%
+  count(document,word)
+
+dtm %>%
+  arrange(desc(n))
+
+```
+
+# Calculate TF-IDF
+
+```{r}
+require(tidytext)
+
+dtm.tfidf <- bind_tf_idf(tbl = dtm,
+            term = word,
+            document = document,
+            n = n)
+
+dtm.tfidf %>%
+  select(word,tf_idf) %>%
+  arrange(desc(tf_idf))
+```
+
+# Convert to wide format
+
+```{r}
+wide_dtm <- cast_dtm(data = dtm.tfidf %>%
+                       select(document,word,tf_idf),
+                     document = document,
+                     term = word,
+                     value = tf_idf)
+
+set.seed(123)
+km_out <- kmeans(x = wide_dtm,
+                 center = 50,
+                 nstart = 5)
+```
+

@@ -1,0 +1,268 @@
+---
+title: "Problem Set 11"
+subtitle: "NLP"
+author: "[YOUR NAME]"
+institute: "Vanderbilt University"
+date: "Due Date: 2024-04-12"
+output:
+  html_document: default
+---
+
+```{r,include=F}
+knitr::opts_chunk$set(error=TRUE)
+```
+
+Open `RStudio` and create a new RMarkDown file (`.Rmd`) by going to `File -> New File -> R Markdown...`.
+Accept defaults and save this file as `[LAST NAME]_ps11.Rmd` to your `code` folder.
+
+Copy and paste the contents of this `.Rmd` file into your `[LAST NAME]_ps11.Rmd` file. Then change the `author: [Your Name]` to your name.
+
+We will be using the `Trump_tweet_words.Rds` file from the course [github page](https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Trump_tweet_words.Rds).
+
+All of the following questions should be answered in this `.Rmd` file. There are code chunks with incomplete code that need to be filled in. 
+
+This problem set is worth 8 total points, plus two extra credit points. The point values for each question are indicated in brackets below. To receive full credit, you must have the correct code. In addition, some questions ask you to provide a written response in addition to the code.
+
+You are free to rely on whatever resources you need to complete this problem set, including lecture notes, lecture presentations, Google, your classmates...you name it. However, the final submission must be complete by you. There are no group assignments. To submit, compiled the completed problem set and upload the PDF file to Brightspace on Friday by midnight. Also note that the TAs and professors will not respond to Campuswire posts after 5PM on Friday, so don't wait until the last minute to get started!
+
+**Good luck!**
+
+*Copy the link to ChatGPT you used here: _____________________
+
+## Question 0
+Require `tidyverse`, `tidytext` and `tidymodels`, and then load the [`Trump_tweet_words.Rds`](https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Trump_tweet_words.Rds) data to an object called `tweet_words`.
+```{r,warning=F,message=F}
+# INSERT CODE HERE
+```
+
+
+## Question 1 [2 points]
+
+a. Plot the total number of times the word "trump" is used each year. Then, plot the proportion of times the word "trump" is used each year. Make sure to justify your choice of `geom_...()`! [1 point] 
+
+b. Why are these plots so different? Which measure is better? Why? [1 point]
+
+```{r,warning = F}
+# Total number of times
+tweet_words %>%
+  count(...) %>% # Calculate total number of times each word was used in each year
+  filter(...) %>% # Filter to the word of interest
+  ggplot(aes(x = ...,
+             y = ...)) +  # Plot results
+  geom_...() + # Choose appropriate geom_...()
+  labs(x = '', # Provide descriptive labels
+       y = '',
+       title = '')
+
+# Proportion of times
+tweet_words %>%
+  count(...) %>% # Calculate total number of times each word was used in each year
+  group_by(...) %>% # Calculate total number of words used each year
+  mutate(...) %>%
+  ungroup() %>%
+  mutate(prop = ...) %>% # Calculate proportion
+  filter(...) %>% # Filter to the word of interest
+  ggplot(aes(x = ...,
+             y = ...)) +  # Plot results
+  geom_...() + # Choose appropriate geom_...()
+  labs(x = '', # Provide descriptive labels
+       y = '',
+       title = '')
+```
+
+>- Write answer here
+
+## Question 2 [2 points]
+
+We want to only look at tweets written during Trump's first year as president (January 20th, 2017 through December 31st, 2017), and are interested if there are patterns in what he talks about.
+
+We will use $k$-means clustering to learn about this data. To do so, follow these steps.
+
+a. Create a document-term matrix (`dtm`), dropping any words that appear fewer than 20 times total, and using the `document` column as the document indicator. **NB: Drop the word `'amp'`.**
+
+b. Calculate the TF-IDF using the appropriate function from the `tidytext` package.
+
+c. Cast the DTM to wide format using the `cast_dtm()` function, also from the `tidytext` package.
+
+d. Determine the optimal number of clusters / centers / topics / $k$ by creating and manually inspecting an elbow plot. To save time, only examine the following sizes: `c(1,10,50,100,250,500,1000)` and set `nstart = 5` with `set.seed(123)`. (This will still take a little while to run so be patient!).
+
+e. Using the optimal value from the elbow plot, run $k$-means on the data with `nstart` set to 5 and `set.seed(123)`.
+
+f. Which are the top 3 most popular topics for Donald Trump in this period? Plot the top 10 highest scoring words for each of the top 3 most popular topics. What is each "about"?
+
+```{r}
+# a.
+dtm <- tweet_words %>% 
+  filter(..., # Filter to the correct period
+         ...) %>%  # Drop the word 'amp'
+  count(...) %>%  # Count the number of times each word appears in each document
+  group_by(...) %>%  # Count the total number of times a word appears overall
+  mutate(tot_n = sum(...)) %>% 
+  ungroup() %>% 
+  filter(...) # Filter to only words that appear more than 20 times in total
+
+#b.
+dtm.tfidf <- bind_tf_idf(tbl = ...,  # Calculate the TF-IDF metric
+                         term = ..., 
+                         document = ..., 
+                         n = ...)
+
+#c.
+castdtm <- cast_dtm(data = ...,  # Cast to a DTM
+                    document = ..., 
+                    term = ..., 
+                    value = ...)
+
+#d. 
+# INSERT CODE HERE (see pset 10 if you need a refresher)
+
+#e. 
+# INSERT CODE HERE (see pset 10 if you need a refresher)
+
+km_out_tidy <- tidy(...) %>% # Tidy the kmeans result
+  gather(...) %>% # Pivot to long format
+  mutate(...) # Convert the average TF-IDF value to numeric
+
+# For students who can't load tidymodels
+# km_out_tidy <- as_tibble(km_out$centers) %>%
+#   mutate(size = km_out$size,
+#          withinss = km_out$withinss,
+#          cluster = factor(row_number())) %>%
+#   gather(word,mean_tfidf,-size,-cluster,-withinss)
+
+#f. Find the top 3 topics tweeted by Trump
+tops <- km_out_tidy %>%
+  select(...) %>% # Select only the size and cluster
+  distinct() %>% # Keep only distinct rows
+  arrange(...) %>% # Arrange by size in descending order
+    slice(...) # Get top 3 topics
+
+# Visualize the top 10 words in the top 3 most used topics
+km_out_tidy %>%
+  filter(cluster %in% ...) %>% # Filter to the topics found above
+  group_by(...) %>% # Arrange in descending order of average TF-IDF
+  arrange(...) %>%
+  slice(...) %>% # Get top 10 words
+  ggplot(aes(x = ...,
+             y = ..., # Reorder words by highest scoring TF-IDF
+             fill = ...)) + # Fill by topic
+  geom_...(...) + # Choose the appropriate geom_...()
+  facet_wrap(~...,scales = 'free') + # Create facets by topics
+  labs(title = '', # Good labels!
+       subtitle = '',
+       x = '',
+       y = '',
+       fill = '')
+```
+
+>- Write answer here
+
+## Question 3 [2 points]
+Now load the sentiment dictionary `nrc` from the `tidytext` package, and look at the clusters with sentiment scores by merging the `km_out_tidy` dataset with the `nrc` dataset using the `inner_join()` function. (If you can't open the `nrc` object from the `tidytext` package, you can just load it from GitHub with this link: `https://github.com/jbisbee1/DS1000_S2024/raw/main/data/nrc.Rds`)
+
+Filter to only look at `positive` and `negative` categories and then `select()` only the `size`, `cluster`, `word`, `mean_tfidf`, and `sentiment` columns. Then use either `spread()` or `pivot_wider()` to create two columns of `mean_tfidf` values: one for `positive` and one for `negative`. Replace `NA` values with 0! Finally, filter to only look at clusters with more than 10 tweets in them. Save this processed data to an object named `cluster_sentiment`.
+
+Using this data, plot the top 10 words for the three most positive clusters and the top 10 words for the three most negative clusters. Describe what you see. What are Trump's most positive and negative topics about?
+
+```{r,warning=F}
+# Load the NRC dictionary
+
+cluster_sentiment <- km_out_tidy %>%
+  inner_join(nrc %>% # Join on the words that appear in both (ignore the warning)
+               filter(...)) %>% # Filter the nrc to only positive and negative labels
+  select(...) %>% # Select the columns size, cluster, word, mean_tfidf, and sentiment
+  spread(...) %>% # Spread the data into two columns, one for 
+  mutate(net_sentiment = ...) %>% # Calculate the net_sentiment as positive - negative
+  group_by(cluster,size) %>% # Calculate the average sentiment by cluster and size
+  summarise(net_sentiment = ...) %>%
+  ungroup() %>%
+  filter(...) # Drop clusters with fewer than 10 tweets
+  
+# Calculate the top 3 most positive clusters
+top_sentiment <- cluster_sentiment %>%
+  arrange(...) %>%  # Arrange in descending order of net sentiment
+  slice(...) # Get top 3
+
+# Visualize the top 10 words in the top 3 most positive clusters
+km_out_tidy %>%
+  filter(cluster %in% ...) %>% # Filter to the topics found above
+  group_by(...) %>% # Arrange in descending order of average TF-IDF
+  arrange(...) %>%
+  slice(...) %>% # Get top 10 words
+  ggplot(aes(x = ...,
+             y = ..., # Reorder words by highest scoring TF-IDF
+             fill = ...)) + # Fill by topic
+  geom_...(...) + # Choose the appropriate geom_...()
+  facet_wrap(~...,scales = 'free') + # Create facets by topics
+  labs(title = '', # Good labels!
+       subtitle = '',
+       x = '',
+       y = '',
+       fill = '')
+
+# Calculate the bottom 3 most negative clusters
+bottom_sentiment <- cluster_sentiment %>%
+  arrange(...) %>%  # Arrange in ascending order of net sentiment
+  slice(...) # Get bottom 3
+
+
+# Visualize the top 10 words in the bottom 3 most negative clusters
+km_out_tidy %>%
+  filter(cluster %in% ...) %>% # Filter to the topics found above
+  group_by(...) %>% # Arrange in descending order of average TF-IDF
+  arrange(...) %>%
+  slice(...) %>% # Get top 10 words
+  ggplot(aes(x = ...,
+             y = ..., # Reorder words by highest scoring TF-IDF
+             fill = ...)) + # Fill by topic
+  geom_...(...) + # Choose the appropriate geom_...()
+  facet_wrap(~...,scales = 'free') + # Create facets by topics
+  labs(title = '', # Good labels!
+       subtitle = '',
+       x = '',
+       y = '',
+       fill = '')
+```
+
+>- Write answer here
+
+## Question 4 [2 points]
+Re-run the previous analysis, except now look at Trump's last year in office, running from January 1st 2020 to January 8th 2021 (when he was kicked off Twitter). What are the top 3 positive topics and the top 3 negative topics? (Just use the same $k$ value you identified in your first elbow plot for this analysis.)
+```{r}
+# a.
+# INSERT CODE HERE (same as in Q2, except different period of analysis)
+
+#b. Calculate TF-IDF
+# INSERT CODE HERE
+
+#c. Cast DTM
+# INSERT CODE HERE
+
+#e. Calculate kmeans (Skip d. here...no need to take forever re-running the elbow plot)
+# INSERT CODE HERE
+
+# Tidy kmeans
+# INSERT CODE HERE
+
+# Join with nrc dictionary
+# INSERT CODE HERE
+  
+#f. Find top 3 most positive topics and visualize them
+# INSERT CODE HERE
+
+# Find bottom 3 most negative topics and visualize them
+# INSERT CODE HERE
+```
+
+>- Write answer here
+
+
+## Extra Credit [2 points]
+Which of Trump's topics are the most "popular", measured by total retweets? You will need to get creative with this final extra credit question. Broadly, you will need to link each tweet to the topic it was assigned as well as the number of retweets it received. This will require you to exploit the fact that the `km_out$cluster` data includes both the cluster to which each observation was assigned, as well as the tweet ID associated with that observation. Once you have created this lookup object, you can then link the original `tweet_words` dataset with the clusters. (NOTE: not every tweet will be assigned to a cluster, since we are dropping many of them.) This will require you to pay attention to object types (the names of the `km_out$cluster` are character, but the document IDs are stored as numeric in the `tweet_words` object), think creatively about how to merge the datasets, be aware of `NA`'s and think about how to deal with them, and then finally analyze the data once you have built it. Your end result should be, as above, the top 10 words associated with the top 3 most popular topics. Good luck!
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write answer here.
+
