@@ -1,0 +1,162 @@
+---
+title: "Lecture 20 Notes"
+output: html_document
+date: "2024-04-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(tidyverse)
+tweet_words <- read_rds(file="https://github.com/jbisbee1/DS1000_S2024/raw/main/data/Trump_tweet_words.Rds")
+
+nrc <- read_rds('https://github.com/jbisbee1/DS1000_S2024/raw/main/data/nrc.Rds')
+
+nrcPosNeg <- nrc %>%
+  filter(sentiment %in% c('negative','positive'))
+
+tweet_words_sentiment <- tweet_words %>%
+  inner_join(nrcPosNeg)
+
+tweet_words_sentiment %>%
+  select(word,sentiment,document,Tweeting.year)
+```
+
+# Simple descriptive sentiment analysis
+```{r}
+tweet_words_sentiment %>%
+  count(Tweeting.year,sentiment) %>%
+  ggplot(aes(x = Tweeting.year,
+             y = n,
+             color = sentiment)) + 
+  geom_point()
+
+# spread() or the pivot_wider()
+tweet_words_sentiment %>%
+  count(Tweeting.year,sentiment) %>%
+  spread(sentiment,n) %>%
+  mutate(net_sentiment = positive - negative)
+
+```
+
+# Sentiment of topics
+
+```{r}
+# Step 1: Create DTM
+dtm <- tweet_words %>%
+  filter(Tweeting.date >= as.Date('2020-01-01')) %>%
+  count(document,word) %>%
+  group_by(word) %>%
+  mutate(tot_n = sum(n)) %>%
+  filter(tot_n >= 20) %>%
+  ungroup()
+
+# Step 2: Apply / calculate TF-IDF
+require(tidytext)
+dtm <- bind_tf_idf(tbl = dtm,
+                   term = word,
+                   document = document,
+                   n = n)
+
+# Step 3: Convert to wide
+castdtm <- cast_dtm(data = dtm,
+                    document = document,
+                    term = word,
+                    value = tf_idf)
+
+# Step 4: Calculate k-means
+# Step 4.1 - create elbow plot to determine k
+set.seed(123)
+toplot <- NULL
+for(k in c(10,50,100,250,500)) {
+  km_out <- kmeans(castdtm,
+                   centers = k,
+                   nstart = 1)
+  
+  toplot <- toplot %>%
+    bind_rows(data.frame(totWSS = km_out$tot.withinss,
+             k = k))
+  
+  cat(k,'\n')
+}
+
+toplot %>%
+  ggplot(aes(x = k,
+             y = totWSS)) + 
+  geom_point() + 
+  geom_line()
+
+# Step 4.2: Actually calculate the final k-means
+km_out_final <- kmeans(castdtm,
+                       centers = 250,
+                       nstart = 5)
+
+require(tidymodels)
+km_out_tidy <- tidy(km_out_final) %>%
+  gather(word,mean_tfidf,-size,-cluster,-withinss)
+
+# IF YOU HAVE ISSUES WITH tidy()
+km_out_tidy <- as_tibble(km_out_final$centers) %>%
+  mutate(size = km_out_final$size,
+         withinss = km_out_final$withinss,
+         cluster = factor(row_number())) %>%
+  gather(word,mean_tfidf,-size,-cluster,-withinss)
+
+# Find top 3 topics by size
+top_3 <- km_out_tidy %>%
+  select(size,withinss,cluster) %>%
+  distinct() %>%
+  arrange(desc(size)) %>%
+  slice(1:3)
+
+# Create object to plot top 10 words
+toplot <- km_out_tidy %>%
+  filter(cluster %in% top_3$cluster) %>%
+  group_by(cluster) %>%
+  arrange(desc(mean_tfidf)) %>%
+  slice(1:10)
+
+# Plot it
+toplot %>%
+  ggplot(aes(x = mean_tfidf,
+             y = reorder(word,mean_tfidf),
+             fill = cluster)) + 
+  geom_bar(stat = 'identity') + 
+  facet_wrap(~cluster,scales = 'free')
+```
+
+# Sentiment analysis
+
+```{r}
+nrc %>%
+  filter(word == 'joe')
+
+# inner_join() with nrc
+cluster_sentiment <- km_out_tidy %>%
+  inner_join(nrcPosNeg) %>%
+  select(size,cluster,word,mean_tfidf,sentiment) %>%
+  spread(sentiment,mean_tfidf,fill = 0) %>%
+  mutate(net_sentiment = positive - negative) %>%
+  group_by(cluster,size) %>%
+  summarise(net_sentiment = mean(net_sentiment)) %>%
+  ungroup()
+
+top_sentiment <- cluster_sentiment %>%
+  arrange(desc(net_sentiment)) %>%
+  slice(1:3)
+
+km_out_tidy %>%
+  filter(cluster %in% top_sentiment$cluster) %>%
+  group_by(cluster) %>%
+  arrange(desc(mean_tfidf)) %>%
+  slice(1:10) %>%
+  ggplot(aes(x = mean_tfidf,
+             y = reorder(word,mean_tfidf),
+             fill = cluster)) + 
+  geom_bar(stat = 'identity') +
+  facet_wrap(~cluster,scales = 'free')
+```
+
+
