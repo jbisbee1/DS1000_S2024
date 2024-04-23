@@ -1,0 +1,143 @@
+---
+title: "Final Exam"
+subtitle: "DS-1000: Spring 2024"
+author: "[YOUR NAME]"
+institute: "Vanderbilt University"
+date: "Due Date: 2024-04-30"
+output:
+  html_document: default
+---
+
+```{r,include=F}
+knitr::opts_chunk$set(error=TRUE,warning = FALSE,message = FALSE)
+```
+
+## Overview
+
+This is your final exam for DS-1000. It consists of two questions, but you only need to respond to one of them. Please read both questions carefully and then choose which to answer. It is cumulative in the sense that you are expected to apply concepts and skills learned over the course of the semester.
+
+These questions embody the types of tasks that are expected of a practicing data scientist. Exemplary independent work on this exam is something that could be advertised along with your CV and cover letter for future jobs. Do well here not just for your grade, but for your future materials. In the short run, your bosses will care about the skills this exam tests you on. In the long run, you will be the boss and should care about the skills this exam tests.
+
+## Grading
+
+The final exam is due by 11:59PM on Tuesday, April 30th. **Submissions received after this deadline will not be graded.**
+
+Students who submit the exam early can earn extra credit points as follows:
+
+- Submit by 11:59PM on Friday, April 26th: +5 EC
+- Submit by 11:59PM on Saturday, April 27th: +4 EC
+- Submit by 11:59PM on Sunday, April 28th: +3 EC
+- Submit by 11:59PM on Monday, April 29th: +2 EC
+
+Please upload **two** versions of this final. The first is a PDF of the output (just like the problem sets) which is used by the graders to score your exam. The second is this .Rmd file in its raw form which is used by the professor to **apply a machine learning algorithm to check for violations of the honor code (see below)**. 5 points will be deducted for failing to submit both files in the requested formats. 
+
+## Resources
+
+You are permitted to rely on any course resources from the Spring 2024 semester. These include all lecture slides, recordings, problem sets, answer keys, homeworks, and lecture notes, as well as any and all posts to Campuswire. **NOTE:** You are not allowed to use ChatGPT on this exam.
+
+Campuswire access will be restricted during the week of the final exam You are only permitted to post clarifying questions about the exam, and these should only be made visible to the instructor and TAs. The graders, TAs, and the Professor will remove questions that ask for help on the contents of the exam.
+
+## Honor
+
+Unlike the problem sets, you are **prohibited** from collaborating with other students on this final, and are **prohibited** from using ChatGPT. You must digitally sign your name below, confirming that you did not collaborate on this exam with any of your classmates, share work, or otherwise discuss its contents. 
+
+## Independent Work Statement
+Please sign your name in the space provided by typing out your full name in place of the underline:
+
+"I, __________________________________, am aware of the serious nature of plagiarism and affirm that I did not collaborate with other students while completing this final exam, nor did I use ChatGPT to assist me with the answers. I understand that violations of this agreement will result in a zero on the final exam, a failing grade for the semester, and a hearing with the Undergraduate Honor Council."
+
+
+<P style="page-break-before: always">
+
+## Question 1 [50 points]
+This question will require you to use the `game_summary.rds` dataset, which can be downloaded from the [course Github](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/game_summary.Rds). Require `tidyverse`, `ranger`, and `tidymodels`, then load the dataset to an object called `gms`.
+
+```{r}
+# INSERT CODE HERE
+```
+
+You are hired by the Boston Celtics as their data scientist. The organization wants you to help them understand how best to win a basketball game (`isWin`). Thus, your **outcome** variable should be `isWin` and the **independent** variables are listed below. Prepare a report that:
+
+1. **Describes the data:** Specifically, your report should identify missingness in the data (if any), and visualize the following variables using univariate and multivariate visualization, where multivariate compares each to the `isWin` outcome.
+
+- `locationGame`
+- `tov`
+- `pts`
+- `treb`
+- `pctFT`
+- `second_game`
+
+**NOTE:** This will require *many* plots, one univariate and one multivariate (bivariate is fine) for each variable. To reduce the number of plots, you might consider trivariate visualizations for some of the combinations, but full credit will be given to those who simply visualize the exhaustive bivariate relationships. Based on the multivariate visualizations, which variables appear to be most prognostic of whether the Celtics win or lose? [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write response here
+
+2. **Runs a regression of winning on these independent variables:** Run a linear regression model (`lm()`) to predict winning. Summarize the model object and interpret the results (don't bother interpreting the intercept and only focus on the variables that are statistically significant). Which independent variables are most predictive of winning? [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write response here
+
+3. **Identifies the most important variables:** Using a random forest's permutation test for variable importance, plot the importance of the following variables for predicting whether the Celtics win (`isWin`): `locationGame`, `tov`, `pts`, `treb`, `pctFT`, and `second_game`. Which is the most important predictor? Which is the least? [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write response here
+
+4. **Compares different models:** Using only the top 3 most important variables, evaluate and compare two models (linear regression `lm()` and logistic regression `glm()`) in terms of AUC using cross validation (100 times with 80-20% split). Does one model perform better than the other? [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write response here
+
+5. **Summarizes key conclusions:** Based on this analysis, what should the Celtics focus on to improve their chances of winning games? Make sure to address both the variable importance results as well as the interpretation of the *linear regression* (`lm()`) model. Then evaluate your work. Are there any shortcomings with your analysis? [10 points]
+
+>- Write response here
+
+
+
+<P style="page-break-before: always">
+
+## Question 2 [50 points]
+Using the `Trump_tweet_words.Rds` data ([link](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/Trump_tweet_words.Rds)), combined with the `nrc.Rds` data ([link](https://github.com/jbisbee1/DS1000_S2024/blob/main/data/nrc.Rds)), investigate the following research question: "Did the use of anger in Trump's tweets influence their popularity?" 
+
+The best answers to this question will:
+
+1. Articulate a theory and a hypothesis in response to the question [10 points]
+
+>- Write response here
+
+2. Merge the Trump tweet data with the NRC sentiment data, filtering to only the anger words, then calculate the number of anger words in each tweet. [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+3. Visualize the variables of interest using univariate and multivariate visualization, and wrangle the data as necessary. Does the multivariate visualization support your hypothesis? Make sure to justify your choices for `geom_...` and explain any other choices you make in this section! [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write response here
+
+4. Run a linear regression model predicting the tweet's popularity (`retweets`) as a function of the number of anger words and interpret the results. Then evaluate the model in terms of both a visual analysis of the errors (both univariate visualization of the errors and multivariate visualization of the errors versus the number of anger words), and the RMSE (via 100 cross validation with an 80-20 split, setting seed to 123 to ensure reproducibility). Does your model do a good job predicting engagement? [10 points]
+
+```{r}
+# INSERT CODE HERE
+```
+
+>- Write response here
+
+5. Discuss your results. Did you support or reject your hypothesis? Can we interpret these results as causal? Why or why not? Based on the preceding answers, what might you want to change to the analysis to strengthen your conclusions? [10 points]
+
+>- Write response here
